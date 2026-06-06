@@ -22,7 +22,7 @@ Si hay conflicto entre lo que dice el código y lo que dicen estos docs, pregunt
 
 Este proyecto es **docs-first**. La continuidad de contexto entre sesiones de AI importa más que moverse rápido y perder contexto.
 
-- Actualizar los docs cuando una decisión cambie.
+- Actualizar `docs/handoff-context.md` al completar cada tarea o cambio de estado. Incluir siempre la fecha y hora exacta en el encabezado de la sección actualizada, formato: `(2026-06-06 15:30)`. Sin timestamp no queda registro de cuándo ocurrió.
 - Separar claramente lo que está confirmado de lo que es una suposición.
 - No construir más de lo que la tarea pide.
 - No inventar datasets ni funcionalidades que no estén en los docs fuente.
