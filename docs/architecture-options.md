@@ -62,15 +62,18 @@ Si Gemini no responde (timeout, error), el motor determinístico sigue funcionan
 
 ```
 /app
-  /page.tsx              ← entrada principal
+  /page.tsx              ← splash / entrada principal
+  /onboarding/           ← elegir meta (absorbe el paso "meta")
   /diagnostico/
-  /meta/
   /recomendaciones/
+  /registro/             ← entrada diaria
   /seguimiento/
 /lib
+  /types.ts              ← contratos TypeScript
   /mock-data.ts          ← datos simulados con origen documentado
   /recommendation-engine.ts  ← lógica determinística
   /gemini.ts             ← capa de explicación LLM
+  /state.ts              ← URL params + localStorage helpers
 /components
   /ui/                   ← componentes simples reutilizables
 ```
