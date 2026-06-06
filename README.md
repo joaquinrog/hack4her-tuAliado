@@ -27,7 +27,7 @@ El usuario prioritario es el **dueño apoyado**: dueño de tienda con baja habil
 
 ## Estado actual
 
-**Fase:** Setup y organización de contexto. Implementación no iniciada.
+**Fase:** Esquema de datos mock implementado. Motor de recomendaciones pendiente. Diseño en progreso.
 
 ## Métricas objetivo
 
@@ -55,6 +55,56 @@ El usuario prioritario es el **dueño apoyado**: dueño de tienda con baja habil
 - `01-contexto-reto-tuali.md` — Contexto oficial, protopersonas, journeys, respuestas de Tuali.
 - `02-posible-mvp-tuali-crece.md` — Dirección del MVP discutida hasta ahora (doc fuente original).
 
+## Assets de diseño
+
+Todos los assets viven en `design/assets/`. Los prompts para generarlos están en `design/stitch-prompts/`.
+
+### Identidad de marca (`design/stitch-prompts/brand-identity.md`)
+
+| Asset | Archivo | Formato |
+|---|---|---|
+| Ícono del logo (solo) | `assets/logo-mark.svg` | SVG |
+| Wordmark (solo nombre) | `assets/wordmark.svg` | SVG |
+| Logo completo (ícono + nombre) | `assets/logo-full.svg` | SVG |
+| Paleta de colores con hex | `assets/palette.png` | PNG |
+| Ícono meta: Vender más | `assets/icons/vender-mas.svg` | SVG |
+| Ícono meta: Aprovechar las promociones | `assets/icons/aprovechar-promos.svg` | SVG |
+| Ícono meta: Surtir mejor mi tienda | `assets/icons/surtir-tienda.svg` | SVG |
+| Ícono meta: Saber cómo me está yendo | `assets/icons/como-voy.svg` | SVG |
+
+### Pantallas (`design/stitch-prompts/0X-*.md`)
+
+| Asset | Archivo | Prompt fuente |
+|---|---|---|
+| Splash screen | `assets/screens/00-splash.png` | `00-splash.md` |
+| Onboarding — sin selección | `assets/screens/01-onboarding-default.png` | `01-onboarding.md` |
+| Onboarding — meta seleccionada (botón activo) | `assets/screens/01-onboarding-selected.png` | `01-onboarding.md` |
+| Diagnóstico | `assets/screens/02-diagnostico.png` | `02-diagnostico.md` |
+| Recomendaciones — 3 tarjetas | `assets/screens/03-recomendaciones.png` | `03-recomendaciones.md` |
+| Modal precio de venta | `assets/screens/03-modal-precio-venta.png` | `03-recomendaciones.md` |
+| Seguimiento y progreso | `assets/screens/04-seguimiento.png` | `04-seguimiento.md` |
+| Chatbot — botón flotante (FAB) | `assets/screens/05-chatbot-fab.png` | `05-chatbot.md` |
+| Chatbot — bottom sheet abierto | `assets/screens/05-chatbot-sheet.png` | `05-chatbot.md` |
+| Registro — P1: ¿Cómo estuvo el día? | `assets/screens/06-registro-p1.png` | `06-registro.md` |
+| Registro — P2: ¿Pediste a Tuali? | `assets/screens/06-registro-p2.png` | `06-registro.md` |
+| Registro — P3: pregunta por meta (cualquier versión) | `assets/screens/06-registro-p3.png` | `06-registro.md` |
+| Registro — pantalla de completado con racha | `assets/screens/06-registro-completado.png` | `06-registro.md` |
+
+**Total: 8 assets de identidad + 13 pantallas = 21 archivos.**
+
+### Paleta de colores
+
+| Token | Uso | Hex |
+|---|---|---|
+| Primario | CTAs, botones principales | `#F97316` |
+| Secundario | Datos informativos, progreso | `#2563EB` |
+| Fondo | Fondo de pantalla | `#FAFAF9` |
+| Superficie | Tarjetas, modales | `#FFFFFF` |
+| Texto | Texto principal | `#1C1917` |
+| Texto muted | Labels, subtítulos | `#78716C` |
+
+---
+
 ## Equipo — Picafresitas
 
 | Nombre | Rol |
@@ -66,4 +116,4 @@ El usuario prioritario es el **dueño apoyado**: dueño de tienda con baja habil
 
 ---
 
-> Nota: El stack técnico y la implementación están pendientes de definir. Los documentos en `docs/` son la fuente de verdad del proyecto.
+> Los documentos en `docs/` son la fuente de verdad del proyecto. Los prompts de diseño en `design/stitch-prompts/` son la fuente de verdad para los assets.

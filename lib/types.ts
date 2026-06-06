@@ -78,10 +78,10 @@ export interface Promocion {
 // ── Onboarding del cliente ───────────────────────────────────────────────────
 // origen: CLIENTE
 export type MetaCliente =
-  | "aumentar_ventas"
-  | "ahorrar_en_compras"
-  | "usar_mas_tuali"
+  | "vender_mas"
   | "aprovechar_promos"
+  | "surtir_tienda"
+  | "como_voy"
 
 // Precios de venta por productoId — lo que el cliente dice que cobra a sus clientes.
 // Tuali no tiene este dato. Se pide de forma progresiva (no en onboarding inicial).
@@ -91,6 +91,37 @@ export interface EstadoOnboarding {
   completado: boolean
   meta: MetaCliente | null
   preciosVenta: PreciosVentaCliente  // origen: CLIENTE
+}
+
+// ── Registro diario del cliente ─────────────────────────────────────────────
+// origen: CLIENTE — completado en /registro, guardado en localStorage
+export interface EntradaDiaria {
+  fecha: string                           // ISO date
+  comoEstuvoElDia: "bien" | "regular" | "mal"
+  hizoPedido: boolean
+  pidioporApp: boolean | null             // null si hizoPedido === false
+  // Específicas por meta (null si la meta no las requiere)
+  sePidioAlgoQueNoTenia: boolean | null   // meta: vender_mas
+  aplicoPromo: boolean | null             // meta: aprovechar_promos
+  seAcaboAlgoHoy: boolean | null          // meta: surtir_tienda
+}
+
+// ── Racha de registros diarios ───────────────────────────────────────────────
+// Incentivo de retención. No usa puntos Tuali — es un logro visual local.
+export interface RachaDiaria {
+  rachaActual: number
+  rachaMaxima: number
+  ultimoRegistro: string | null           // ISO date del último registro
+}
+
+// ── Baseline (punto de partida) ──────────────────────────────────────────────
+// Se guarda al entrar a /recomendaciones por primera vez. Base para medir delta.
+export interface BaselineSnapshot {
+  fecha: string
+  ticketPromedio: number                  // origen: TUALI
+  porcentajePedidosTuali: number          // origen: TUALI
+  usaPromociones: boolean                 // origen: TUALI
+  puntosLoyalty: number                   // origen: TUALI
 }
 
 // ── Diagnóstico ──────────────────────────────────────────────────────────────

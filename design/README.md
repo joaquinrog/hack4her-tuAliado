@@ -27,3 +27,4 @@ design/
 | `03-recomendaciones.md` | Recomendaciones (3 tarjetas) |
 | `04-seguimiento.md` | Seguimiento y progreso |
 | `05-chatbot.md` | Botón flotante + chat |
+| `06-registro.md` | Registro diario (stepper 2-3 preguntas + racha) |

@@ -16,7 +16,7 @@ Layout (top to bottom):
 1. Header:
    - Back arrow
    - Title: "Tu avance" — 20px bold
-   - Subtitle showing active goal: "Meta: Subir ticket promedio" with goal icon
+   - Subtitle showing active goal: "Meta: Vender más" with goal icon (adapts to selected goal — one of the 4 confirmed goals)
 
 2. Hero progress card:
    - Section label: "Ticket promedio" — 14px, text-muted

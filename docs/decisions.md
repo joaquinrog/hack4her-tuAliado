@@ -185,6 +185,24 @@
 
 ---
 
+### Diseño del registro diario
+
+- **Decisión:** 2 preguntas base (siempre) + 1 pregunta específica por meta. Máximo 3 preguntas, solo botones grandes, sin texto libre.
+- **Estado:** Confirmado — 2026-06-06
+- **Preguntas base:** (1) "¿Cómo estuvo el día?" → bien/regular/mal. (2) "¿Pediste a Tuali hoy?" → por app / con promotor / no pedí.
+- **Pregunta por meta:** `vender_mas` → ¿Te pidieron algo que no tenías? | `aprovechar_promos` → ¿Usaste alguna promoción? | `surtir_tienda` → ¿Se te acabó algo? | `como_voy` → sin pregunta 3 (va directo al seguimiento).
+- **Razón:** Raúl no puede con formularios largos. Cada pregunta tiene señal directa para el motor. `pidioporApp` alimenta la métrica secundaria de autonomía en Tuali en todas las metas.
+
+---
+
+### Incentivo de retención: racha de días
+
+- **Decisión:** Mostrar racha de días consecutivos registrados ("¡Llevas X días seguidos!"). Logros visuales en 3, 7, 14, 30 días. Sin puntos Tuali simulados.
+- **Estado:** Confirmado — 2026-06-06
+- **Razón:** Los puntos de loyalty del programa real (Gana con Tuali) se ganan por compras, no por interacciones en la app. Simular puntos que no existen en el sistema real sería incoherencia de datos. La racha es 100% local y no requiere cambios en el backend de Tuali. En el pitch se puede proponer como evolución futura del programa de loyalty.
+
+---
+
 ### Protopersona del mock: Raúl
 
 - **Decisión:** El mock está construido sobre el perfil de Raúl (63 años, baja habilidad digital, 80% pedidos por promotor).

@@ -16,7 +16,7 @@ Layout (top to bottom):
 1. Header:
    - Back arrow
    - Title: "Tus recomendaciones" — 20px bold
-   - Meta context chip: small pill showing selected goal, e.g., "Meta: Subir ticket" with the goal icon
+   - Meta context chip: small pill showing selected goal, e.g., "Meta: Vender más" with the goal icon (one of: Vender más / Aprovechar las promociones / Surtir mejor mi tienda / Saber cómo me está yendo)
 
 2. Three recommendation cards (stacked vertically, each card):
 

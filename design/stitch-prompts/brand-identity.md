@@ -20,15 +20,15 @@ Visual identity to generate:
 2. Wordmark — "tuAliado" in a rounded, approachable sans-serif. Lowercase "tu" in regular weight, uppercase "A" and rest in bold. 
 3. Color palette — 4 colors:
    - Primary: a warm, energetic orange (#F97316 range) — action, growth, warmth
-   - Secondary: a deep teal or forest green (#059669 range) — money, trust, progress
+   - Secondary: a trustworthy blue (#2563EB range) — information, trust, progress
    - Background: off-white or warm white (#FAFAF9) — clean, not clinical
    - Text: near-black (#1C1917) — readable at 16px+
 4. Typography — one rounded sans-serif (e.g., Nunito, Poppins, or Plus Jakarta Sans). Bold for numbers and key data, regular for body.
 5. Icon set — 4 icons representing the main goals a user can pick:
    - "Vender más" (sell more): shopping bag with upward arrow
-   - "Subir ticket" (increase average order): receipt with plus sign
-   - "Usar más Tuali" (use app more): phone with checkmark
-   - "Aprovechar promos" (use promotions): tag with percentage
+   - "Aprovechar las promociones" (use promotions): tag with percentage
+   - "Surtir mejor mi tienda" (restock well): box or crate with a checkmark
+   - "Saber cómo me está yendo" (see my progress): bar chart with upward trend
 
 Style: flat design, no gradients, no shadows. Bold shapes. Accessible contrast (WCAG AA minimum).
 Mobile context: all elements must work on a 375px wide screen.
@@ -41,9 +41,9 @@ Una vez generada la identidad, extraer estos tokens y agregarlos a `tailwind.con
 | Token | Uso | Hex esperado |
 |---|---|---|
 | `primary` | CTAs, botones principales | ~`#F97316` |
-| `primary-dark` | Hover / pressed state | ~`#EA580C` |
-| `secondary` | Indicadores positivos, progreso | ~`#059669` |
-| `secondary-light` | Fondo de badges de éxito | ~`#D1FAE5` |
+| `primary-dark` | Pressed state | ~`#EA580C` |
+| `secondary` | Datos informativos, progreso, trust | ~`#2563EB` |
+| `secondary-light` | Fondo de badges informativos | ~`#DBEAFE` |
 | `bg` | Fondo de pantalla | ~`#FAFAF9` |
 | `surface` | Tarjetas, modales | `#FFFFFF` |
 | `text` | Texto principal | ~`#1C1917` |

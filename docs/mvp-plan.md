@@ -117,7 +117,7 @@ En orden de impacto para el demo:
 | T0.2 | `app/layout.tsx`: max-width 430px, fuente 16px, fondo blanco | 10 min |
 | T0.3 | Crear carpetas de rutas con `page.tsx` placeholder | 10 min |
 | T0.4 | `lib/state.ts`: helpers URL params (meta, preciosVenta) + `guardarBaseline`, `cargarBaseline`, `guardarEntradaDiaria`, `cargarEntradasDiarias` | 15 min |
-| T0.4b | `lib/types.ts`: añadir `BaselineSnapshot` y `EntradaDiaria`. `lib/mock-data.ts`: añadir `ENTRADAS_DEMO` (4 entradas coherentes con historial de Raúl) | 15 min |
+| T0.4b | `lib/types.ts`: ✅ ya tiene `BaselineSnapshot`, `EntradaDiaria`, `RachaDiaria` y `MetaCliente` actualizado. `lib/state.ts`: agregar `guardarRacha`, `cargarRacha`. `lib/mock-data.ts`: añadir `ENTRADAS_DEMO` (4 entradas con campos por meta coherentes con historial de Raúl) | 20 min |
 | T0.5 | `lib/recommendation-engine.ts`: `calcularRecomendaciones(meta, estado)` → `Recomendacion[]` + `BaselineSnapshot` | 30 min |
 | T0.6 | `lib/gemini.ts`: `explicarRecomendacion(rec, perfil)` → string simple | 15 min |
 | T0.7 | `app/api/chat/route.ts`: POST → Gemini → `{ reply }` | 15 min |
@@ -138,7 +138,7 @@ En orden de impacto para el demo:
 | T1.4c | Renderizar 3 tarjetas, CTA primario en tarjeta A | 15 min |
 | T1.4d | Integrar texto Gemini en cada tarjeta | 20 min |
 | T1.5 | Modal F6: "¿En cuánto vendes X?" → recalcular beneficio | 25 min |
-| T1.5b | `app/registro/page.tsx`: stepper 3 preguntas (aplicoPromo, pidioporApp, precioVentaMayor), botones 44×44px, guarda `EntradaDiaria` en localStorage | 30 min |
+| T1.5b | `app/registro/page.tsx`: stepper 2-3 preguntas según meta. P1: ¿Cómo estuvo el día? (bien/regular/mal). P2: ¿Pediste a Tuali? (app/promotor/no). P3 por meta: `vender_mas`→¿te pidieron algo que no tenías?, `aprovechar_promos`→¿usaste promo?, `surtir_tienda`→¿se te acabó algo?, `como_voy`→sin P3. Al terminar: actualizar racha + mostrar "¡Llevas X días!" + ir a /seguimiento. | 40 min |
 | T1.6a | Seguimiento — estructura base, leer baseline de localStorage (si no hay → CTA a /onboarding) | 10 min |
 | T1.6b | `ProgressBar` animado: ticket promedio baseline vs. promedio entradas diarias vs. objetivo | 15 min |
 | T1.6c | Delta % pedidos app: baseline.porcentajePedidosTuali vs. % `pidioporApp` en entradas | 10 min |
