@@ -60,9 +60,9 @@ El usuario prioritario es el **dueño apoyado**: dueño de tienda con baja habil
 | Nombre | Rol |
 |---|---|
 | Joaquín Rosales González | Tech Lead / Ingeniería |
-| — | Diseño UX/UI |
-| — | Producto / Estrategia |
-| — | Presentación / Pitch |
+| Fernanda Sánchez Estudillo | Diseño UX/UI |
+| Isabel Mejía Franco | Producto / Estrategia |
+| Katia Iveth Uribe Briones | Presentación / Pitch |
 
 ---
 
