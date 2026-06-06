@@ -22,11 +22,11 @@
 | `lib/types.ts` — contratos TypeScript | ✅ Hecho |
 | `lib/mock-data.ts` — perfil Raúl, pedidos, productos, promos, loyalty | ✅ Hecho |
 | `lib/onboarding-questions.ts` — estructura de preguntas | ✅ Hecho |
-| `lib/recommendation-engine.ts` — motor determinístico | ⬜ Pendiente |
-| `lib/gemini.ts` — capa de explicación | ⬜ Pendiente |
-| `lib/state.ts` — URL params + localStorage | ⬜ Pendiente |
-| Pantallas core (onboarding, diagnóstico, recomendaciones, seguimiento) | ⬜ Pendiente |
-| Chatbot flotante + `/api/chat` | ⬜ Pendiente |
+| `lib/recommendation-engine.ts` — motor determinístico | ✅ Hecho |
+| `lib/gemini.ts` — capa de explicación | ✅ Hecho |
+| `lib/state.ts` — URL params + localStorage | ✅ Hecho |
+| Pantallas core (onboarding, diagnóstico, recomendaciones, seguimiento) | 🔄 Placeholders listos |
+| Chatbot flotante + `/api/chat` | 🔄 `/api/chat` listo — falta UI |
 | **Chat de voz** (diferenciador clave — F13) | ⬜ Pendiente |
 
 ## Contexto del equipo
@@ -152,6 +152,28 @@ Tres archivos en `/lib/`:
 - `CLIENTE`: meta elegida en onboarding, precios de venta (progresivos).
 - `ESTIMACION`: cualquier cálculo de margen/ganancia — devuelve `null` si no hay precio del cliente.
 
+## FASE 0 completada (2026-06-06)
+
+Todos los módulos de lógica están listos:
+
+| Archivo | Qué hace |
+|---|---|
+| `lib/state.ts` | `getMeta`, `buildUrl`, `guardarBaseline`, `cargarBaseline`, `guardarEntradaDiaria`, `cargarEntradasDiarias`, `guardarRacha`, `cargarRacha`, `actualizarRacha` |
+| `lib/recommendation-engine.ts` | `calcularTicketPromedio`, `calcularDiagnostico`, `calcularRecomendaciones(meta, estado)` → `{ recomendaciones, baseline }` |
+| `lib/gemini.ts` | `explicarRecomendacion(rec, perfil)` → string, `responderChat(msg, ctx)` → string |
+| `app/api/chat/route.ts` | POST `/api/chat` → `{ reply }` usando Gemini Flash |
+| `lib/mock-data.ts` | +`ENTRADAS_DEMO` (4 entradas coherentes con historial de Raúl) |
+| `lib/onboarding-questions.ts` | Corregidas metas a valores confirmados (`vender_mas`, `aprovechar_promos`, `surtir_tienda`, `como_voy`) |
+| `app/layout.tsx` | `max-w-[430px]`, `lang="es"`, `bg-white`, title="tuAliado" |
+| Rutas placeholder | `/onboarding`, `/diagnostico`, `/recomendaciones`, `/registro`, `/seguimiento` |
+
+**Build Next.js pasa limpio. TypeScript 0 errores.**
+
+Ticket promedio de Raúl (calculado por motor): **$450 MXN**. Objetivo sugerido: **$518 MXN** (+15%).
+
 ## Próximo paso
 
-Implementar `lib/recommendation-engine.ts` — motor determinístico que lee `EstadoMock` y produce `Diagnostico` + hasta 3 `Recomendacion[]`.
+**FASE 1 — Pantallas core.** Empezar por:
+1. `app/page.tsx` — Splash (T1.1)
+2. `app/onboarding/page.tsx` — 4 botones grandes (T1.2)
+3. `app/diagnostico/page.tsx` — Diagnóstico visual (T1.3a–e)
