@@ -1,6 +1,6 @@
 # Handoff Context — Estado actual del proyecto
 
-> Leer este archivo al inicio de cualquier sesión nueva de Claude/Codex.
+> Leer este archivo al inicio de cualquier sesión nueva.
 > Actualizar cuando el estado del proyecto cambie.
 
 ---
@@ -13,7 +13,21 @@
 | Reto | Tuali Growth Agent |
 | Producto de trabajo | tuAliado |
 | Tech Lead | Tech Lead del equipo |
-| Estado | Esquema de datos mock implementado — motor pendiente |
+
+### Qué está hecho y qué falta
+
+| Módulo | Estado |
+|---|---|
+| Proyecto Next.js 15 inicializado | ✅ Hecho |
+| `lib/types.ts` — contratos TypeScript | ✅ Hecho |
+| `lib/mock-data.ts` — perfil Raúl, pedidos, productos, promos, loyalty | ✅ Hecho |
+| `lib/onboarding-questions.ts` — estructura de preguntas | ✅ Hecho |
+| `lib/recommendation-engine.ts` — motor determinístico | ⬜ Pendiente |
+| `lib/gemini.ts` — capa de explicación | ⬜ Pendiente |
+| `lib/state.ts` — URL params + localStorage | ⬜ Pendiente |
+| Pantallas core (onboarding, diagnóstico, recomendaciones, seguimiento) | ⬜ Pendiente |
+| Chatbot flotante + `/api/chat` | ⬜ Pendiente |
+| **Chat de voz** (diferenciador clave — F13) | ⬜ Pendiente |
 
 ## Contexto del equipo
 
@@ -61,6 +75,7 @@ Puntos clave:
 - Métrica principal: **ticket promedio**.
 - Métrica secundaria: **autonomía del cliente dentro de Tuali**.
 - Motor determinístico primero; LLM solo para explicar en lenguaje natural.
+- **Chat de voz es diferenciador principal** — Web Speech API + speechSynthesis, mismo backend `/api/chat`. Se desarrolla en paralelo con diseño en Stitch. Raúl no quiere leer.
 - El chatbot es apoyo, no el centro.
 - Una meta + tres recomendaciones concretas.
 - Integrar: promociones, pedido sugerido, loyalty.
@@ -112,7 +127,7 @@ No habrá dataset real de Tuali. Solo los datos de `01-contexto-reto-tuali.md`.
 ## Lo que está hecho
 
 ### Proyecto Next.js inicializado (2026-06-06)
-- Next.js 16 + TypeScript + Tailwind CSS — App Router.
+- Next.js 15 + TypeScript + Tailwind CSS — App Router.
 - Deploy target: Vercel.
 
 ### Esquema de datos mock implementado (2026-06-06)
