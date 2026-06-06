@@ -171,11 +171,17 @@
 
 ---
 
-### Onboarding inicial: 1 sola pregunta
+### Onboarding inicial: 1 sola pregunta con 4 botones
 
 - **Decisión:** La sesión 1 del onboarding hace exactamente 1 pregunta: "¿Qué quieres para tu tienda?" con 4 botones grandes.
 - **Estado:** Confirmado — 2026-06-06
 - **Razón:** Raúl (baja habilidad digital) no puede con más de una decisión al arranque. El precio de venta se pide después, de forma contextual, cuando el motor detecta una promoción relevante.
+
+### Las 4 metas del onboarding
+
+- **Decisión:** Los 4 botones son: "Vender más" / "Aprovechar las promociones" / "Surtir mejor mi tienda" / "Saber cómo me está yendo".
+- **Estado:** Confirmado — 2026-06-06
+- **Razón:** De 6 candidatas se eliminaron "Organizar mejor mi negocio" (sin output concreto en el motor) y "Ahorrar para una meta importante" (requiere tracking financiero externo no disponible). "Tener siempre producto" y "Saber qué productos pedir" se fusionaron en "Surtir mejor mi tienda" porque el motor las resuelve igual (pedido sugerido). La autonomía en Tuali es un resultado implícito, no una meta que Raúl expresaría.
 
 ---
 

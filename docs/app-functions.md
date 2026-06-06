@@ -14,8 +14,8 @@ Al entrar por primera vez, la app le pregunta al cliente una sola cosa:
 
 Le presenta 4 opciones con botón grande e ícono:
 - Vender más
-- Gastar menos en lo que pido
-- Usar mejor las promociones
+- Aprovechar las promociones
+- Surtir mejor mi tienda
 - Saber cómo me está yendo
 
 **Qué produce:**
@@ -27,17 +27,27 @@ Le presenta 4 opciones con botón grande e ícono:
 ## F2: Perfil del cliente
 
 **Qué hace:**
-Captura información básica del cliente para personalizar la experiencia.
+Captura información del cliente para personalizar la experiencia. Los datos básicos (nombre, correo, teléfono) vienen de Tuali. Lo que se pregunta en el onboarding de tuAliado:
 
-Incluye:
-- Nombre o alias.
-- Edad o rango de edad — detecta si necesita asistencia adicional (ej: Raúl, 63 años).
-- Si necesita asistencia extra (accesibilidad, barreras, especificaciones personales).
-- Preferencias de comunicación (texto simple, voz, tamaño de letra).
+**Perfil del tendero:**
+- Fecha de nacimiento.
+- Género (Mujer / Hombre / Prefiero no responder / Otro).
+- Nivel de estudios (Primaria / Secundaria / Preparatoria / Carrera técnica / Universidad).
+- ¿Requiere apoyo adicional para actividades físicas? (Sí / No).
+
+**Perfil del negocio:**
+- ¿Cuánto tiempo lleva abierto tu negocio? (< 1 año / 1-3 / 3-10 / > 10 años).
+- ¿Quién atiende el negocio? (Yo solo / Mi familia y yo / Empleados / Familia y empleados).
+- ¿Cuántas personas atienden? (1 / 2-3 / 4-5 / Más de 5).
+- Tipo de negocio (Tienda de abarrotes / Miscelánea / Depósito / Papelería / Tienda de conveniencia / Otro).
+- Ubicación: Estado, Municipio/Ciudad, Zona (Urbana / Suburbana / Rural).
+
+**Nota:** La mayor parte de la personalización proviene de los datos transaccionales de Tuali/Arca, no de este formulario. Priorizar reducir fricción para Raúl — este formulario es stretch, no parte del MVP mínimo.
 
 **Qué produce:**
 - Perfil base para personalización de lenguaje y accesibilidad.
-- Señal para activar modo asistido (pop-ups guiados, chat de voz, texto más grande).
+- Señal para activar modo asistido (pop-ups guiados, texto más grande).
+- Contexto geográfico para recomendaciones de zona (F18).
 
 ---
 

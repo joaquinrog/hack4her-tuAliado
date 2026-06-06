@@ -25,9 +25,9 @@ Layout (top to bottom):
 
 The 4 goals (icon + label):
    A. Shopping bag + upward arrow → "Vender más"
-   B. Receipt + plus sign → "Subir ticket promedio"
-   C. Phone with checkmark → "Pedir más por Tuali"
-   D. Price tag with % → "Aprovechar promociones"
+   B. Price tag with % → "Aprovechar las promociones"
+   C. Box with checkmark → "Surtir mejor mi tienda"
+   D. Bar chart → "Saber cómo me está yendo"
 
 3. Bottom CTA:
    - "Continuar" button — disabled (gray) until one goal is selected, then primary orange
@@ -50,4 +50,4 @@ Design constraints:
 
 ## Datos que produce
 
-`?meta=vender_mas` | `subir_ticket` | `usar_tuali` | `aprovechar_promos`
+`?meta=vender_mas` | `aprovechar_promos` | `surtir_tienda` | `como_voy`

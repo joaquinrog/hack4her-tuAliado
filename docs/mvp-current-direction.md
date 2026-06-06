@@ -48,15 +48,16 @@ El diagnóstico puede considerar:
 - historial de compras y pedidos,
 - si hace pedidos por Tuali o por otros canales.
 
-## Metas posibles del cliente
+## Metas del cliente (4 confirmadas para onboarding)
 
-Metas alineadas al reto y confirmadas en la discusión:
-- aumentar ventas,
-- incrementar ticket promedio,
-- pedir más por Tuali,
-- aprovechar promociones,
-- mejorar autonomía dentro de la app,
-- mejorar seguimiento del avance.
+| Botón | Etiqueta | Qué resuelve el motor |
+|---|---|---|
+| 1 | Vender más | Ticket promedio — promos, productos top, pedido sugerido ampliado |
+| 2 | Aprovechar las promociones | Detecta promos activas no usadas por el cliente |
+| 3 | Surtir mejor mi tienda | Pedido sugerido, resurtido, productos de zona |
+| 4 | Saber cómo me está yendo | Activa diagnóstico + seguimiento |
+
+**Decisión:** 4 botones, no 6. Las metas "Organizar mejor mi negocio" y "Ahorrar para una meta importante" fueron descartadas por no tener output concreto en el motor determinístico. "Tener siempre producto" y "Saber qué productos pedir" se fusionaron en "Surtir mejor mi tienda" (el motor las resuelve igual: pedido sugerido). Ver `docs/decisions.md`.
 
 ## Recomendaciones
 
