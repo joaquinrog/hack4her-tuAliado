@@ -1,4 +1,4 @@
-# Project Brief — Tuali Crece
+# Project Brief — tuAliado
 
 ## El problema
 
@@ -17,7 +17,7 @@ El resultado concreto:
 
 Raúl, 63 años. Lleva 18 años con la tienda. Se apoya en el promotor para pedir, le cuesta leer letras pequeñas, tiene miedo a equivocarse con la app, y lo que más quiere es mantener los ingresos de su familia sin depender de sus hijos.
 
-Si Tuali Crece funciona para Raúl, funciona para cualquier cliente más tecnológico también.
+Si tuAliado funciona para Raúl, funciona para cualquier cliente más tecnológico también.
 
 ## Por qué importa
 
@@ -25,7 +25,7 @@ La tienda de abarrotes o pequeño negocio es frecuentemente el sustento principa
 
 Para Tuali/Arca, un cliente que crece su negocio pide más, pide más seguido, y pide por Tuali en lugar de por otros canales.
 
-## Qué es Tuali Crece
+## Qué es tuAliado
 
 Un agente de crecimiento integrado dentro de Tuali que:
 

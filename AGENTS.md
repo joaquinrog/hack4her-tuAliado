@@ -1,153 +1,52 @@
-# AGENTS.md — Flujo de trabajo con agentes de AI
+# AGENTS.md — Flujo de trabajo con AI
 
-Este documento define cómo se usan los agentes de AI en este proyecto durante el hackathon.
+Este documento define cómo se usa Claude Code en este proyecto.
 
-El objetivo es que cada agente tenga una responsabilidad clara, no se pisen entre sí, y que el contexto se mantenga consistente entre sesiones.
+Un solo agente. Un solo loop. Sin coordinación entre herramientas externas.
 
 ---
 
-## Agente 1: Orquestador / Agente de Contexto
+## Claude Code — Único agente
 
-**Herramienta:** Claude Code (sesión principal)
-
-**Propósito:**
-Mantener el contexto del proyecto, planear las siguientes tareas, tomar decisiones de producto y arquitectura, y coordinar a los demás agentes.
+**Responsabilidad:** Todo. Contexto, planificación, implementación, validación, docs.
 
 **Puede tocar:**
-- Todos los archivos de `docs/`
-- Todos los archivos de `.ai/`
-- `CLAUDE.md`, `AGENTS.md`, `README.md`
-- Decisiones de alto nivel
+- Cualquier archivo del proyecto
+- Docs en `docs/`
+- Tracking en `.ai/`
+- Código de producto
 
-**Debe evitar:**
-- Implementar código de producto sin que el Tech Lead lo apruebe
-- Cambiar arquitectura sin registrarlo en `docs/decisions.md`
-- Inventar datos o asumir funcionalidades no confirmadas
-
-**Cómo reporta:**
-- Actualiza `docs/handoff-context.md` cuando el estado cambia
-- Registra decisiones en `docs/decisions.md`
-- Actualiza `.ai/task-board.md` al completar tareas
+**Reglas que siempre aplican:**
+- Leer `docs/handoff-context.md` antes de cualquier tarea mayor
+- No implementar sin aprobación de Joaquín
+- No inventar datos ni funcionalidades no documentadas
+- Registrar decisiones en `docs/decisions.md`
+- Actualizar `docs/handoff-context.md` cuando el estado del proyecto cambie
+- Actualizar `.ai/task-board.md` al completar tareas
 
 ---
 
-## Agente 2: Frontend Agent
+## Flujo de trabajo
 
-**Herramienta:** Claude Code o Codex
+```
+1. Leer docs/handoff-context.md (contexto del estado actual)
+2. Identificar la tarea (referencia al task board o instrucción directa)
+3. Implementar con tareas acotadas — un módulo o archivo a la vez
+4. Verificar que no hay incoherencia en los datos
+5. Actualizar task-board.md y handoff-context.md
+6. Confirmar con Joaquín antes de la siguiente tarea mayor
+```
 
-**Propósito:**
-Implementar la interfaz de usuario: pantallas, flujos, componentes visuales, y la interacción del cliente con Tuali Crece.
+**Atajo para implementación:** usa `/dev` con el número de tarea.
 
-**Puede tocar:**
-- Directorio de frontend (por definir una vez elegido el stack)
-- Componentes, páginas, estilos
-- Datos mock para visualización
-
-**Debe evitar:**
-- Cambiar la lógica de negocio o motor de recomendaciones
-- Modificar documentación de contexto
-- Crear nuevas pantallas o flujos sin aprobación previa
-- Hardcodear datos que deberían venir del motor
-
-**Cómo reporta:**
-- Anota hallazgos de UI en `.ai/visual-qa-notes.md`
-- Reporta decisiones de UI relevantes a el Tech Lead para registro en `docs/decisions.md`
+Ejemplo: "Revisa la task #3 y haz /dev"
 
 ---
 
-## Agente 3: Backend / Datos / Lógica Agent
+## Sobre el LLM en el producto
 
-**Herramienta:** Claude Code o Codex
-
-**Propósito:**
-Implementar el motor de recomendaciones, la lógica de diagnóstico, el manejo de datos (mock o reales), y cualquier API o servicio backend.
-
-**Puede tocar:**
-- Directorio de backend/lógica (por definir)
-- Motor de recomendaciones
-- Lógica de diagnóstico
-- Datos mock estructurados
-- APIs y endpoints
-
-**Debe evitar:**
-- Inventar datasets o asumir que existen datos reales sin confirmación
-- Cambiar interfaces de UI sin coordinar con el Frontend Agent
-- Hacer cálculos con datos incoherentes — si los números no cuadran, parar y reportar
-
-**Cómo reporta:**
-- Documenta supuestos de datos en `docs/data-assumptions.md`
-- Reporta cualquier inconsistencia de datos antes de continuar
-
----
-
-## Agente 4: Visual QA Agent
-
-**Herramienta:** Claude Code con Playwright MCP (cuando esté disponible)
-
-**Propósito:**
-Verificar que la interfaz funciona como se espera: flujos, navegación, estados de error, accesibilidad básica y consistencia visual.
-
-**Puede tocar:**
-- `.ai/visual-qa-notes.md`
-- Scripts de prueba de UI (cuando existan)
-
-**Debe evitar:**
-- Modificar código de producto
-- Tomar decisiones de diseño
-
-**Cómo reporta:**
-- Registra hallazgos en `.ai/visual-qa-notes.md` con fecha, pantalla afectada y descripción del problema
-
----
-
-## Agente 5: Test / Validation Agent
-
-**Herramienta:** Claude Code o Codex
-
-**Propósito:**
-Correr pruebas, validar consistencia de datos, verificar que el build pasa, y asegurar que no hay números incoherentes en la interfaz.
-
-**Puede tocar:**
-- Archivos de pruebas
-- `.ai/validation-log.md`
-- Scripts de validación
-
-**Debe evitar:**
-- Modificar lógica de producto para hacer pasar pruebas
-- Ignorar errores de consistencia de datos
-
-**Cómo reporta:**
-- Registra cada validación en `.ai/validation-log.md`
-- Si encuentra incoherencia de datos, bloquea y reporta antes de continuar
-
----
-
-## Agente 6: Pitch / Docs Agent
-
-**Herramienta:** Claude Code
-
-**Propósito:**
-Preparar materiales de presentación: narrativa del pitch, slides, resúmenes ejecutivos, y asegurarse de que los docs técnicos y de producto estén al día.
-
-**Puede tocar:**
-- `docs/pitch-context.md`
-- `docs/project-brief.md`
-- `README.md`
-- Materiales de presentación
-
-**Debe evitar:**
-- Exagerar funcionalidades no implementadas
-- Crear certeza falsa sobre datos o métricas
-- Contradecir lo que dicen los docs fuente
-
-**Cómo reporta:**
-- Cualquier cambio de narrativa que afecte el producto debe pasar por el Tech Lead
-
----
-
-## Coordinación general
-
-- Un agente a la vez por archivo cuando sea posible.
-- Si dos agentes necesitan tocar el mismo archivo, coordinar con el Tech Lead primero.
-- El Orquestador es el que tiene la visión completa — los demás agentes preguntan si tienen dudas de contexto.
-- Los docs en `docs/` son la fuente de verdad; el código debe ser consistente con ellos.
+Gemini API actúa solo como **capa de explicación**:
+- Traduce recomendaciones ya calculadas a lenguaje natural
+- No toma decisiones de negocio
+- No inventa datos
+- Si la API falla, el motor determinístico sigue funcionando

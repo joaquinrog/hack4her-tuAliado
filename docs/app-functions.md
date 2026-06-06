@@ -1,4 +1,4 @@
-# Funciones de la App — Tuali Crece
+# Funciones de la App — tuAliado
 
 > Lista completa sin depurar. Incluye funciones del equipo + las ya definidas.
 > Próximo paso: depurar cuáles entran al MVP/Demo del hackathon.

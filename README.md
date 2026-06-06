@@ -1,4 +1,4 @@
-# Tuali Crece — Tuali Growth Agent
+# tuAliado — Tuali Growth Agent
 
 **Hackathon:** Hack4Her
 **Reto:** Tuali Growth Agent
@@ -12,7 +12,7 @@ Los clientes de Tuali (dueños de tiendas de abarrotes y similares) tienen acces
 
 El resultado: el cliente no sabe qué le conviene pedir, no aprovecha las promociones de forma óptima, y depende del promotor para tomar decisiones que podría tomar solo.
 
-## Solución: Tuali Crece
+## Solución: tuAliado
 
 Un agente de crecimiento para clientes de Tuali que:
 
@@ -53,7 +53,7 @@ El usuario prioritario es el **dueño apoyado**: dueño de tienda con baja habil
 ## Archivos fuente del reto
 
 - `01-contexto-reto-tuali.md` — Contexto oficial, protopersonas, journeys, respuestas de Tuali.
-- `02-posible-mvp-tuali-crece.md` — Dirección del MVP discutida hasta ahora.
+- `02-posible-mvp-tuali-crece.md` — Dirección del MVP discutida hasta ahora (doc fuente original).
 
 ## Equipo — Picafresitas
 

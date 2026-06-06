@@ -1,4 +1,4 @@
-# Contexto para el pitch — Tuali Crece
+# Contexto para el pitch — tuAliado
 
 > Este documento organiza el contexto que necesitamos para la presentación ante jueces.
 > Actualizar cuando la narrativa o los datos cambien.
@@ -11,7 +11,7 @@ Los dueños de tiendas que usan Tuali tienen datos valiosos disponibles, pero no
 
 ## La solución
 
-**Tuali Crece:** un agente de crecimiento dentro de Tuali que diagnostica al cliente, lo ayuda a elegir una meta, le da recomendaciones concretas y da seguimiento a su avance — en lenguaje simple, adaptado a su perfil.
+**tuAliado:** un agente de crecimiento dentro de Tuali que diagnostica al cliente, lo ayuda a elegir una meta, le da recomendaciones concretas y da seguimiento a su avance — en lenguaje simple, adaptado a su perfil.
 
 ## Beneficio para el cliente
 
@@ -34,7 +34,7 @@ Los dueños de tiendas que usan Tuali tienen datos valiosos disponibles, pero no
 
 Raúl, 63 años, baja habilidad digital, se apoya en el promotor para pedir. No entiende las letras pequeñas. Tiene miedo a equivocarse.
 
-Si Tuali Crece funciona para Raúl:
+Si tuAliado funciona para Raúl:
 - Funciona para todos los demás clientes también.
 - Demuestra que el agente puede ser simple y útil al mismo tiempo.
 - El impacto en clientes como Raúl es directo: menos dependencia del promotor, más autonomía.
@@ -51,7 +51,7 @@ Principios de diseño del MVP:
 
 ## Por qué no es un chatbot genérico
 
-El chatbot genérico pregunta "¿en qué te puedo ayudar?" y espera. Tuali Crece:
+El chatbot genérico pregunta "¿en qué te puedo ayudar?" y espera. tuAliado:
 
 1. Ya sabe quién es el cliente (diagnóstico del perfil).
 2. Ya tiene una meta activa.
@@ -72,7 +72,7 @@ Estas dos métricas fueron confirmadas directamente por Tuali como lo que quiere
 ## Flujo del MVP en pasos claros
 
 ```
-1. Diagnóstico    → Tuali Crece entiende quién es el cliente
+1. Diagnóstico    → tuAliado entiende quién es el cliente
 2. Meta           → El cliente elige o ve su meta activa
 3. Recomendación  → 3 acciones concretas, ordenadas por impacto
 4. Acción         → El cliente actúa dentro de Tuali

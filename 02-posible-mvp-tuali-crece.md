@@ -2,7 +2,7 @@
 
 ## Nombre / dirección de producto
 
-**Tuali Crece**
+**tuAliado**
 
 También descrito como:
 
@@ -163,7 +163,7 @@ Contexto relacionado:
 
 ### 5. Riesgo y beneficio
 
-El concepto de Tuali Crece incluye detallar niveles de riesgo y beneficio.
+El concepto de tuAliado incluye detallar niveles de riesgo y beneficio.
 
 Esto puede ayudar a que el cliente entienda:
 

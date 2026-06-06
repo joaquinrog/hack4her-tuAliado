@@ -11,7 +11,7 @@
 |---|---|
 | Hackathon | Hack4Her |
 | Reto | Tuali Growth Agent |
-| Producto de trabajo | Tuali Crece |
+| Producto de trabajo | tuAliado |
 | Tech Lead | Tech Lead del equipo |
 | Estado | Esquema de datos mock implementado — motor pendiente |
 
@@ -49,7 +49,7 @@ Los clientes de Tuali tienen datos útiles disponibles (pedidos, promociones, lo
 | ¿Qué no quieren ver? | Incoherencia en los datos. | Crítico: cualquier número debe tener origen claro. |
 | ¿Cómo debe comportarse? | Evaluar comportamiento del usuario dentro de la app. | El agente debe usar señales de la app. |
 
-## Dirección del MVP: Tuali Crece
+## Dirección del MVP: tuAliado
 
 Flujo base:
 ```

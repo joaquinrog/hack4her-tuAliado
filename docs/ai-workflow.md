@@ -1,91 +1,57 @@
-# Flujo de trabajo con AI — Claude Code y Codex
+# Flujo de trabajo con AI — Claude Code
 
-## Principios generales
+## Principios
 
-- Las tareas se mantienen acotadas. Un agente, un archivo o módulo, un objetivo claro.
-- Cuando una decisión cambia, se actualiza el doc correspondiente antes de continuar.
-- Dos agentes no deben editar el mismo archivo al mismo tiempo sin coordinación.
-- Los docs en `docs/` son la fuente de verdad — el código debe ser consistente con ellos.
-- Si hay duda sobre contexto, leer `docs/handoff-context.md` antes de continuar.
-
----
-
-## Claude Code — Rol principal
-
-**Usa para:**
-- Orquestación y contexto entre tareas.
-- Planeación de la siguiente tarea.
-- Escribir y actualizar documentación.
-- Decisiones de producto y arquitectura (en conversación con el Tech Lead).
-- Tareas de coordinación entre módulos.
-- Revisar coherencia general del proyecto.
-
-**No usar para:**
-- Implementar funcionalidades completas de producto sin aprobación.
-- Cambiar arquitectura sin registrarlo en `docs/decisions.md`.
-- Asumir contexto no documentado.
+- Un agente, un loop. Claude Code hace contexto, planificación e implementación.
+- Las tareas se mantienen acotadas: un objetivo, un módulo o archivo a la vez.
+- Los docs en `docs/` son fuente de verdad — el código debe ser consistente con ellos.
+- Si hay duda de contexto, leer `docs/handoff-context.md` antes de continuar.
+- Cuando una decisión cambia, actualizar el doc correspondiente antes de seguir.
 
 ---
 
-## Codex — Rol de implementación
-
-**Usa para:**
-- Implementación de componentes de UI específicos.
-- Lógica de motor de recomendaciones.
-- Tests y validaciones.
-- Debugging de errores concretos.
-- Tareas de implementación con contexto bien definido (archivos, inputs, outputs claros).
-
-**Cómo pasarle contexto a Codex:**
-1. Darle siempre el fragmento relevante de `docs/handoff-context.md`.
-2. Especificar claramente qué archivo toca, qué no toca, y cuál es el output esperado.
-3. Si genera código que contradice los docs, detectarlo y corregirlo antes de integrar.
-
----
-
-## Playwright MCP — Visual QA (futuro)
-
-Disponible para verificar que la UI funciona como se espera.
-
-**Usa para:**
-- Verificar flujos de navegación.
-- Comprobar estados de pantallas.
-- Detectar inconsistencias visuales.
-- Registrar hallazgos en `.ai/visual-qa-notes.md`.
-
-**No está activo aún.** Se habilitará cuando haya algo que mostrar en el browser.
-
----
-
-## Ciclo de trabajo recomendado
+## Loop de trabajo
 
 ```
 1. Leer handoff-context.md
-2. Identificar la siguiente tarea con el Tech Lead
-3. Ejecutar la tarea (Claude Code o Codex según el tipo)
-4. Registrar resultado en validation-log.md o decisions.md según corresponda
-5. Actualizar handoff-context.md si el estado del proyecto cambió
-6. Confirmar con el Tech Lead antes de la siguiente tarea
+2. Identificar la siguiente tarea (task board o instrucción directa)
+3. Implementar con scope acotado
+4. Verificar coherencia de datos
+5. Actualizar task-board.md + handoff-context.md
+6. Confirmar con Joaquín
 ```
 
 ---
 
-## Reglas de coordinación entre agentes
+## Slash commands disponibles
 
-- El Orquestador (Claude Code, sesión principal) mantiene la visión del proyecto.
-- Codex recibe tareas acotadas con contexto explícito.
-- Si Codex necesita información de contexto, Claude Code se la provee — no que Codex asuma.
-- Los archivos `.ai/` son territorio de tracking; los archivos `docs/` son territorio de contexto.
-- `CLAUDE.md` es solo para instrucciones a Claude Code.
+| Comando | Cuándo usarlo |
+|---|---|
+| `/dev` | Implementar una tarea del task board. Pasar número de tarea. |
+| `/verify` | Verificar que un cambio funciona en el browser. |
+| `/run` | Levantar el servidor de desarrollo. |
+| `/code-review` | Revisar el diff antes de commit. |
+
+**Ejemplo de uso:**
+```
+Revisa la task #3 en .ai/task-board.md y haz /dev
+```
 
 ---
 
-## Sobre el uso del LLM en el producto
+## Sobre el LLM en el producto
 
 El LLM (Gemini API) dentro del producto solo actúa como **capa de explicación**:
-- Traduce recomendaciones ya calculadas a lenguaje natural.
-- Adapta el tono al perfil del cliente.
-- No toma decisiones de negocio.
-- No inventa datos.
+- Traduce recomendaciones ya calculadas a lenguaje natural
+- Adapta el tono al perfil del cliente
+- No toma decisiones de negocio, no inventa datos
 
-Si el LLM no está disponible (API caída, timeout), el motor determinístico debe seguir funcionando. Las recomendaciones no pueden depender del LLM para existir — solo para explicarse.
+Si el LLM no está disponible, el motor determinístico debe seguir funcionando.
+
+---
+
+## Reglas de datos
+
+- Separar datos reales, datos mock y estimaciones — siempre con origen claro.
+- Si los números no cuadran, parar y reportar antes de continuar.
+- Documentar supuestos de datos en `docs/data-assumptions.md`.

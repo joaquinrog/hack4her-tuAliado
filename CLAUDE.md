@@ -4,7 +4,7 @@
 
 Este repositorio es el proyecto de hackathon **Hack4Her** para el reto **Tuali Growth Agent**.
 
-El nombre de trabajo del producto es **Tuali Crece**.
+El nombre de trabajo del producto es **tuAliado**.
 
 El Tech Lead y único programador es el responsable de ingeniería del equipo.
 
@@ -98,7 +98,7 @@ Detener y reportar si una pantalla tiene:
 ## Archivos fuente de contexto (no modificar sin revisión)
 
 - `01-contexto-reto-tuali.md` — contexto oficial del reto y respuestas de Tuali.
-- `02-posible-mvp-tuali-crece.md` — dirección del MVP discutida hasta ahora.
+- `02-posible-mvp-tuali-crece.md` — dirección del MVP discutida hasta ahora (doc fuente original, nombre histórico).
 
 ## Estado actual
 

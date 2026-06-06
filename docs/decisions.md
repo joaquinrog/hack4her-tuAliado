@@ -16,7 +16,7 @@
 
 ### Nombre de trabajo del producto
 
-- **Decisión:** Tuali Crece
+- **Decisión:** tuAliado
 - **Estado:** Confirmado
 
 ---
