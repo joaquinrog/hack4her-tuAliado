@@ -166,18 +166,6 @@ function RecomendacionesContent() {
           })}
         </div>
 
-        <section className="flex items-center gap-stack-sm rounded-xl border border-primary/20 bg-primary/5 p-stack-sm">
-          <span className="material-symbols-outlined text-[32px] text-primary" aria-hidden>
-            start
-          </span>
-          <div>
-            <p className="font-sans text-label-md text-on-surface">Empieza por aquí</p>
-            <p className="font-sans text-body-md text-on-surface-variant">
-              Si no sabes cuál elegir, empieza con la primera.
-            </p>
-          </div>
-        </section>
-
         {recomendaciones.map((rec) => (
           <RecomendacionCard
             key={rec.id}

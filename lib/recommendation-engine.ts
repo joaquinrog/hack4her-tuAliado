@@ -92,7 +92,7 @@ function recPedirPorApp(id: string, titulo: string, fundamento: string): Recomen
     titulo,
     retornoEstimado: "Retorno: historial claro y puntos sin depender del promotor",
     fundamento,
-    accion: "Hacer pedido por la app",
+    accion: "Voy a intentarlo",
     productoIds: [],
   }
 }
@@ -108,7 +108,7 @@ function recLoyalty(estado: EstadoMock, id = "rec-loyalty"): Recomendacion | nul
     titulo: `Reto: gana ${retoActivo.puntosRecompensa} puntos`,
     retornoEstimado: `+${retoActivo.puntosRecompensa} puntos reales de Gana con Tuali`,
     fundamento: retoActivo.descripcion,
-    accion: "Activar reto",
+    accion: "Voy a intentarlo",
     productoIds: [],
   }
 }
@@ -171,7 +171,7 @@ export function calcularRecomendaciones(
               "Empieza con promo de Coca-Cola",
               promoCoca,
               estado,
-              "Pedir con esta promoción",
+              "Voy a intentarlo",
               "Coca-Cola 600ml es producto frecuente en los pedidos de Raúl."
             )
           : null,
@@ -190,7 +190,7 @@ export function calcularRecomendaciones(
               "Mueve más Coca-Cola con promo",
               promoCoca,
               estado,
-              "Pedir con esta promoción",
+              "Voy a intentarlo",
               "Es producto de alta rotación y tiene descuento activo."
             )
           : null,
@@ -209,26 +209,26 @@ export function calcularRecomendaciones(
               "Usa promo de Coca-Cola",
               promoCoca,
               estado,
-              "Agregar Coca-Cola",
+              "Voy a intentarlo",
               "Es la promo más familiar para Raúl por su historial de compra."
             )
           : null,
         promoCiel
-          ? recPromo("rec-promo-ciel", "Suma Ciel con descuento", promoCiel, estado, "Agregar Ciel", "Ciel aparece seguido en sus pedidos recientes.")
+          ? recPromo("rec-promo-ciel", "Suma Ciel con descuento", promoCiel, estado, "Voy a intentarlo", "Ciel aparece seguido en sus pedidos recientes.")
           : null,
         promoVictoria
-          ? recPromo("rec-promo-victoria", "Revisa promo de Victoria", promoVictoria, estado, "Agregar Victoria", "Victoria ya aparece en pedidos anteriores de Raúl.")
+          ? recPromo("rec-promo-victoria", "Revisa promo de Victoria", promoVictoria, estado, "Voy a intentarlo", "Victoria ya aparece en pedidos anteriores de Raúl.")
           : null,
       ],
       ganancia: [
         promoVictoria
-          ? recPromo("rec-promo-victoria", "Mayor ahorro: Victoria", promoVictoria, estado, "Agregar Victoria", "Es la promo con mayor ahorro por paquete en el catálogo mock.")
+          ? recPromo("rec-promo-victoria", "Mayor ahorro: Victoria", promoVictoria, estado, "Voy a intentarlo", "Es la promo con mayor ahorro por paquete en el catálogo mock.")
           : null,
         promoCoca
-          ? recPromo("rec-promo-coca", "Coca-Cola con descuento", promoCoca, estado, "Agregar Coca-Cola", "Es producto frecuente y la promo sigue activa.")
+          ? recPromo("rec-promo-coca", "Coca-Cola con descuento", promoCoca, estado, "Voy a intentarlo", "Es producto frecuente y la promo sigue activa.")
           : null,
         promoCiel
-          ? recPromo("rec-promo-ciel", "Ciel con descuento", promoCiel, estado, "Agregar Ciel", "Tiene descuento activo y Raúl lo compra seguido.")
+          ? recPromo("rec-promo-ciel", "Ciel con descuento", promoCiel, estado, "Voy a intentarlo", "Tiene descuento activo y Raúl lo compra seguido.")
           : null,
       ],
     },
@@ -242,7 +242,7 @@ export function calcularRecomendaciones(
               titulo: `Resurte ${frecuente.nombre}`,
               retornoEstimado: "Retorno: menos faltantes en productos que ya vendes",
               fundamento: "Es el producto que más aparece en el historial de pedidos.",
-              accion: "Agregar a mi pedido",
+              accion: "Voy a intentarlo",
               productoIds: [frecuente.id],
             }
           : null,
@@ -253,16 +253,16 @@ export function calcularRecomendaciones(
           titulo: "Revisa tu pedido sugerido",
           retornoEstimado: "Retorno: surtido más constante sin adivinar",
           fundamento: "Raúl todavía no usa pedido sugerido en Tuali.",
-          accion: "Ver pedido sugerido",
+          accion: "Voy a intentarlo",
           productoIds: [],
         },
         promoCiel
-          ? recPromo("rec-surtir-promo", "Completa con promo de Ciel", promoCiel, estado, "Agregar promo", "Ciel combina con su surtido frecuente y tiene descuento activo.")
+          ? recPromo("rec-surtir-promo", "Completa con promo de Ciel", promoCiel, estado, "Voy a intentarlo", "Ciel combina con su surtido frecuente y tiene descuento activo.")
           : null,
       ],
       ganancia: [
         promoCiel
-          ? recPromo("rec-surtir-promo", "Ahorra al resurtir Ciel", promoCiel, estado, "Agregar promo", "Es una promo compatible con productos que Raúl ya compra.")
+          ? recPromo("rec-surtir-promo", "Ahorra al resurtir Ciel", promoCiel, estado, "Voy a intentarlo", "Es una promo compatible con productos que Raúl ya compra.")
           : null,
         {
           id: "rec-surtir-sugerido",
@@ -271,7 +271,7 @@ export function calcularRecomendaciones(
           titulo: "Usa pedido sugerido",
           retornoEstimado: "Retorno: menos producto agotado en días de venta",
           fundamento: "El historial permite detectar productos que conviene repetir.",
-          accion: "Ver pedido sugerido",
+          accion: "Voy a intentarlo",
           productoIds: [],
         },
         frecuente
@@ -282,7 +282,7 @@ export function calcularRecomendaciones(
               titulo: `No dejes faltar ${frecuente.nombre}`,
               retornoEstimado: "Retorno: proteger venta de un producto frecuente",
               fundamento: "Es el producto que más se repite en sus pedidos.",
-              accion: "Agregar a mi pedido",
+              accion: "Voy a intentarlo",
               productoIds: [frecuente.id],
             }
           : null,
@@ -297,7 +297,7 @@ export function calcularRecomendaciones(
           titulo: "Registra cómo estuvo tu día",
           retornoEstimado: "Retorno: avance visible sin hacer cuentas",
           fundamento: "Con registros diarios, tuAliado puede comparar cambios reales.",
-          accion: "Registrar mi día",
+          accion: "Voy a intentarlo",
           productoIds: [],
         },
         recPedirPorApp("rec-como-app", "Pide por la app una vez", "Así queda historial para saber cómo va tu tienda."),
@@ -313,7 +313,7 @@ export function calcularRecomendaciones(
           titulo: "Cierra el día con registro",
           retornoEstimado: "Retorno: señales claras para tu resumen semanal",
           fundamento: "Sin registro, el seguimiento solo ve pedidos, no cómo estuvo el día.",
-          accion: "Registrar mi día",
+          accion: "Voy a intentarlo",
           productoIds: [],
         },
       ],

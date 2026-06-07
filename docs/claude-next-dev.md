@@ -28,9 +28,14 @@ Verificación ya pasada después de esos commits:
 
 ---
 
-## Prioridad 1 — Recomendaciones menos genéricas por meta
+## ✅ Prioridad 1 — Recomendaciones menos genéricas por meta (cerrada 2026-06-07)
 
-**Problema:** `/recomendaciones` todavía se siente repetitiva entre metas. Hoy dos tarjetas se repiten por datos reales globales de Raúl:
+> Implementada en `2a262a4 feat(recomendaciones): agrega selector de estrategia más fácil/más ganancia`
+> y revisada/ajustada por Claude el 2026-06-07 08:32 (ver `docs/handoff-context.md`).
+> Las 4 metas ya producen sets de 3 títulos distintos con selector Más fácil / Más ganancia.
+> Se deja el contenido original abajo solo como referencia histórica del enfoque.
+
+**Problema (ya resuelto):** `/recomendaciones` todavía se sentía repetitiva entre metas. Antes dos tarjetas se repetían por datos reales globales de Raúl:
 
 - promo sin usar;
 - reto loyalty sin activar.
@@ -204,9 +209,10 @@ Eso es defensible, pero para demo puede sentirse pobre si se comparan metas.
 
 ## Estado de pendientes después de esta preparación
 
+> Actualizado 2026-06-07 08:32 por Claude tras revisar los commits de Codex de la mañana.
+
 Pendientes reales:
 
-- Hacer recomendaciones más distintas por meta, si hay tiempo.
 - Polish visible del flujo demo.
 - Narrativa final del pitch.
 - QA final mobile del demo path.
@@ -217,3 +223,10 @@ Pendientes cerrados:
 - End correcto de demo.
 - Explicación de diagnóstico común.
 - Navegación desde recomendaciones a registro.
+- Hacer recomendaciones más distintas por meta (commit `2a262a4`).
+- Coherencia CTA → destino en `/recomendaciones`: las tarjetas tenían textos de botón muy
+  específicos (`"Activar reto"`, `"Ver pedido sugerido"`, `"Agregar Coca-Cola"`...) que prometían
+  funciones que no existen — todas navegan a `/registro`. Se unificó a `"Voy a intentarlo"` en
+  `lib/recommendation-engine.ts`.
+- Compactar `/recomendaciones`: se quitó el bloque "Empieza por aquí" (redundante con el orden ya
+  priorizado de las tarjetas) en `app/recomendaciones/page.tsx`.
