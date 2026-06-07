@@ -5,38 +5,38 @@ const ESTILO_POR_RIESGO: Record<
   {
     emoji: string
     etiqueta: string
-    emojiBeneficio: string
+    emojiRetorno: string
     accent: string
     badge: string
-    beneficio: string
+    retorno: string
     cta: string
   }
 > = {
   bajo: {
     emoji: "🟢",
     etiqueta: "Bajo riesgo",
-    emojiBeneficio: "💰",
+    emojiRetorno: "💰",
     accent: "bg-[#22c55e]",
     badge: "bg-[#22c55e]/10 text-[#166534]",
-    beneficio: "border-[#22c55e]/20 bg-[#22c55e]/5 text-[#166534]",
+    retorno: "border-[#22c55e]/20 bg-[#22c55e]/5 text-[#166534]",
     cta: "bg-primary text-on-primary",
   },
   medio: {
     emoji: "🟡",
     etiqueta: "Riesgo medio",
-    emojiBeneficio: "⭐",
+    emojiRetorno: "⭐",
     accent: "bg-[#eab308]",
     badge: "bg-[#eab308]/10 text-[#854d0e]",
-    beneficio: "border-[#eab308]/20 bg-[#eab308]/5 text-[#854d0e]",
+    retorno: "border-[#eab308]/20 bg-[#eab308]/5 text-[#854d0e]",
     cta: "border-2 border-primary bg-transparent text-primary",
   },
   alto: {
     emoji: "🟠",
     etiqueta: "Mayor ganancia",
-    emojiBeneficio: "📈",
+    emojiRetorno: "📈",
     accent: "bg-primary",
     badge: "bg-primary/10 text-primary",
-    beneficio: "border-primary/20 bg-primary/5 text-primary",
+    retorno: "border-primary/20 bg-primary/5 text-primary",
     cta: "bg-transparent text-primary",
   },
 }
@@ -44,7 +44,7 @@ const ESTILO_POR_RIESGO: Record<
 interface RecomendacionCardProps {
   recomendacion: Recomendacion
   descripcion: string | null
-  onAction?: () => void
+  onAction: () => void
 }
 
 export function RecomendacionCard({ recomendacion, descripcion, onAction }: RecomendacionCardProps) {
@@ -60,10 +60,14 @@ export function RecomendacionCard({ recomendacion, descripcion, onAction }: Reco
         </span>
         <h2 className="font-sans text-body-lg font-bold text-on-surface">{recomendacion.titulo}</h2>
         {descripcion && <p className="font-sans text-body-md text-on-surface-variant">{descripcion}</p>}
-        {recomendacion.beneficioEstimado && (
-          <p className={`flex items-center gap-stack-sm rounded-lg border p-stack-sm font-sans text-label-md ${estilo.beneficio}`}>
-            <span aria-hidden>{estilo.emojiBeneficio}</span>
-            {recomendacion.beneficioEstimado}
+        <p className="font-sans text-caption text-on-surface-variant">
+          <span className="font-bold text-on-surface">Por qué: </span>
+          {recomendacion.fundamento}
+        </p>
+        {recomendacion.retornoEstimado && (
+          <p className={`flex items-center gap-stack-sm rounded-lg border p-stack-sm font-sans text-label-md ${estilo.retorno}`}>
+            <span aria-hidden>{estilo.emojiRetorno}</span>
+            {recomendacion.retornoEstimado}
           </p>
         )}
         <button

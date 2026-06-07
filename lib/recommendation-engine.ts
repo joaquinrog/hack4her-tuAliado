@@ -4,6 +4,9 @@ import type {
   Recomendacion,
   BaselineSnapshot,
   Diagnostico,
+  EstrategiaRiesgo,
+  Producto,
+  Promocion,
 } from "./types"
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -25,17 +28,93 @@ function nivelEngagement(c: EstadoMock["comportamiento"]): Diagnostico["nivelEng
   return "bajo"
 }
 
-// Nivel de riesgo por tipo de recomendación — calca los ejemplos de
-// design/stitch-prompts/03-recomendaciones.md (Card A=promo/bajo, B=pedido_sugerido/medio,
-// C=loyalty/mayor ganancia):
-// - promo → "bajo" (aprovechar un descuento ya activo, acción segura e inmediata)
-// - pedido_sugerido → "medio" (implica cambiar un hábito, requiere algo de esfuerzo)
-// - loyalty / precio_venta → "alto" (badge: 🟠 Mayor ganancia — más cambio, mayor potencial)
-const NIVEL_RIESGO_POR_TIPO: Record<Recomendacion["tipo"], Recomendacion["nivelRiesgo"]> = {
-  promo: "bajo",
-  pedido_sugerido: "medio",
-  loyalty: "alto",
-  precio_venta: "alto",
+const PESOS = new Intl.NumberFormat("es-MX", {
+  style: "currency",
+  currency: "MXN",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+})
+
+function buscarProducto(estado: EstadoMock, productoId: string): Producto | undefined {
+  return estado.catalogo.find((producto) => producto.id === productoId)
+}
+
+function buscarPromoPorProducto(estado: EstadoMock, productoId: string): Promocion | undefined {
+  return estado.promocionesActivas.find((promo) => promo.productoIds.includes(productoId))
+}
+
+function productoMasComprado(estado: EstadoMock): Producto | undefined {
+  const cantidades = new Map<string, number>()
+
+  estado.historialPedidos.forEach((pedido) => {
+    pedido.productos.forEach((item) => {
+      cantidades.set(item.productoId, (cantidades.get(item.productoId) ?? 0) + item.cantidad)
+    })
+  })
+
+  const [productoId] = [...cantidades.entries()].sort((a, b) => b[1] - a[1])[0] ?? []
+  return productoId ? buscarProducto(estado, productoId) : undefined
+}
+
+function retornoPromo(promo: Promocion, estado: EstadoMock): string {
+  const producto = buscarProducto(estado, promo.productoIds[0])
+  if (!producto) return `${promo.descuentoPct}% menos en producto con promo activa`
+
+  const ahorro = producto.precioCosto * (promo.descuentoPct / 100)
+  return `Ahorro aprox. ${PESOS.format(ahorro)} por ${producto.nombre}`
+}
+
+function recPromo(
+  id: string,
+  titulo: string,
+  promo: Promocion,
+  estado: EstadoMock,
+  accion: string,
+  fundamento: string
+): Recomendacion {
+  return {
+    id,
+    tipo: "promo",
+    nivelRiesgo: "bajo",
+    titulo,
+    retornoEstimado: retornoPromo(promo, estado),
+    fundamento,
+    accion,
+    productoIds: promo.productoIds,
+  }
+}
+
+function recPedirPorApp(id: string, titulo: string, fundamento: string): Recomendacion {
+  return {
+    id,
+    tipo: "pedido_sugerido",
+    nivelRiesgo: "medio",
+    titulo,
+    retornoEstimado: "Retorno: historial claro y puntos sin depender del promotor",
+    fundamento,
+    accion: "Hacer pedido por la app",
+    productoIds: [],
+  }
+}
+
+function recLoyalty(estado: EstadoMock, id = "rec-loyalty"): Recomendacion | null {
+  const retoActivo = estado.loyalty.retosActivos.find((reto) => !reto.completado)
+  if (!retoActivo) return null
+
+  return {
+    id,
+    tipo: "loyalty",
+    nivelRiesgo: "alto",
+    titulo: `Reto: gana ${retoActivo.puntosRecompensa} puntos`,
+    retornoEstimado: `+${retoActivo.puntosRecompensa} puntos reales de Gana con Tuali`,
+    fundamento: retoActivo.descripcion,
+    accion: "Activar reto",
+    productoIds: [],
+  }
+}
+
+function compactar(recs: Array<Recomendacion | null>): Recomendacion[] {
+  return recs.filter((rec): rec is Recomendacion => rec !== null).slice(0, 3)
 }
 
 // ── Diagnóstico ────────────────────────────────────────────────────────────
@@ -66,7 +145,8 @@ export function calcularDiagnostico(estado: EstadoMock): Diagnostico {
 
 export function calcularRecomendaciones(
   meta: MetaCliente,
-  estado: EstadoMock
+  estado: EstadoMock,
+  estrategia: EstrategiaRiesgo = "facil"
 ): { recomendaciones: Recomendacion[]; baseline: BaselineSnapshot } {
   const baseline: BaselineSnapshot = {
     fecha: new Date().toISOString().slice(0, 10),
@@ -76,88 +156,169 @@ export function calcularRecomendaciones(
     puntosLoyalty: estado.loyalty.puntosAcumulados,
   }
 
-  const recs: Recomendacion[] = []
+  const promoCoca = buscarPromoPorProducto(estado, "p-001")
+  const promoCiel = buscarPromoPorProducto(estado, "p-006")
+  const promoVictoria = buscarPromoPorProducto(estado, "p-008")
+  const loyalty = recLoyalty(estado)
+  const frecuente = productoMasComprado(estado)
 
-  // Rec A — promos no aprovechadas (aplica en todas las metas)
-  const promoSinUsar = estado.promocionesActivas[0]
-  if (!estado.comportamiento.usaPromociones && promoSinUsar) {
-    recs.push({
-      id: "rec-promo-a",
-      tipo: "promo",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.promo,
-      titulo: `Usa: ${promoSinUsar.nombre}`,
-      beneficioEstimado: `${promoSinUsar.descuentoPct}% menos en tu próximo pedido`,
-      accion: "Pedir con esta promoción",
-      productoIds: promoSinUsar.productoIds,
-    })
+  const porMeta: Record<MetaCliente, Record<EstrategiaRiesgo, Array<Recomendacion | null>>> = {
+    vender_mas: {
+      facil: [
+        promoCoca
+          ? recPromo(
+              "rec-vender-coca",
+              "Empieza con promo de Coca-Cola",
+              promoCoca,
+              estado,
+              "Pedir con esta promoción",
+              "Coca-Cola 600ml es producto frecuente en los pedidos de Raúl."
+            )
+          : null,
+        recPedirPorApp(
+          "rec-vender-app",
+          "Haz un pedido por la app",
+          "Hoy Raúl hace 80% de sus pedidos con promotor."
+        ),
+        loyalty,
+      ],
+      ganancia: [
+        loyalty,
+        promoCoca
+          ? recPromo(
+              "rec-vender-coca",
+              "Mueve más Coca-Cola con promo",
+              promoCoca,
+              estado,
+              "Pedir con esta promoción",
+              "Es producto de alta rotación y tiene descuento activo."
+            )
+          : null,
+        recPedirPorApp(
+          "rec-vender-app",
+          "Pasa más pedidos a la app",
+          "Los pedidos por app dejan historial para medir ticket y puntos."
+        ),
+      ],
+    },
+    aprovechar_promos: {
+      facil: [
+        promoCoca
+          ? recPromo(
+              "rec-promo-coca",
+              "Usa promo de Coca-Cola",
+              promoCoca,
+              estado,
+              "Agregar Coca-Cola",
+              "Es la promo más familiar para Raúl por su historial de compra."
+            )
+          : null,
+        promoCiel
+          ? recPromo("rec-promo-ciel", "Suma Ciel con descuento", promoCiel, estado, "Agregar Ciel", "Ciel aparece seguido en sus pedidos recientes.")
+          : null,
+        promoVictoria
+          ? recPromo("rec-promo-victoria", "Revisa promo de Victoria", promoVictoria, estado, "Agregar Victoria", "Victoria ya aparece en pedidos anteriores de Raúl.")
+          : null,
+      ],
+      ganancia: [
+        promoVictoria
+          ? recPromo("rec-promo-victoria", "Mayor ahorro: Victoria", promoVictoria, estado, "Agregar Victoria", "Es la promo con mayor ahorro por paquete en el catálogo mock.")
+          : null,
+        promoCoca
+          ? recPromo("rec-promo-coca", "Coca-Cola con descuento", promoCoca, estado, "Agregar Coca-Cola", "Es producto frecuente y la promo sigue activa.")
+          : null,
+        promoCiel
+          ? recPromo("rec-promo-ciel", "Ciel con descuento", promoCiel, estado, "Agregar Ciel", "Tiene descuento activo y Raúl lo compra seguido.")
+          : null,
+      ],
+    },
+    surtir_tienda: {
+      facil: [
+        frecuente
+          ? {
+              id: "rec-surtir-frecuente",
+              tipo: "pedido_sugerido",
+              nivelRiesgo: "bajo",
+              titulo: `Resurte ${frecuente.nombre}`,
+              retornoEstimado: "Retorno: menos faltantes en productos que ya vendes",
+              fundamento: "Es el producto que más aparece en el historial de pedidos.",
+              accion: "Agregar a mi pedido",
+              productoIds: [frecuente.id],
+            }
+          : null,
+        {
+          id: "rec-surtir-sugerido",
+          tipo: "pedido_sugerido",
+          nivelRiesgo: "medio",
+          titulo: "Revisa tu pedido sugerido",
+          retornoEstimado: "Retorno: surtido más constante sin adivinar",
+          fundamento: "Raúl todavía no usa pedido sugerido en Tuali.",
+          accion: "Ver pedido sugerido",
+          productoIds: [],
+        },
+        promoCiel
+          ? recPromo("rec-surtir-promo", "Completa con promo de Ciel", promoCiel, estado, "Agregar promo", "Ciel combina con su surtido frecuente y tiene descuento activo.")
+          : null,
+      ],
+      ganancia: [
+        promoCiel
+          ? recPromo("rec-surtir-promo", "Ahorra al resurtir Ciel", promoCiel, estado, "Agregar promo", "Es una promo compatible con productos que Raúl ya compra.")
+          : null,
+        {
+          id: "rec-surtir-sugerido",
+          tipo: "pedido_sugerido",
+          nivelRiesgo: "medio",
+          titulo: "Usa pedido sugerido",
+          retornoEstimado: "Retorno: menos producto agotado en días de venta",
+          fundamento: "El historial permite detectar productos que conviene repetir.",
+          accion: "Ver pedido sugerido",
+          productoIds: [],
+        },
+        frecuente
+          ? {
+              id: "rec-surtir-frecuente",
+              tipo: "pedido_sugerido",
+              nivelRiesgo: "bajo",
+              titulo: `No dejes faltar ${frecuente.nombre}`,
+              retornoEstimado: "Retorno: proteger venta de un producto frecuente",
+              fundamento: "Es el producto que más se repite en sus pedidos.",
+              accion: "Agregar a mi pedido",
+              productoIds: [frecuente.id],
+            }
+          : null,
+      ],
+    },
+    como_voy: {
+      facil: [
+        {
+          id: "rec-como-registro",
+          tipo: "registro",
+          nivelRiesgo: "bajo",
+          titulo: "Registra cómo estuvo tu día",
+          retornoEstimado: "Retorno: avance visible sin hacer cuentas",
+          fundamento: "Con registros diarios, tuAliado puede comparar cambios reales.",
+          accion: "Registrar mi día",
+          productoIds: [],
+        },
+        recPedirPorApp("rec-como-app", "Pide por la app una vez", "Así queda historial para saber cómo va tu tienda."),
+        loyalty,
+      ],
+      ganancia: [
+        loyalty,
+        recPedirPorApp("rec-como-app", "Mide tus pedidos en la app", "Los pedidos por app alimentan el seguimiento de avance."),
+        {
+          id: "rec-como-registro",
+          tipo: "registro",
+          nivelRiesgo: "bajo",
+          titulo: "Cierra el día con registro",
+          retornoEstimado: "Retorno: señales claras para tu resumen semanal",
+          fundamento: "Sin registro, el seguimiento solo ve pedidos, no cómo estuvo el día.",
+          accion: "Registrar mi día",
+          productoIds: [],
+        },
+      ],
+    },
   }
 
-  // Rec B — según meta
-  // "vender_mas": apunta a autonomía de canal (mismo criterio usado para resolver
-  // la oportunidad "Pides por promotor, no por app" del diagnóstico).
-  if (meta === "vender_mas" && estado.comportamiento.porcentajePedidosTuali < 50) {
-    recs.push({
-      id: "rec-pide-por-app",
-      tipo: "pedido_sugerido",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
-      titulo: "Pide por la app esta semana",
-      beneficioEstimado: "Llevas tu historial y acumulas puntos automáticamente",
-      accion: "Hacer pedido por la app",
-      productoIds: [],
-    })
-  }
-
-  // "surtir_tienda": apunta a resurtido — pedido sugerido es la herramienta correcta.
-  if (meta === "surtir_tienda" && !estado.comportamiento.usaPedidoSugerido) {
-    recs.push({
-      id: "rec-pedido-sugerido",
-      tipo: "pedido_sugerido",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
-      titulo: "Activa el pedido sugerido",
-      beneficioEstimado: "Nunca te quedas sin producto en momentos de venta",
-      accion: "Ver pedido sugerido",
-      productoIds: [],
-    })
-  }
-
-  if (meta === "aprovechar_promos" && estado.promocionesActivas.length > 1) {
-    const promo2 = estado.promocionesActivas[1]
-    recs.push({
-      id: "rec-promo-b",
-      tipo: "promo",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.promo,
-      titulo: `También: ${promo2.nombre}`,
-      beneficioEstimado: `${promo2.descuentoPct}% de descuento`,
-      accion: "Agregar al pedido",
-      productoIds: promo2.productoIds,
-    })
-  }
-
-  if (meta === "como_voy" && !estado.comportamiento.usaPedidoSugerido) {
-    recs.push({
-      id: "rec-app",
-      tipo: "pedido_sugerido",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
-      titulo: "Empieza a pedir por la app",
-      beneficioEstimado: "Ves tu historial y acumulas puntos automáticamente",
-      accion: "Hacer pedido por app",
-      productoIds: [],
-    })
-  }
-
-  // Rec C — reto de loyalty sin activar (aplica en todas las metas)
-  const retoActivo = estado.loyalty.retosActivos.find((r) => !r.completado)
-  if (retoActivo) {
-    recs.push({
-      id: "rec-loyalty",
-      tipo: "loyalty",
-      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.loyalty,
-      titulo: `Reto: gana ${retoActivo.puntosRecompensa} puntos`,
-      beneficioEstimado: retoActivo.descripcion,
-      accion: "Activar reto",
-      productoIds: [],
-    })
-  }
-
-  return { recomendaciones: recs.slice(0, 3), baseline }
+  return { recomendaciones: compactar(porMeta[meta][estrategia]), baseline }
 }

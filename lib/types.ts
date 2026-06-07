@@ -83,6 +83,8 @@ export type MetaCliente =
   | "surtir_tienda"
   | "como_voy"
 
+export type EstrategiaRiesgo = "facil" | "ganancia"
+
 // Precios de venta por productoId — lo que el cliente dice que cobra a sus clientes.
 // Tuali no tiene este dato. Se pide de forma progresiva (no en onboarding inicial).
 export type PreciosVentaCliente = Record<string, number>
@@ -137,14 +139,15 @@ export interface Diagnostico {
 }
 
 // ── Recomendaciones ──────────────────────────────────────────────────────────
-// Producidas por recommendation-engine.ts. beneficioEstimado es null
-// cuando no hay precio de venta del cliente — nunca se inventa un número.
+// Producidas por recommendation-engine.ts. retornoEstimado usa ahorro real,
+// puntos reales o texto cualitativo; nunca inventa margen ni precio de venta.
 export interface Recomendacion {
   id: string
-  tipo: "promo" | "loyalty" | "pedido_sugerido" | "precio_venta"
+  tipo: "promo" | "loyalty" | "pedido_sugerido" | "precio_venta" | "registro"
   nivelRiesgo: "bajo" | "medio" | "alto"
   titulo: string
-  beneficioEstimado: string | null  // ESTIMACION o null si faltan preciosVenta
+  retornoEstimado: string | null
+  fundamento: string
   accion: string                    // texto del CTA
   productoIds: string[]
 }

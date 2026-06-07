@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useMemo, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { calcularRecomendaciones } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
@@ -9,26 +9,55 @@ import { PREGUNTA_META } from "@/lib/onboarding-questions"
 import { buildUrl, cargarBaseline, getMeta, guardarBaseline } from "@/lib/state"
 import { obtenerExplicacion } from "@/lib/explicaciones"
 import { RecomendacionCard } from "@/components/RecomendacionCard"
-import type { MetaCliente } from "@/lib/types"
+import type { EstrategiaRiesgo, MetaCliente } from "@/lib/types"
 
-const ENFOQUE_POR_META: Record<MetaCliente, { titulo: string; texto: string }> = {
+const ENFOQUE_POR_META: Record<MetaCliente, Record<EstrategiaRiesgo, { titulo: string; texto: string }>> = {
   vender_mas: {
-    titulo: "Sube tu venta esta semana",
-    texto: "Empieza con una promo segura y mueve más pedidos a la app.",
+    facil: {
+      titulo: "Tu plan más fácil",
+      texto: "Empieza con una promo segura y un pedido por la app.",
+    },
+    ganancia: {
+      titulo: "Tu plan con más ganancia",
+      texto: "Primero activa puntos y usa productos de alta rotación.",
+    },
   },
   aprovechar_promos: {
-    titulo: "Usa promos que ya tienes",
-    texto: "El plan prioriza descuentos activos para que no dejes dinero en la mesa.",
+    facil: {
+      titulo: "Promos fáciles de usar",
+      texto: "Arranca con productos que Raúl ya compra seguido.",
+    },
+    ganancia: {
+      titulo: "Promos con mayor retorno",
+      texto: "Ordenamos por ahorro real calculado desde el costo Tuali.",
+    },
   },
   surtir_tienda: {
-    titulo: "Evita quedarte sin producto",
-    texto: "El plan se enfoca en surtido y hábitos de pedido más constantes.",
+    facil: {
+      titulo: "Surtido sin complicarte",
+      texto: "Primero repite lo que ya vendes y evita faltantes.",
+    },
+    ganancia: {
+      titulo: "Surtido con mejor retorno",
+      texto: "Combina pedido sugerido con promos compatibles.",
+    },
   },
   como_voy: {
-    titulo: "Mide cómo va tu tienda",
-    texto: "El plan empieza con acciones simples para tener más señales de avance.",
+    facil: {
+      titulo: "Mide tu tienda fácil",
+      texto: "Registra el día y deja que tuAliado haga las cuentas.",
+    },
+    ganancia: {
+      titulo: "Mide lo que más suma",
+      texto: "Prioriza puntos, pedidos por app y señales de avance.",
+    },
   },
 }
+
+const ESTRATEGIAS: { valor: EstrategiaRiesgo; label: string }[] = [
+  { valor: "facil", label: "Más fácil" },
+  { valor: "ganancia", label: "Más ganancia" },
+]
 
 export default function Recomendaciones() {
   return (
@@ -42,18 +71,23 @@ function RecomendacionesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const meta = getMeta(searchParams)
+  const [estrategia, setEstrategia] = useState<EstrategiaRiesgo>("facil")
   const [descripciones, setDescripciones] = useState<Record<string, string | null>>({})
-  const resultado = meta ? calcularRecomendaciones(meta, MOCK_STATE) : null
-  const recomendaciones = resultado?.recomendaciones ?? []
+
+  const resultado = useMemo(
+    () => (meta ? calcularRecomendaciones(meta, MOCK_STATE, estrategia) : null),
+    [meta, estrategia]
+  )
+  const recomendaciones = useMemo(() => resultado?.recomendaciones ?? [], [resultado])
 
   useEffect(() => {
     if (resultado && !cargarBaseline()) guardarBaseline(resultado.baseline)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meta])
+  }, [resultado])
 
   useEffect(() => {
     if (!meta) return
     let cancelado = false
+    setDescripciones({})
 
     recomendaciones.forEach((rec) => {
       obtenerExplicacion(rec, MOCK_STATE.perfil).then((descripcion) => {
@@ -64,8 +98,7 @@ function RecomendacionesContent() {
     return () => {
       cancelado = true
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meta])
+  }, [meta, recomendaciones])
 
   if (!meta) {
     return (
@@ -84,7 +117,7 @@ function RecomendacionesContent() {
   }
 
   const opcionMeta = PREGUNTA_META.opciones.find((o) => o.valor === meta)
-  const enfoque = ENFOQUE_POR_META[meta]
+  const enfoque = ENFOQUE_POR_META[meta][estrategia]
 
   return (
     <div className="relative flex flex-1 flex-col bg-background">
@@ -102,7 +135,7 @@ function RecomendacionesContent() {
 
       <main className="flex flex-1 flex-col gap-stack-md px-margin-mobile pt-stack-md pb-[120px]">
         {opcionMeta && (
-          <span className="inline-flex w-max items-center gap-stack-sm rounded-full bg-surface-container px-stack-sm py-unit font-sans text-label-md text-on-surface">
+          <span className="inline-flex w-max max-w-full items-center gap-stack-sm rounded-full bg-surface-container px-stack-sm py-unit font-sans text-label-md text-on-surface">
             <span aria-hidden>{opcionMeta.emoji}</span>
             Meta: {opcionMeta.label}
           </span>
@@ -112,6 +145,37 @@ function RecomendacionesContent() {
           <p className="mb-unit font-sans text-caption text-primary">Tu plan</p>
           <h2 className="mb-unit font-sans text-headline-lg-mobile text-on-background">{enfoque.titulo}</h2>
           <p className="font-sans text-body-md text-on-surface-variant">{enfoque.texto}</p>
+        </section>
+
+        <div className="grid grid-cols-2 rounded-full bg-surface-container p-unit" role="group" aria-label="Estrategia">
+          {ESTRATEGIAS.map((opcion) => {
+            const activa = estrategia === opcion.valor
+            return (
+              <button
+                key={opcion.valor}
+                type="button"
+                aria-pressed={activa}
+                onClick={() => setEstrategia(opcion.valor)}
+                className={`h-[44px] rounded-full font-sans text-label-md transition-colors ${
+                  activa ? "bg-primary text-on-primary shadow-sm" : "text-on-surface-variant"
+                }`}
+              >
+                {opcion.label}
+              </button>
+            )
+          })}
+        </div>
+
+        <section className="flex items-center gap-stack-sm rounded-xl border border-primary/20 bg-primary/5 p-stack-sm">
+          <span className="material-symbols-outlined text-[32px] text-primary" aria-hidden>
+            start
+          </span>
+          <div>
+            <p className="font-sans text-label-md text-on-surface">Empieza por aquí</p>
+            <p className="font-sans text-body-md text-on-surface-variant">
+              Si no sabes cuál elegir, empieza con la primera.
+            </p>
+          </div>
         </section>
 
         {recomendaciones.map((rec) => (
