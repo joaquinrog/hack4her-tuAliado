@@ -72,6 +72,8 @@ function RegistroContent() {
   const tienePreguntaMeta = meta !== "como_voy"
   const totalPasos = tienePreguntaMeta ? 3 : 2
   const pasoActual = paso === "dia" ? 1 : paso === "pedido" ? 2 : totalPasos
+  const rachaMostrada = rachaActual ?? 1
+  const textoRacha = rachaMostrada === 1 ? "1 día seguido" : `${rachaMostrada} días seguidos`
 
   function terminarRegistro(respuestasFinales: RespuestasRegistro) {
     if (!respuestasFinales.comoEstuvoElDia || !respuestasFinales.pedido || !meta) return
@@ -212,7 +214,7 @@ function RegistroContent() {
               local_fire_department
             </span>
             <h2 className="mb-2 font-sans text-headline-lg-mobile text-on-background">
-              ¡Llevas {rachaActual ?? 1} días seguidos!
+              ¡Llevas {textoRacha}!
             </h2>
             <p className="font-sans text-body-md text-on-surface-variant">Guardamos tu registro de hoy.</p>
           </div>

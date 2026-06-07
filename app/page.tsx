@@ -9,8 +9,9 @@ export default function Splash() {
           <Image
             src="/logo-full.svg"
             alt="tuAliado"
-            width={240}
-            height={60}
+            width={862}
+            height={216}
+            sizes="240px"
             priority
             className="h-auto w-full"
           />
