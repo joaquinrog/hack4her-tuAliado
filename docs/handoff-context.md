@@ -5,6 +5,38 @@
 
 ---
 
+## ✅ T1.6 — Seguimiento implementada, FASE 1 / T1 cerrada (2026-06-07 12:30)
+
+`app/seguimiento/page.tsx` reescrito (placeholder → pantalla completa). Codex (`codex exec`)
+quedó colgado ~16 min sin producir output (proceso esperando en stdin), así que escribí el
+código directamente siguiendo el spec ya preparado.
+
+**Fix previo necesario**: `guardarBaseline()` nunca se invocaba — `app/recomendaciones/page.tsx`
+calculaba el baseline pero lo descartaba. Agregado un `useEffect` que llama
+`guardarBaseline(resultado.baseline)` solo si `cargarBaseline()` es `null` (evita sobreescribir
+en visitas repetidas).
+
+**Decisión confirmada con Joaquín**: la tarjeta de "puntos de loyalty semanales" del spec de
+diseño (`design/stitch-prompts/04-seguimiento.md`) requería un dato semanal que no existe en
+el mock → reemplazada por conteo de `aplicoPromo: true` en entradas diarias (dato real,
+alineado con T1.6d de `docs/mvp-plan.md`).
+
+Archivos nuevos:
+- `components/ProgressBar.tsx` — barra animada reutilizable (`current`/`target`/`label`)
+- `app/seguimiento/ComparacionCanal.tsx` — comparación % app vs. promotor, degrada sin
+  inventar datos si no hay pedidos registrados ("Aún no tienes pedidos registrados esta semana")
+- `app/seguimiento/PromosCard.tsx` — conteo de promos aplicadas
+
+Verificación: `npx tsc --noEmit` y `npm run build` sin errores. Probado en navegador
+(390x844) con Chrome DevTools: guard sin baseline → CTA a `/onboarding`, pantalla completa
+con datos simulados en localStorage, degradación sin pedidos, sin overflow horizontal, CTA
+"Registrar mi día" navega a `/registro`. localStorage de prueba limpiado al terminar.
+
+Esto cierra **FASE 1 / T1 (Pantallas Core)** completa: Splash, Onboarding, Diagnóstico,
+Recomendaciones, Registro y Seguimiento implementados y verificados.
+
+---
+
 ## Identificación del proyecto
 
 | Campo | Valor |

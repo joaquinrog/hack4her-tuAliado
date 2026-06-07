@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { calcularRecomendaciones } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { PREGUNTA_META } from "@/lib/onboarding-questions"
-import { getMeta } from "@/lib/state"
+import { cargarBaseline, getMeta, guardarBaseline } from "@/lib/state"
 import { obtenerExplicacion } from "@/lib/explicaciones"
 import { RecomendacionCard } from "@/components/RecomendacionCard"
 
@@ -23,7 +23,13 @@ function RecomendacionesContent() {
   const searchParams = useSearchParams()
   const meta = getMeta(searchParams)
   const [descripciones, setDescripciones] = useState<Record<string, string | null>>({})
-  const recomendaciones = meta ? calcularRecomendaciones(meta, MOCK_STATE).recomendaciones : []
+  const resultado = meta ? calcularRecomendaciones(meta, MOCK_STATE) : null
+  const recomendaciones = resultado?.recomendaciones ?? []
+
+  useEffect(() => {
+    if (resultado && !cargarBaseline()) guardarBaseline(resultado.baseline)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meta])
 
   useEffect(() => {
     if (!meta) return
