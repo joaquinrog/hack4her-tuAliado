@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffdbca",
+                        "on-surface-variant": "#584237",
+                        "on-primary-fixed": "#341100",
+                        "surface-tint": "#9d4300",
+                        "on-surface": "#1e1b19",
+                        "inverse-on-surface": "#f7efeb",
+                        "tertiary-container": "#00a2f4",
+                        "primary": "#9d4300",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "on-background": "#1e1b19",
+                        "surface-dim": "#e0d8d5",
+                        "outline-variant": "#e0c0b1",
+                        "outline": "#8c7164",
+                        "on-tertiary-container": "#003554",
+                        "on-primary-container": "#582200",
+                        "surface-container-highest": "#e9e1dd",
+                        "inverse-surface": "#33302d",
+                        "background": "#fff8f5",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "inverse-primary": "#ffb690",
+                        "secondary-container": "#eae1da",
+                        "primary-fixed-dim": "#ffb690",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#eae1da",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f5",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#6a635e",
+                        "surface-variant": "#e9e1dd",
+                        "tertiary": "#006398",
+                        "surface-container-low": "#faf2ee",
+                        "surface-container-high": "#eee7e3",
+                        "on-tertiary-fixed": "#001d32",
+                        "on-primary-fixed-variant": "#783200",
+                        "tertiary-fixed": "#cde5ff",
+                        "primary-container": "#f97316",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#1f1b17",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "surface-bright": "#fff8f5",
+                        "secondary": "#645d58",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f4ece8",
+                        "error": "#ba1a1a",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1120px",
+                        "stack-lg": "48px",
+                        "gutter": "24px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "40px",
+                        "unit": "8px",
+                        "stack-sm": "12px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Outfit"],
+                        "caption": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "display-mobile": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "display": ["Outfit"],
+                        "label-md": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .option-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .option-card:active {
+            transform: scale(0.98);
+        }
+        .option-card.selected {
+            border-color: #9d4300;
+            background-color: #ffdbca;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- Top App Bar (Custom Implementation as per task instructions for Check-in Screen) -->
+<header class="w-full top-0 bg-background flex justify-center items-center px-margin-mobile py-6 max-w-container-max mx-auto">
+<div class="flex flex-col items-center gap-2">
+<span class="font-label-md text-label-md text-on-surface-variant">1 de 3</span>
+<div class="flex gap-2">
+<div class="w-8 h-1.5 rounded-full bg-primary"></div>
+<div class="w-2 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-2 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow px-margin-mobile flex flex-col items-center max-w-md mx-auto w-full pt-stack-md">
+<!-- Illustration / Mood Header -->
+<div class="mb-stack-lg w-full">
+<div class="relative w-full aspect-video rounded-3xl overflow-hidden mb-stack-md border border-outline-variant">
+<img alt="Tienda familiar" class="w-full h-full object-cover" data-alt="A warm and inviting photograph of a small family-owned corner shop in a sunny neighborhood. The interior is clean and organized with wooden shelves filled with local products. Soft morning sunlight streams through the window, creating a peaceful and humble atmosphere. The colors are dominated by earthy tones and soft oranges, reflecting a trusted neighbor brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE4ecitSKt1LcmW-ITv9gS4DZo7FwgIygEcA4o2CegfDxbE5Pam_g6P-naODUXmzreLXL5UrFfha26m4DE2QwUsl9IUFoaBr631X8KbP1_H2CLiwf9sR6JtiP34_pDHxPhbaLphUSSHvnEHpMGHgeQb-9xxIyfoefTXJE2kB5-aB1F2qHx8j8XU5bAlZyFoDQwdixsrrATaiWSTmgkgs2aF3fE3HiiWFE7lQfZFx_nFJpMOL3VoLTe_fgkhzMawD60xksosRR3YPY"/>
+</div>
+<div class="text-center">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-2 px-2">¿Cómo estuvo el día en tu tienda?</h1>
+<p class="font-caption text-caption text-on-secondary-container">Toca una opción</p>
+</div>
+</div>
+<!-- Options Container -->
+<div class="w-full flex flex-col gap-4 mb-stack-lg">
+<!-- Option: Muy bien -->
+<button class="option-card w-full h-[72px] bg-surface-container-lowest border border-[#E7E5E4] rounded-2xl flex items-center px-6 gap-4 text-left shadow-sm" onclick="selectOption(this)">
+<span class="text-[32px]">😊</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Muy bien</span>
+<div class="ml-auto opacity-0 check-icon">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Option: Regular -->
+<button class="option-card w-full h-[72px] bg-surface-container-lowest border border-[#E7E5E4] rounded-2xl flex items-center px-6 gap-4 text-left shadow-sm" onclick="selectOption(this)">
+<span class="text-[32px]">😐</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Regular</span>
+<div class="ml-auto opacity-0 check-icon">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<!-- Option: Mal -->
+<button class="option-card w-full h-[72px] bg-surface-container-lowest border border-[#E7E5E4] rounded-2xl flex items-center px-6 gap-4 text-left shadow-sm" onclick="selectOption(this)">
+<span class="text-[32px]">😞</span>
+<span class="font-label-md text-label-md text-on-surface font-bold">Mal</span>
+<div class="ml-auto opacity-0 check-icon">
+<span class="material-symbols-outlined text-primary" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+</div>
+<!-- Help/Support Anchor -->
+<div class="mt-auto py-8 text-center flex flex-col items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="help_outline">help_outline</span>
+<p class="font-caption text-caption text-on-surface-variant">Tus respuestas nos ayudan a darte <br/> mejores consejos para tu negocio.</p>
+</div>
+</main>
+<script>
+        function selectOption(element) {
+            // Remove selection from all cards
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected', 'border-primary', 'bg-primary-fixed');
+                card.classList.add('bg-surface-container-lowest', 'border-[#E7E5E4]');
+                card.querySelector('.check-icon').classList.add('opacity-0');
+            });
+
+            // Add selection to clicked card
+            element.classList.add('selected', 'border-primary', 'bg-primary-fixed');
+            element.classList.remove('bg-surface-container-lowest', 'border-[#E7E5E4]');
+            element.querySelector('.check-icon').classList.remove('opacity-0');
+
+            // Simulate navigation after choice
+            setTimeout(() => {
+                console.log('Proceeding to Step 2...');
+                // In a real app: window.location.href = 'step2.html';
+            }, 600);
+        }
+    </script>
+</body></html>
