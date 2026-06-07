@@ -49,7 +49,7 @@ Razón:
 URL path esperado:
 
 ```text
-/ → /onboarding → /diagnostico?meta=vender_mas → /recomendaciones?meta=vender_mas → /registro?meta=vender_mas → /seguimiento?meta=vender_mas
+/ → /onboarding → /diagnostico?meta=vender_mas → /recomendaciones?meta=vender_mas → tocar una acción → /registro?meta=vender_mas → redirección automática → /seguimiento?meta=vender_mas
 ```
 
 ---
@@ -61,10 +61,24 @@ URL path esperado:
 | 1 | Splash `/` | Logo + entrada simple | "tuAliado vive dentro de Tuali como asesor de crecimiento, no como app externa." |
 | 2 | Onboarding `/onboarding` | 4 metas visuales | "Raúl no llena formularios largos; elige una meta con botones grandes." |
 | 3 | Diagnóstico `/diagnostico?meta=vender_mas` | Ticket, canal, loyalty y oportunidades | "Antes de recomendar, tuAliado entiende cómo está el negocio de Raúl." |
-| 4 | Recomendaciones `/recomendaciones?meta=vender_mas` | 3 tarjetas con riesgo/beneficio | "El motor no inventa: usa promociones, canal de pedido y loyalty para dar acciones concretas." |
-| 5 | Chat flotante | Abrir bottom sheet, opcional modo voz | "El chat explica la recomendación, pero no decide la recomendación." |
+| 4 | Recomendaciones `/recomendaciones?meta=vender_mas` | Plan específico por meta + 3 tarjetas con riesgo/beneficio | "El motor no inventa: usa promociones, canal de pedido y loyalty para dar acciones concretas." |
+| 5 | Acción desde recomendación | Tocar cualquier CTA de tarjeta | "Raúl no navega por menús; toma una acción recomendada y pasa al registro." |
 | 6 | Registro `/registro?meta=vender_mas` | Check-in diario de 2-3 preguntas | "Raúl reporta señales simples; no captura ventas complejas." |
-| 7 | Seguimiento `/seguimiento?meta=vender_mas` | Progreso visual y CTA registrar día | "El agente cierra el loop: no solo recomienda, también da seguimiento." |
+| 7 | Seguimiento `/seguimiento?meta=vender_mas` | Pantalla final después de la redirección automática | "El agente cierra el loop: no solo recomienda, también da seguimiento." |
+| 8 | Chat flotante | Abrir bottom sheet, opcional modo voz | "El chat explica la recomendación, pero no decide la recomendación." |
+
+---
+
+## End correcto de la demo
+
+El final correcto del flujo es:
+
+1. En `/recomendaciones?meta=vender_mas`, tocar una acción de cualquier tarjeta.
+2. La app navega a `/registro?meta=vender_mas`.
+3. Completar el check-in diario.
+4. La app muestra el cierre de racha y redirige sola a `/seguimiento?meta=vender_mas`.
+
+No entrar a `/registro` o `/seguimiento` escribiendo la URL durante la demo. Eso rompe la historia del producto: Raúl llega ahí porque tomó una acción recomendada.
 
 ---
 
@@ -105,9 +119,10 @@ Frase útil:
 2. "Primero no le pedimos un formulario; solo una meta. Vamos a elegir Vender más."
 3. "tuAliado diagnostica con datos que Tuali ya tiene: ticket promedio, canal, puntos y oportunidades."
 4. "Con esa foto y la meta, el motor calcula tres recomendaciones concretas. Gemini solo las explica en lenguaje simple."
-5. "Raúl puede pedir ayuda por chat o voz, pero el chatbot no es el producto; es apoyo."
+5. "Al tocar una acción, Raúl pasa al registro del día. No necesita buscar otra pantalla."
 6. "Después de actuar, registra su día con preguntas simples."
-7. "Finalmente ve seguimiento visual: avance, canal app vs promotor y promociones aplicadas."
+7. "Finalmente la app lo lleva al seguimiento visual: avance, canal app vs promotor y promociones aplicadas."
+8. "Si tiene dudas, puede pedir ayuda por chat o voz, pero el chatbot no es el producto; es apoyo."
 
 ---
 

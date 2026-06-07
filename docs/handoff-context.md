@@ -5,6 +5,20 @@
 
 ---
 
+## ✅ Navegación real de demo corregida (2026-06-07 04:49)
+
+Se navegó/revisó el flujo real de la app y se confirmó el corte principal: en `/recomendaciones`, los botones de las tarjetas eran visuales pero no navegaban a ningún lado.
+
+Cambios aplicados:
+- `components/RecomendacionCard.tsx`: los CTAs aceptan `onAction`.
+- `app/recomendaciones/page.tsx`: cada CTA de recomendación navega a `/registro?meta=...`; además se agregó un bloque "Tu plan" específico por meta para que la pantalla no se sienta tan genérica aunque dos recomendaciones se repitan por datos reales.
+- `app/seguimiento/page.tsx`: `localStorage` se lee después del mount cliente; esto elimina el error SSR `localStorage is not defined` visto en logs del dev server.
+- `docs/demo-flow.md`: actualizado con el end correcto de demo: Recomendaciones → tocar acción → Registro → redirección automática → Seguimiento.
+
+Pendiente a evaluar si hay tiempo: hacer más distintas las recomendaciones del motor por meta. Hoy dos tarjetas se repiten a propósito porque salen de oportunidades reales globales de Raúl (promos sin usar y loyalty sin activar); el bloque "Tu plan" reduce la sensación de repetición sin inventar datos.
+
+---
+
 ## ✅ Demo path documentado (2026-06-07 04:27)
 
 Nuevo archivo `docs/demo-flow.md`: define cómo mostrar la demo, qué pantallas enseñar y cómo
