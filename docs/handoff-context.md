@@ -31,6 +31,37 @@
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | ✅ Hecho — integrado en `ChatbotButton`/`ChatSheet`, ver entrada 23:01 |
 
+## ✅ Dev server por IP LAN habilitado para pruebas mobile (2026-06-07)
+
+Joaquín reportó que en mobile, entrando por `http://10.22.210.160:3000`, los botones no respondían bien y pidió revisar shell/network. Codex diagnosticó y aplicó este fix puntual por solicitud explícita de Joaquín, aunque su rol normal en este repo es solo lectura.
+
+**Causa real encontrada:** Next.js 16 bloqueaba recursos de desarrollo desde la IP LAN porque el origen no estaba en `allowedDevOrigins`. En `.next/dev/logs/next-development.log` aparecía:
+
+```text
+Blocked cross-origin request to Next.js dev resource /_next/webpack-hmr from "10.22.210.160".
+```
+
+También se reprodujo por network:
+
+```text
+GET http://10.22.210.160:3000/_next/webpack-hmr
+403 Forbidden
+Unauthorized
+```
+
+**Cambio aplicado:** `next.config.ts` ahora incluye:
+
+```ts
+allowedDevOrigins: ["10.22.210.160"],
+```
+
+Esto permite que el celular use la IP LAN durante desarrollo sin que Next bloquee `/_next/webpack-hmr` y otros recursos dev relacionados. Después de este cambio hay que reiniciar `npm run dev` para que Next cargue la config nueva.
+
+**Nota para Claude:** este cambio solo arregla el error real de red/dev por IP LAN. Durante el diagnóstico también se observó una posible causa independiente de taps difíciles en mobile: overlays fijos/absolutos como el footer de onboarding (`app/onboarding/page.tsx`) pueden capturar toques en su zona transparente. Eso NO se corrigió aquí porque Joaquín pidió arreglar por esta vez solo el error real de red/dev.
+
+**Pendiente reportado por Joaquín antes de dormir (2026-06-07):** en su teléfono, el flujo de voz no está pidiendo permisos de micrófono; aparece/queda el mensaje "Necesito permiso para usar tu micrófono". Claude debe revisar después si el navegador móvil está bloqueando permisos por origen/IP, si `SpeechRecognition` requiere HTTPS/contexto seguro en ese dispositivo, o si la UI necesita guiar al usuario a habilitar el micrófono manualmente.
+
+
 ## ✅ ChatbotButton montado en layout.tsx (2026-06-06 22:05)
 
 Se integró `<ChatbotButton />` en `app/layout.tsx` (import + render dentro de `<body>`, como
