@@ -310,7 +310,7 @@ Al mes de uso, le pregunta al cliente cómo le fue con la app.
 | F2 | Perfil del cliente | Flujo core |
 | F3 | Diagnóstico | Flujo core |
 | F4 | Recomendaciones (3 niveles de riesgo) | Flujo core |
-| F5 | Opciones de sustitución | Flujo core |
+| F5 | Opciones de sustitución | Stretch |
 | F6 | Pedir precio de venta (contextual) | Flujo core |
 | F7 | Confirmación de pedido | Utilidad |
 | F8 | Asesoramiento financiero | Valor agregado |

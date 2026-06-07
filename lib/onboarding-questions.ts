@@ -20,10 +20,10 @@ export const PREGUNTA_META: PreguntaOnboarding = {
   id: "pregunta-meta",
   texto: "¿Qué quieres para tu tienda?",
   opciones: [
-    { label: "Vender más", emoji: "📈", valor: "aumentar_ventas" },
-    { label: "Gastar menos", emoji: "💰", valor: "ahorrar_en_compras" },
-    { label: "Pedir yo solo", emoji: "📱", valor: "usar_mas_tuali" },
-    { label: "Aprovechar ofertas", emoji: "🏷️", valor: "aprovechar_promos" },
+    { label: "Vender más", emoji: "📈", valor: "vender_mas" },
+    { label: "Aprovechar las promociones", emoji: "🏷️", valor: "aprovechar_promos" },
+    { label: "Surtir mejor mi tienda", emoji: "📦", valor: "surtir_tienda" },
+    { label: "Saber cómo me está yendo", emoji: "📊", valor: "como_voy" },
   ],
   campoResultado: "meta",
 }

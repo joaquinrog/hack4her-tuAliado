@@ -123,7 +123,7 @@ No debe ser el punto de entrada principal ni reemplazar el flujo estructurado.
 
 ## Chat de voz
 
-Mencionado como posible función para mejorar accesibilidad con usuarios de baja habilidad digital. No confirmado como parte del MVP mínimo.
+**Confirmado como diferenciador clave (2026-06-06).** Raúl no quiere leer — la voz reduce la fricción al mínimo. Se implementa en paralelo con el diseño en Stitch, usando Web Speech API (STT) + `speechSynthesis` (TTS), sobre el mismo backend `/api/chat`. Fallback a texto si el navegador no soporta voz.
 
 ## Pop-ups guiados
 
