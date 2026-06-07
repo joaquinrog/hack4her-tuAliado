@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-
-const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
+import { generarContenidoGemini } from "@/lib/gemini"
 
 interface ChatRequest {
   message: string
@@ -21,30 +19,11 @@ Meta del cliente: ${meta}. Ticket promedio: $${ticket} MXN.
 Responde en máximo 2 oraciones cortas en español, sin tecnicismos. Sé amigable y práctico.
 Pregunta: ${message}`
 
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) {
-    return NextResponse.json({ reply: "Lo siento, no puedo responder ahora. Intenta más tarde." })
-  }
+  const reply = await generarContenidoGemini(prompt, { maxOutputTokens: 100, temperature: 0.4 })
 
-  const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: 100, temperature: 0.4 },
-    }),
-  })
-
-  if (!res.ok) {
+  if (!reply) {
     return NextResponse.json({ reply: "No pude generar una respuesta. Intenta de nuevo." })
   }
-
-  const data = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[]
-  }
-  const reply =
-    data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ??
-    "No pude generar una respuesta."
 
   return NextResponse.json({ reply })
 }
