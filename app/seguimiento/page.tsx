@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { calcularDiagnostico } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { PREGUNTA_META } from "@/lib/onboarding-questions"
 import { buildUrl, cargarBaseline, cargarEntradasDiarias, getMeta } from "@/lib/state"
+import type { BaselineSnapshot } from "@/lib/types"
 import { ProgressBar } from "@/components/ProgressBar"
 import { ComparacionCanal } from "./ComparacionCanal"
 import { PromosCard } from "./PromosCard"
@@ -23,7 +24,15 @@ function SeguimientoContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const meta = getMeta(searchParams)
-  const baseline = cargarBaseline()
+  const [baseline, setBaseline] = useState<BaselineSnapshot | null | undefined>(undefined)
+
+  useEffect(() => {
+    setBaseline(cargarBaseline())
+  }, [])
+
+  if (baseline === undefined) {
+    return null
+  }
 
   if (!meta || !baseline) {
     return (

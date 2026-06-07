@@ -6,9 +6,29 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { calcularRecomendaciones } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { PREGUNTA_META } from "@/lib/onboarding-questions"
-import { cargarBaseline, getMeta, guardarBaseline } from "@/lib/state"
+import { buildUrl, cargarBaseline, getMeta, guardarBaseline } from "@/lib/state"
 import { obtenerExplicacion } from "@/lib/explicaciones"
 import { RecomendacionCard } from "@/components/RecomendacionCard"
+import type { MetaCliente } from "@/lib/types"
+
+const ENFOQUE_POR_META: Record<MetaCliente, { titulo: string; texto: string }> = {
+  vender_mas: {
+    titulo: "Sube tu venta esta semana",
+    texto: "Empieza con una promo segura y mueve más pedidos a la app.",
+  },
+  aprovechar_promos: {
+    titulo: "Usa promos que ya tienes",
+    texto: "El plan prioriza descuentos activos para que no dejes dinero en la mesa.",
+  },
+  surtir_tienda: {
+    titulo: "Evita quedarte sin producto",
+    texto: "El plan se enfoca en surtido y hábitos de pedido más constantes.",
+  },
+  como_voy: {
+    titulo: "Mide cómo va tu tienda",
+    texto: "El plan empieza con acciones simples para tener más señales de avance.",
+  },
+}
 
 export default function Recomendaciones() {
   return (
@@ -64,6 +84,7 @@ function RecomendacionesContent() {
   }
 
   const opcionMeta = PREGUNTA_META.opciones.find((o) => o.valor === meta)
+  const enfoque = ENFOQUE_POR_META[meta]
 
   return (
     <div className="relative flex flex-1 flex-col bg-background">
@@ -87,11 +108,18 @@ function RecomendacionesContent() {
           </span>
         )}
 
+        <section className="rounded-2xl bg-primary-container/10 p-stack-md">
+          <p className="mb-unit font-sans text-caption text-primary">Tu plan</p>
+          <h2 className="mb-unit font-sans text-headline-lg-mobile text-on-background">{enfoque.titulo}</h2>
+          <p className="font-sans text-body-md text-on-surface-variant">{enfoque.texto}</p>
+        </section>
+
         {recomendaciones.map((rec) => (
           <RecomendacionCard
             key={rec.id}
             recomendacion={rec}
             descripcion={descripciones[rec.id] ?? null}
+            onAction={() => router.push(buildUrl("/registro", meta))}
           />
         ))}
       </main>

@@ -44,9 +44,10 @@ const ESTILO_POR_RIESGO: Record<
 interface RecomendacionCardProps {
   recomendacion: Recomendacion
   descripcion: string | null
+  onAction?: () => void
 }
 
-export function RecomendacionCard({ recomendacion, descripcion }: RecomendacionCardProps) {
+export function RecomendacionCard({ recomendacion, descripcion, onAction }: RecomendacionCardProps) {
   const estilo = ESTILO_POR_RIESGO[recomendacion.nivelRiesgo]
 
   return (
@@ -67,6 +68,7 @@ export function RecomendacionCard({ recomendacion, descripcion }: RecomendacionC
         )}
         <button
           type="button"
+          onClick={onAction}
           className={`mt-unit flex h-[48px] w-full items-center justify-center rounded-full font-sans text-label-md transition-transform active:scale-[0.98] ${estilo.cta}`}
         >
           {recomendacion.accion}
