@@ -4,8 +4,8 @@
 
 **Hackathon:** Hack4Her — Reto **Tuali Growth Agent**
 **Equipo:** Picafresitas
-**Demo en vivo:** `[ PENDIENTE — link de Vercel ]`
-**Video / capturas:** `[ PENDIENTE — link a video de YouTube y/o capturas ]`
+**Demo en vivo:** https://hack4her-tu-aliado.vercel.app/
+**Video / capturas / Devpost:** https://devpost.com/software/tualiado · https://youtube.com/shorts/Dmv-8YtmCt8?feature=share
 
 ---
 
@@ -95,6 +95,16 @@ Se recorre una sola meta (**Vender más**) de punta a punta — es la más fáci
 - Sistema de racha / streak de uso diario
 - UX mobile-first (375–430px) con visuales sobre texto
 
+## Próximos pasos
+
+En orden de impacto para el siguiente sprint (ver detalle y estimaciones en `docs/mvp-plan.md`):
+
+1. **Calculador de ganancia** (F6) — modal en `/recomendaciones` para pedir el precio de venta de Raúl y mostrar el beneficio estimado; diseño ya recibido (`design/assets/recomendaciones/tualiado_calculador_de_ganancia_v3`), falta conectarlo al motor.
+2. **Pop-ups guiados** (F16) — tour de primera visita que señala "esto es para ti, Raúl".
+3. **Sustitución de recomendaciones** (F5) — botón "no me convence, ver otra" para que el producto se sienta vivo, no estático.
+4. **Asesoramiento financiero** (F8) y **perfil del cliente editable** (F2) — más profundidad y credibilidad en la demo.
+5. **Piloto con datos reales** — conectar el motor a datos productivos de Tuali/Arca Continental con un grupo pequeño de clientes, y validar que las recomendaciones siguen siendo coherentes fuera del mock.
+
 ## Visión a futuro
 
 Aprendizaje adaptativo en tiempo real, modelos predictivos de comportamiento, predicciones estacionales, evaluación dinámica de riesgo, y conexión completa con datos productivos reales de Tuali y Arca Continental. Lo de hoy es un prototipo funcional sobre datos mock — el siguiente paso natural es pilotear con datos reales de un grupo pequeño de clientes.
@@ -134,4 +144,4 @@ Este proyecto es **docs-first**: la continuidad de contexto entre sesiones de de
 
 ---
 
-> `[ PENDIENTE ]` — completar antes de la entrega final: link de Vercel, video/capturas de la demo, y "Limitaciones actuales / Próximos pasos" si el equipo decide incluir esa sección (ver preguntas abiertas en `docs/producto-preguntas.md`).
+> Capturas adicionales de la demo: ver el [Devpost del proyecto](https://devpost.com/software/tualiado). Preguntas abiertas de producto en `docs/producto-preguntas.md`.
