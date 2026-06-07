@@ -43,6 +43,13 @@ Ejemplo: "Revisa la task #3 y haz /dev"
 
 ---
 
+## Uso de subagents (ahorro de tokens)
+
+- Si el path del archivo ya se conoce, leerlo directo con `Read`/`grep` — no delegar a un subagent `Explore`. Spawnear un subagent duplica el costo: primero procesa el archivo completo, luego lo vuelve a transcribir de regreso.
+- Reservar `Explore` para cuando el path NO se conoce (búsquedas, "¿dónde está X?", exploración de estructura desconocida) o cuando la tarea requiere síntesis/juicio sobre varios archivos a la vez.
+
+---
+
 ## Sobre el LLM en el producto
 
 Gemini API actúa solo como **capa de explicación**:

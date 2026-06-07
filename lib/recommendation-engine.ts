@@ -33,8 +33,8 @@ export function calcularDiagnostico(estado: EstadoMock): Diagnostico {
 
   if (!estado.comportamiento.usaPromociones && estado.promocionesActivas.length > 0)
     oportunidades.push(`Tienes ${estado.promocionesActivas.length} promociones sin usar`)
-  if (!estado.comportamiento.usaPedidoSugerido)
-    oportunidades.push("No usas el pedido sugerido todavía")
+  if (estado.comportamiento.porcentajePedidosTuali < 50)
+    oportunidades.push("Pides por promotor, no por app")
   if (!estado.comportamiento.interactuaConLoyalty && estado.loyalty.retosActivos.length > 0)
     oportunidades.push(`Tienes ${estado.loyalty.retosActivos.length} reto de puntos sin activar`)
 
