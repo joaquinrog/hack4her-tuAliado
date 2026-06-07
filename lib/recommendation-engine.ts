@@ -89,7 +89,6 @@ export function calcularRecomendaciones(
       beneficioEstimado: `${promoSinUsar.descuentoPct}% menos en tu próximo pedido`,
       accion: "Pedir con esta promoción",
       productoIds: promoSinUsar.productoIds,
-      nivelRiesgo: "bajo",
     })
   }
 
@@ -118,7 +117,6 @@ export function calcularRecomendaciones(
       beneficioEstimado: "Nunca te quedas sin producto en momentos de venta",
       accion: "Ver pedido sugerido",
       productoIds: [],
-      nivelRiesgo: "medio",
     })
   }
 
@@ -132,7 +130,6 @@ export function calcularRecomendaciones(
       beneficioEstimado: `${promo2.descuentoPct}% de descuento`,
       accion: "Agregar al pedido",
       productoIds: promo2.productoIds,
-      nivelRiesgo: "bajo",
     })
   }
 
@@ -145,7 +142,6 @@ export function calcularRecomendaciones(
       beneficioEstimado: "Ves tu historial y acumulas puntos automáticamente",
       accion: "Hacer pedido por app",
       productoIds: [],
-      nivelRiesgo: "medio",
     })
   }
 
@@ -160,7 +156,6 @@ export function calcularRecomendaciones(
       beneficioEstimado: retoActivo.descripcion,
       accion: "Activar reto",
       productoIds: [],
-      nivelRiesgo: "alto",
     })
   }
 

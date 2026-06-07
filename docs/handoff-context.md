@@ -75,6 +75,39 @@ Se delegó a Codex (`codex exec`) la investigación de costo/latencia de Gemini 
 
 **Nota:** Codex hizo búsquedas web por su cuenta (no se le pidió explícitamente) para traer precios vigentes — comportamiento esperado/deseable para este tipo de investigación, pero consume parte de su ventana de uso.
 
+## ⚠️ Pull de fix de diseño — reabre la contradicción #3 en sentido contrario (2026-06-06 22:32)
+
+Se hizo `git pull` del commit `69dfd82` ("fix: design/assets/diagnostico error de prompt", de Isabel)
+y se mergeó con el trabajo local de T1.4 (commit de merge `fbb07ad`).
+
+**1. Conflicto de merge resuelto — duplicados de `nivelRiesgo`:**
+El auto-merge de git dejó propiedades duplicadas (`nivelRiesgo` aparecía dos veces en el mismo
+objeto literal en `lib/recommendation-engine.ts`, y dos veces en la interfaz `Recomendacion` de
+`lib/types.ts`) porque ambas ramas habían agregado el campo de forma independiente — la rama
+remota con strings literales (`"bajo"`, `"medio"`, `"alto"`) y la local con la tabla
+`NIVEL_RIESGO_POR_TIPO`. Se eliminaron los literales duplicados y se dejó la versión con la
+tabla (más DRY, ya documentada arriba en T1.4). `npx tsc --noEmit` → 0 errores tras el fix.
+
+**2. ⚠️ Hallazgo importante — el fix de diseño invierte la resolución de la contradicción #3:**
+El fix de Isabel cambia el copy de `design/assets/diagnostico/code.html` de
+**"Pides por promotor, no por app"** a **"No usas el pedido sugerido todavía"**.
+
+Esto es exactamente **lo opuesto** a lo que se había resuelto como "opción A" (ver sección
+"Contradicción #3 resuelta" más abajo, 2026-06-06 21:40): ahí se cambió el motor
+(`calcularDiagnostico`) para generar "Pides por promotor, no por app" — alineándolo con el
+diseño *de ese momento* y con la métrica de autonomía de canal.
+
+Con este fix, **diseño y motor vuelven a estar desalineados, pero al revés**:
+- Motor genera: "Pides por promotor, no por app" (`lib/recommendation-engine.ts:50`)
+- Diseño ahora muestra: "No usas el pedido sugerido todavía"
+
+→ **No se modificó nada en código ni se revirtió el fix de diseño** — esto requiere alinear con
+Isabel/Tech Lead cuál de los dos textos es el correcto antes de tocar cualquiera de los dos lados,
+para no generar otra ronda de incoherencia. Posibles caminos: (a) que Isabel revierta su fix si fue
+un error sin contexto del cambio anterior, o (b) volver a cambiar el motor — pero eso afectaría
+también la lógica de "Rec B" en `calcularRecomendaciones` que ya usa `porcentajePedidosTuali` para
+generar "Pide por la app esta semana" (T1.4, ver arriba), que sí está alineada con autonomía de canal.
+
 ## Contexto del equipo
 
 El Tech Lead es el único programador. El proyecto depende de continuidad de contexto entre sesiones de AI, por eso existe esta documentación.
