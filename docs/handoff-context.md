@@ -5,6 +5,71 @@
 
 ---
 
+## ✅ README.md reescrito para jueces/DevTools/MLH (Claude) (2026-06-07 09:30)
+
+Joaquín pidió revisar la merge `993e460` (que respondió las preguntas clave de
+`docs/producto-preguntas.md`, commit `2b25c28`) y, con eso, armar un README útil para
+hackathon/devtools/MLH. Revisión: las 7 preguntas "[Clave]" de prioridad alta quedaron
+respondidas y son coherentes con `CLAUDE.md`/handoff (mismo framing: dueño apoyado,
+ticket promedio + autonomía, motor determinístico + Gemini solo explica). Quedan vacías
+la 8 (link de Vercel) y, según confirmó Joaquín, la 13 se resuelve como **"sistema de
+acompañamiento"** — el resto (14-46, salvo 47-51 que ya tenían respuesta corta) queda
+para después.
+
+Reescrito `README.md` (antes era el borrador inicial pre-implementación, "Fase: esquema
+mock implementado, motor pendiente"). Estructura nueva basada en las respuestas
+confirmadas + `docs/demo-flow.md` + `docs/decisions.md`: frase de una línea, problema,
+solución con flujo, "por qué no es otro chatbot", diferenciador, promesa para Tuali/Arca,
+sección "Datos usados en la demo" (con tabla de orígenes TUALI/CLIENTE/ESTIMACION y
+números reales: ticket $440 → meta $506, canal 20/80, loyalty 180 pts), camino de demo,
+qué está implementado hoy, visión a futuro, stack, tabla de docs y equipo.
+
+**Placeholders dejados explícitos** (marcados `[ PENDIENTE ]`, arriba del README y al
+final): link de Vercel (pregunta 8), video/capturas de demo (pregunta 48 ya autorizó
+dejar placeholder), y posible sección "Limitaciones / Próximos pasos" si el equipo
+decide incluirla.
+
+No se tocó código ni otros docs.
+
+---
+
+## ✅ Momento "antes → después" para mostrar avance multi-día en demo (Claude) (2026-06-07 13:40)
+
+Joaquín planteó que el demo solo enseñaba "día 1" en `/seguimiento` (una sola entrada, racha de
+1 día), sin mostrar cómo avanza Raúl con el tiempo — justo lo que la propuesta de valor promete
+(ticket promedio + autonomía evolucionando). Se diseñó e implementó un mecanismo de
+"antes → después" en vivo, sin construir pantallas nuevas:
+
+- **Gesto oculto en `/seguimiento`:** mantener presionado (~0.8s) el título "Tu avance"
+  (`app/seguimiento/page.tsx`) siembra 4 días de historial simulado terminando ayer; repetir el
+  gesto lo limpia (toggle, para ensayar sin recargar). No se agregó UI visible nueva — se
+  reutilizó un `<h1>` que ya existía y no era interactivo.
+- **`lib/state.ts`:** nuevas funciones `sembrarHistorialDemo`, `limpiarHistorialDemo`,
+  `hayHistorialSembrado`. El patrón narrativo (`PATRON_HISTORIAL_DEMO`) reutiliza el mismo
+  contenido que `ENTRADAS_DEMO` (eliminado de `lib/mock-data.ts` por quedar redundante — estaba
+  huérfano desde el commit base, nunca conectado a la app), pero genera **fechas relativas a
+  "hoy"** (`hoy-4`…`hoy-1`) en vez de fechas fijas, para que el check-in en vivo del presentador
+  continúe la racha de forma natural sin importar qué día sea el pitch real. La racha se
+  recalcula cronológicamente desde el set completo de entradas, preservando cualquier registro
+  en vivo ya guardado.
+- **`/recomendaciones` se dejó intacto a propósito:** el motor sigue usando `MOCK_STATE` + meta,
+  no lee `entradas diarias`. Razón: `/recomendaciones` refleja el estado real de Tuali; lo que
+  evoluciona día a día es `/seguimiento`. Mezclar ambos habría arriesgado incoherencia de datos
+  cerca de la entrega — justo lo que Tuali no quiere ver.
+- **`docs/demo-flow.md`:** se agregó la sección `## Momento "antes → después" (avance
+  multi-día)` con el guion de uso y la respuesta preparada para "¿las recomendaciones también
+  cambian con el tiempo?".
+
+Verificación:
+- `npx tsc --noEmit` y `npm run build` sin errores (9 rutas compiladas).
+- QA visual en 390x844 con Chrome DevTools: check-in en vivo → `/seguimiento` muestra "1 día
+  seguido" / 100% app / 0 promos; gesto activa → salta a "5 días seguidos" / 100% app / 1 promo
+  aplicada sin parpadeos ni errores en consola; gesto repetido → vuelve exactamente al estado de
+  "día 1" (toggle limpio, ensayable); `/recomendaciones` confirmado sin cambios tras sembrar
+  historial.
+
+---
+
 ## ✅ Segunda API key de Gemini como respaldo (Claude) (2026-06-07 08:59)
 
 Joaquín pidió agregar una segunda API key de Gemini para usarla como respaldo si la primera se

@@ -69,6 +69,44 @@ URL path esperado:
 
 ---
 
+## Momento "antes → después" (avance multi-día)
+
+Mostrar solo el día 1 en `/seguimiento` se siente pobre frente a la promesa central del
+producto: que tuAliado acompaña a Raúl día a día y que sus números avanzan con el tiempo.
+Para resolverlo sin construir una pantalla nueva ni narrar en seco, `/seguimiento` tiene un
+**gesto oculto**: mantener presionado el título "Tu avance" (~0.8s).
+
+Qué hace:
+
+- La primera vez, siembra 4 días de historial simulado **terminando ayer** (mismo patrón
+  narrativo que `ENTRADAS_DEMO` en `lib/mock-data.ts`, con fechas relativas a "hoy" para que
+  el check-in en vivo del presentador continúe la racha de forma natural).
+- Si se vuelve a presionar, limpia ese historial sembrado — así se puede ensayar el momento
+  varias veces sin recargar la página ni dejar residuos.
+
+Cómo usarlo en la demo:
+
+1. Completar el check-in en vivo (paso 6) y llegar a `/seguimiento?meta=vender_mas` — el
+   jurado ve el estado de "día 1": una racha de 1 día, % de pedidos por app y promos basados
+   en un solo registro.
+2. Decir algo como: *"Así se ve hoy, con un solo registro."*
+3. Mantener presionado el título "Tu avance" (~1 segundo). Los números cambian frente al
+   jurado: la racha sube, el porcentaje de pedidos por app y las promos aplicadas reflejan
+   varios días de constancia.
+4. Cerrar con: *"Y así se ve después de unos días siguiendo el plan — sin que Raúl tenga que
+   hacer nada distinto."*
+
+Nota importante para preguntas del jurado: **`/recomendaciones` no cambia** con este gesto ni
+con los días que pasan — sigue reflejando el estado real de Tuali (historial de pedidos,
+promociones activas, loyalty) más la meta elegida. Lo que evoluciona día a día es
+`/seguimiento`, porque es ahí donde se mide el avance de Raúl. Si preguntan "¿y las
+recomendaciones también cambian con el tiempo?", la respuesta es: el motor decide *qué*
+recomendar con base en los datos reales de Tuali; el seguimiento muestra *si* Raúl está
+avanzando — son responsabilidades distintas a propósito, para no mezclar datos reales con
+señales simuladas del día a día.
+
+---
+
 ## End correcto de la demo
 
 El final correcto del flujo es:

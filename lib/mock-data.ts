@@ -7,7 +7,6 @@ import type {
   Producto,
   EstadoOnboarding,
   EstadoMock,
-  EntradaDiaria,
 } from "./types"
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -259,52 +258,3 @@ export const MOCK_STATE: EstadoMock = {
   catalogo: CATALOGO_PRODUCTOS,        // origen: TUALI
   onboarding: ONBOARDING_INICIAL,      // origen: CLIENTE
 }
-
-// ════════════════════════════════════════════════════════════════════════════
-// ENTRADAS DEMO
-// 4 entradas pre-cargadas para el demo. Representan los últimos 4 días de Raúl.
-// Coherentes con HISTORIAL_PEDIDOS: Raúl empezó a usar la app y las promos.
-// origen: CLIENTE (simulado)
-// ════════════════════════════════════════════════════════════════════════════
-export const ENTRADAS_DEMO: EntradaDiaria[] = [
-  {
-    // Día 1 — regular, se le acabó producto
-    fecha: "2026-06-02",
-    comoEstuvoElDia: "regular",
-    hizoPedido: false,
-    pidioporApp: null,
-    sePidioAlgoQueNoTenia: true,
-    aplicoPromo: false,
-    seAcaboAlgoHoy: true,
-  },
-  {
-    // Día 2 — bueno, pidió por app y usó promo (primera vez)
-    fecha: "2026-06-03",
-    comoEstuvoElDia: "bien",
-    hizoPedido: true,
-    pidioporApp: true,
-    sePidioAlgoQueNoTenia: false,
-    aplicoPromo: true,
-    seAcaboAlgoHoy: false,
-  },
-  {
-    // Día 3 — bueno, sin pedido
-    fecha: "2026-06-04",
-    comoEstuvoElDia: "bien",
-    hizoPedido: false,
-    pidioporApp: null,
-    sePidioAlgoQueNoTenia: false,
-    aplicoPromo: false,
-    seAcaboAlgoHoy: false,
-  },
-  {
-    // Día 4 — bueno, sin pedido
-    fecha: "2026-06-05",
-    comoEstuvoElDia: "bien",
-    hizoPedido: false,
-    pidioporApp: null,
-    sePidioAlgoQueNoTenia: false,
-    aplicoPromo: false,
-    seAcaboAlgoHoy: false,
-  },
-]

@@ -73,3 +73,83 @@ export function actualizarRacha(fecha: string): RachaDiaria {
   guardarRacha(result)
   return result
 }
+
+// ── Historial demo (antes/después del pitch) ────────────────────────────────
+// Mismo patrón narrativo de los 4 días de Raúl que ya estaba validado como
+// coherente con HISTORIAL_PEDIDOS, pero con fechas relativas a "hoy" para que
+// el check-in en vivo continúe la racha sin importar qué día sea el pitch real.
+// origen: CLIENTE (simulado para demo)
+const PATRON_HISTORIAL_DEMO: Omit<EntradaDiaria, "fecha">[] = [
+  {
+    comoEstuvoElDia: "regular",
+    hizoPedido: false,
+    pidioporApp: null,
+    sePidioAlgoQueNoTenia: true,
+    aplicoPromo: false,
+    seAcaboAlgoHoy: true,
+  },
+  {
+    comoEstuvoElDia: "bien",
+    hizoPedido: true,
+    pidioporApp: true,
+    sePidioAlgoQueNoTenia: false,
+    aplicoPromo: true,
+    seAcaboAlgoHoy: false,
+  },
+  {
+    comoEstuvoElDia: "bien",
+    hizoPedido: false,
+    pidioporApp: null,
+    sePidioAlgoQueNoTenia: false,
+    aplicoPromo: false,
+    seAcaboAlgoHoy: false,
+  },
+  {
+    comoEstuvoElDia: "bien",
+    hizoPedido: false,
+    pidioporApp: null,
+    sePidioAlgoQueNoTenia: false,
+    aplicoPromo: false,
+    seAcaboAlgoHoy: false,
+  },
+]
+
+function fechaRelativa(diasAtras: number): string {
+  return new Date(Date.now() - diasAtras * 86_400_000).toISOString().slice(0, 10)
+}
+
+function fechasHistorialDemo(): Set<string> {
+  const dias = PATRON_HISTORIAL_DEMO.length
+  return new Set(Array.from({ length: dias }, (_, i) => fechaRelativa(dias - i)))
+}
+
+function recalcularRachaDesde(entradas: EntradaDiaria[]): void {
+  localStorage.removeItem(KEYS.racha)
+  const ordenadas = [...entradas].sort((a, b) => (a.fecha < b.fecha ? -1 : 1))
+  ordenadas.forEach((entrada) => actualizarRacha(entrada.fecha))
+}
+
+export function sembrarHistorialDemo(): void {
+  const dias = PATRON_HISTORIAL_DEMO.length
+
+  PATRON_HISTORIAL_DEMO.forEach((patron, i) => {
+    const fecha = fechaRelativa(dias - i)
+    guardarEntradaDiaria({ ...patron, fecha })
+  })
+
+  // Recalcula la racha en orden cronológico para encadenar con el registro en
+  // vivo de "hoy" si ya existe (o con el que el presentador complete después).
+  recalcularRachaDesde(cargarEntradasDiarias())
+}
+
+export function limpiarHistorialDemo(): void {
+  const fechasSembradas = fechasHistorialDemo()
+  const restantes = cargarEntradasDiarias().filter((e) => !fechasSembradas.has(e.fecha))
+  localStorage.setItem(KEYS.entradas, JSON.stringify(restantes))
+  recalcularRachaDesde(restantes)
+}
+
+export function hayHistorialSembrado(): boolean {
+  const fechasSembradas = fechasHistorialDemo()
+  return cargarEntradasDiarias().some((e) => fechasSembradas.has(e.fecha))
+}

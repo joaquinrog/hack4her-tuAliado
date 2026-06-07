@@ -1,16 +1,27 @@
 "use client"
 
 import Link from "next/link"
-import { Suspense, useEffect, useState } from "react"
+import { Suspense, useEffect, useRef, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { calcularDiagnostico } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { PREGUNTA_META } from "@/lib/onboarding-questions"
-import { buildUrl, cargarBaseline, cargarEntradasDiarias, getMeta } from "@/lib/state"
+import {
+  buildUrl,
+  cargarBaseline,
+  cargarEntradasDiarias,
+  cargarRacha,
+  getMeta,
+  hayHistorialSembrado,
+  limpiarHistorialDemo,
+  sembrarHistorialDemo,
+} from "@/lib/state"
 import type { BaselineSnapshot } from "@/lib/types"
 import { ProgressBar } from "@/components/ProgressBar"
 import { ComparacionCanal } from "./ComparacionCanal"
 import { PromosCard } from "./PromosCard"
+
+const DURACION_GESTO_MS = 800
 
 export default function Seguimiento() {
   return (
@@ -25,10 +36,25 @@ function SeguimientoContent() {
   const searchParams = useSearchParams()
   const meta = getMeta(searchParams)
   const [baseline, setBaseline] = useState<BaselineSnapshot | null | undefined>(undefined)
+  const [, setVersion] = useState(0)
+  const presionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     setBaseline(cargarBaseline())
   }, [])
+
+  function iniciarGestoDemo() {
+    presionTimer.current = setTimeout(() => {
+      if (hayHistorialSembrado()) limpiarHistorialDemo()
+      else sembrarHistorialDemo()
+      setVersion((v) => v + 1)
+    }, DURACION_GESTO_MS)
+  }
+
+  function cancelarGestoDemo() {
+    if (presionTimer.current) clearTimeout(presionTimer.current)
+    presionTimer.current = null
+  }
 
   if (baseline === undefined) {
     return null
@@ -53,6 +79,7 @@ function SeguimientoContent() {
   const opcionMeta = PREGUNTA_META.opciones.find((o) => o.valor === meta)
   const objetivo = calcularDiagnostico(MOCK_STATE).ticketObjetivoSugerido
   const entradas = cargarEntradasDiarias()
+  const racha = cargarRacha()
   const conPedido = entradas.filter((e) => e.hizoPedido)
   const porcentajeApp =
     conPedido.length > 0
@@ -71,16 +98,33 @@ function SeguimientoContent() {
         >
           arrow_back
         </button>
-        <h1 className="font-sans text-body-lg text-on-surface">Tu avance</h1>
+        <h1
+          className="select-none font-sans text-body-lg text-on-surface"
+          onPointerDown={iniciarGestoDemo}
+          onPointerUp={cancelarGestoDemo}
+          onPointerLeave={cancelarGestoDemo}
+        >
+          Tu avance
+        </h1>
       </header>
 
       <main className="flex flex-1 flex-col gap-stack-md px-margin-mobile pt-stack-md pb-[120px]">
-        {opcionMeta && (
-          <span className="inline-flex w-max items-center gap-stack-sm rounded-full bg-surface-container px-stack-sm py-unit font-sans text-label-md text-on-surface">
-            <span aria-hidden>{opcionMeta.emoji}</span>
-            Meta: {opcionMeta.label}
-          </span>
-        )}
+        <div className="flex flex-wrap items-center gap-stack-sm">
+          {opcionMeta && (
+            <span className="inline-flex w-max items-center gap-stack-sm rounded-full bg-surface-container px-stack-sm py-unit font-sans text-label-md text-on-surface">
+              <span aria-hidden>{opcionMeta.emoji}</span>
+              Meta: {opcionMeta.label}
+            </span>
+          )}
+          {racha.rachaActual > 0 && (
+            <span className="inline-flex w-max items-center gap-stack-sm rounded-full bg-surface-container px-stack-sm py-unit font-sans text-label-md text-on-surface">
+              <span className="material-symbols-outlined text-[18px] text-primary" aria-hidden style={{ fontVariationSettings: "'FILL' 1" }}>
+                local_fire_department
+              </span>
+              {racha.rachaActual === 1 ? "1 día seguido" : `${racha.rachaActual} días seguidos`}
+            </span>
+          )}
+        </div>
 
         <section className="flex flex-col gap-stack-sm rounded-2xl border border-outline-variant bg-surface-container-lowest p-stack-md text-center">
           <h2 className="font-sans text-caption text-on-surface-variant">Ticket promedio</h2>
