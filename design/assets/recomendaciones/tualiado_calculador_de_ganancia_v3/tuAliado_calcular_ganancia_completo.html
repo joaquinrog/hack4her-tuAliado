@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>tuAliado - Calcular Ganancia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+body{font-family:'Outfit',sans-serif;background-color:#00000080;display:flex;justify-content:center;align-items:flex-end;height:100vh;margin:0;overflow:hidden}
+.bottom-sheet{width:375px;max-width:100%;animation:slideUp .3s ease-out forwards}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.large-input:focus{outline:none;border-color:#9d4300;box-shadow:0 0 0 2px #9d430020}
+</style>
+</head>
+<body>
+<div class="bottom-sheet" style="background:#fff8f5;border-radius:12px 12px 0 0;padding:20px;font-family:Outfit,sans-serif;">
+<div style="display:flex;justify-content:center;margin-bottom:12px;">
+<div style="width:48px;height:6px;background:#e0c0b1;border-radius:999px;"></div>
+</div>
+
+<h2>¿En cuánto vendes este producto?</h2>
+
+<div style="background:#faf2ee;border:1px solid #e0c0b1;border-radius:8px;padding:12px;margin:16px 0;">
+Coca-Cola 600ml · $11.50 en Tuali
+</div>
+
+<label>Tu precio de venta</label>
+<div style="border:2px solid #e0c0b1;border-radius:8px;padding:12px;margin-top:8px;">
+$ <input id="price-input" type="number" value="20" step="0.5">
+</div>
+
+<div style="text-align:center;margin-top:24px;">
+<p>Con ese precio ganarías:</p>
+<h1 style="color:#15803d;">$4.50 por unidad</h1>
+</div>
+
+<p style="text-align:center;font-size:12px;">Solo se usa para calcular tu ganancia. No se guarda.</p>
+
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:24px;">
+<button style="height:56px;background:#9d4300;color:white;border:none;border-radius:8px;">Ver mi ganancia estimada</button>
+<button style="height:48px;background:transparent;color:#9d4300;border:none;">Calcular después</button>
+</div>
+</div>
+</body></html>

@@ -26,7 +26,8 @@
 | `lib/gemini.ts` — capa de explicación | ✅ Hecho |
 | `lib/state.ts` — URL params + localStorage | ✅ Hecho |
 | Splash, Onboarding, Diagnóstico (T1.1–T1.3) | ✅ Hecho |
-| Pantallas core restantes (recomendaciones, registro, seguimiento) | 🔄 Placeholders listos |
+| Recomendaciones (T1.4) | ✅ Hecho — 3 tarjetas + texto Gemini vía `/api/explicar` |
+| Pantallas core restantes (registro, seguimiento) | 🔄 Placeholders listos |
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | 🔄 `lib/voice.ts` listo. Modo voz se integrará dentro del bottom sheet de `ChatbotButton` |
 
@@ -54,6 +55,59 @@ edición activa" ya no aplicaba — FASE 1 (T1) está completa.
   `components/ChatbotButton.tsx` para que quede libre de esa barra — afecta también a
   Recomendaciones/Registro/Seguimiento, que siguen el mismo patrón de CTA fijo. En Splash y
   Onboarding (sin barra fija) se ve igual de bien con el nuevo offset.
+
+## ✅ Ahorro de tokens: reglas de subagents + Codex como agente secundario (2026-06-06 22:16)
+
+Sesión enfocada en reducir consumo de tokens de Claude (no cambios de producto). Cambios en `AGENTS.md` y `docs/decisions.md`:
+
+**1. Reglas de uso de subagents (`AGENTS.md` → "Uso de subagents (ahorro de tokens)"):**
+- Si el path de un archivo ya se conoce, leer directo con `Read`/`grep` — no delegar a `Explore` (spawnear un subagent duplica el costo de procesar el archivo).
+- Verificación de frontend: preferir `evaluate_script`/`list_console_messages`/`list_network_requests` (texto, baratos) sobre `take_snapshot`/`take_screenshot` (payloads pesados); reservar capturas para chequeos visuales reales; hacer `resize_page` a viewport móvil antes de capturar; delegar la sesión de verificación al skill `verify` o un subagent para aislar el payload pesado.
+- Hallazgo que motivó esto: de las llamadas históricas a chrome-devtools-mcp en este proyecto, 14 fueron `take_screenshot` y 6 `take_snapshot` — las más costosas con diferencia.
+
+**2. Codex como agente secundario (`AGENTS.md` → nueva sección "Codex — Agente secundario"; `docs/decisions.md` → "Uso de Codex como agente secundario"):**
+- Claude Code sigue siendo el agente principal (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código).
+- Codex se habilita como agente **secundario de solo lectura**: investigación externa, segunda opinión sobre diffs, lectura/resumen de documentación. **No edita código, no toca `docs/`/`.ai/`, no toma decisiones**.
+- Razón: Joaquín tiene Claude Pro y GPT Plus, ambos con ventana de uso de ~5h — el recurso escaso es esa ventana, no "tokens" en abstracto. Las MCP tools y el contexto profundo del proyecto son no-transferibles a Codex; conviene proteger la ventana de Claude para eso y descargar en Codex el trabajo genérico.
+- Esto matiza la regla histórica "un solo agente, un solo loop, sin coordinación con herramientas externas" — la nueva sección de `AGENTS.md` da contexto directo a Codex (lo lee automáticamente al ejecutarse en el repo, junto con `CLAUDE.md`).
+
+**3. Prueba real de delegación — resolvió una decisión pendiente:**
+Se delegó a Codex (`codex exec`) la investigación de costo/latencia de Gemini Flash vs Pro. Resultado: recomienda **Flash/Flash-Lite** (Flash-Lite ≈ $0.25/M input + $1.50/M output vs. Pro ≈ $2/M + $12/M, ~8x más caro), con fuentes de `ai.google.dev/gemini-api/docs/pricing`. Costó ~48,353 tokens — todos de la cuota de Codex, ninguno de la ventana de Claude. Se registró como decisión confirmada en `docs/decisions.md` ("Modelo de Gemini a usar"), resolviendo el pendiente que existía ahí.
+
+**Nota:** Codex hizo búsquedas web por su cuenta (no se le pidió explícitamente) para traer precios vigentes — comportamiento esperado/deseable para este tipo de investigación, pero consume parte de su ventana de uso.
+
+## ⚠️ Pull de fix de diseño — reabre la contradicción #3 en sentido contrario (2026-06-06 22:32)
+
+Se hizo `git pull` del commit `69dfd82` ("fix: design/assets/diagnostico error de prompt", de Isabel)
+y se mergeó con el trabajo local de T1.4 (commit de merge `fbb07ad`).
+
+**1. Conflicto de merge resuelto — duplicados de `nivelRiesgo`:**
+El auto-merge de git dejó propiedades duplicadas (`nivelRiesgo` aparecía dos veces en el mismo
+objeto literal en `lib/recommendation-engine.ts`, y dos veces en la interfaz `Recomendacion` de
+`lib/types.ts`) porque ambas ramas habían agregado el campo de forma independiente — la rama
+remota con strings literales (`"bajo"`, `"medio"`, `"alto"`) y la local con la tabla
+`NIVEL_RIESGO_POR_TIPO`. Se eliminaron los literales duplicados y se dejó la versión con la
+tabla (más DRY, ya documentada arriba en T1.4). `npx tsc --noEmit` → 0 errores tras el fix.
+
+**2. ⚠️ Hallazgo importante — el fix de diseño invierte la resolución de la contradicción #3:**
+El fix de Isabel cambia el copy de `design/assets/diagnostico/code.html` de
+**"Pides por promotor, no por app"** a **"No usas el pedido sugerido todavía"**.
+
+Esto es exactamente **lo opuesto** a lo que se había resuelto como "opción A" (ver sección
+"Contradicción #3 resuelta" más abajo, 2026-06-06 21:40): ahí se cambió el motor
+(`calcularDiagnostico`) para generar "Pides por promotor, no por app" — alineándolo con el
+diseño *de ese momento* y con la métrica de autonomía de canal.
+
+Con este fix, **diseño y motor vuelven a estar desalineados, pero al revés**:
+- Motor genera: "Pides por promotor, no por app" (`lib/recommendation-engine.ts:50`)
+- Diseño ahora muestra: "No usas el pedido sugerido todavía"
+
+→ **No se modificó nada en código ni se revirtió el fix de diseño** — esto requiere alinear con
+Isabel/Tech Lead cuál de los dos textos es el correcto antes de tocar cualquiera de los dos lados,
+para no generar otra ronda de incoherencia. Posibles caminos: (a) que Isabel revierta su fix si fue
+un error sin contexto del cambio anterior, o (b) volver a cambiar el motor — pero eso afectaría
+también la lógica de "Rec B" en `calcularRecomendaciones` que ya usa `porcentajePedidosTuali` para
+generar "Pide por la app esta semana" (T1.4, ver arriba), que sí está alineada con autonomía de canal.
 
 ## Contexto del equipo
 
@@ -328,11 +382,18 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
    *"Coca-Cola 600ml · $15.50 en Tuali"*, pero `lib/mock-data.ts` (p-001) tiene `precioCosto: 11.5`.
    → Hay que avisar a la diseñadora que use los precios de `mock-data.ts` como fuente única, o corregir el mock si $15.50 es el dato correcto.
 
-2. **Falta el campo `nivelRiesgo` en `Recomendacion`:**
-   `mvp-plan.md` (F4) dice "Recomendaciones (3 niveles de riesgo)" y el diseño `tualiado_recomendaciones_v2`
-   muestra explícitamente 3 badges: 🟢 Bajo riesgo / 🟡 Riesgo medio / 🟠 Mayor ganancia — pero
-   `lib/types.ts → Recomendacion` no tiene ningún campo de riesgo, y el motor tampoco lo asigna.
-   → Pendiente: agregar `nivelRiesgo: "bajo" | "medio" | "alto"` (o equivalente) a `Recomendacion` y que `calcularRecomendaciones` lo determine.
+2. **✅ RESUELTO (2026-06-06 23:10) — Falta el campo `nivelRiesgo` en `Recomendacion`:**
+   Se agregó `nivelRiesgo: "bajo" | "medio" | "alto"` a `Recomendacion` (`lib/types.ts`) y una
+   tabla `NIVEL_RIESGO_POR_TIPO` en `lib/recommendation-engine.ts` que lo asigna de forma
+   determinística según `tipo`. El mapeo final **calca los ejemplos concretos del Stitch prompt**
+   (`design/stitch-prompts/03-recomendaciones.md` y `tualiado_recomendaciones_v2/code.html`,
+   no la primera intuición que se discutió):
+   - `promo` → `bajo` (🟢 — aprovechar un descuento ya activo, acción segura e inmediata)
+   - `pedido_sugerido` → `medio` (🟡 — implica cambiar un hábito, requiere algo de esfuerzo)
+   - `loyalty` / `precio_venta` → `alto` (🟠 "Mayor ganancia" — más cambio, mayor potencial)
+   *(Nota: la primera propuesta había invertido `promo`↔`loyalty`; se corrigió al leer el HTML
+   real del diseño, que muestra "Activa la promo de Coca-Cola" como Card A/bajo riesgo y
+   "Activa el reto de loyalty" como Card C/mayor ganancia.)*
 
 3. **✅ RESUELTO (2026-06-06 21:40, opción A) — Las "oportunidades" del diagnóstico no calzaban con lo que genera el motor:**
    Diseño muestra: "No usas las promociones activas" / **"Pides por promotor, no por app"** / "Retos de loyalty sin activar".
@@ -340,9 +401,14 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
    → La oportunidad #2 no coincide: el diseño apunta a **autonomía de canal** (métrica secundaria confirmada), el motor apunta a pedido sugerido.
    Si se implementa la pantalla con el texto del diseño tal cual, quedaría incoherente con lo que el motor realmente detecta.
 
-4. **Recomendación B para "Vender más" no coincide:**
-   Diseño muestra "Pide por la app esta semana" (autonomía de canal); el motor genera "Activa el pedido sugerido" para esa meta.
-   Refuerza el punto 3 — el diseño está más alineado con la métrica de autonomía que el motor actual.
+4. **✅ RESUELTO (2026-06-06 23:10) — Recomendación B para "Vender más" no coincidía:**
+   Se separó la rama única que generaba "Activa el pedido sugerido" para `vender_mas` y
+   `surtir_tienda` en dos ramas independientes (`lib/recommendation-engine.ts`):
+   - `vender_mas` + `porcentajePedidosTuali < 50` → **"Pide por la app esta semana"**
+     (`rec-pide-por-app`, tipo `pedido_sugerido`) — mismo criterio de autonomía de canal usado
+     para resolver el punto #3, alineado con el copy del diseño.
+   - `surtir_tienda` + `!usaPedidoSugerido` → se queda igual, "Activa el pedido sugerido"
+     (`rec-pedido-sugerido`) — este sí encaja con el concepto de resurtido de esa meta.
 
 5. **Naming de marca — mayúscula/minúscula:**
    El logo (`brand identity/wordmark.svg`) usa **"TuAliado"** (A mayúscula); `decisions.md` y `CLAUDE.md` confirman el nombre como **"tuAliado"** (t minúscula).
@@ -356,22 +422,45 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
      (Diagnóstico → Meta → Recomendación → Acción → Seguimiento) ni con las rutas ya creadas.
    → Probablemente sea scaffolding genérico de Stitch sin personalizar. Confirmar con la diseñadora antes de implementar — no copiar tal cual.
 
-## Próximo paso (actualizado 2026-06-06 22:05)
+## ✅ T1.4 — Recomendaciones: completa (2026-06-07 04:40)
 
-**T1.1, T1.2 y T1.3 (Splash, Onboarding, Diagnóstico) ya están implementadas**, y el chatbot
-flotante ya está montado e integrado — ver secciones "FASE 1" y "ChatbotButton montado en
-layout.tsx" arriba.
+**T1.4a–d completas.** Resueltas las contradicciones #2 y #4 (ver sección de
+contradicciones arriba) como parte de este trabajo — eran bloqueantes para esta pantalla.
 
-**Siguiente: T1.4 — Recomendaciones (`app/recomendaciones/page.tsx`).**
-Ahí se deben resolver las contradicciones pendientes que tocan esta pantalla:
-- **#2** — agregar `nivelRiesgo` a `Recomendacion` y que el motor lo determine (3 badges:
-  🟢 Bajo riesgo / 🟡 Riesgo medio / 🟠 Mayor ganancia).
-- **#4** — alinear la Recomendación B de "vender_mas" con el copy del diseño ("Pide por la
-  app esta semana") en vez de "Activa el pedido sugerido", siguiendo la misma lógica de
-  autonomía de canal usada para resolver la #3.
-- **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) afecta el "Calculador de ganancia"
-  dentro de esta misma pantalla — confirmar con la diseñadora cuál es la fuente correcta antes
-  de construir esa sección.
+| Sub-tarea | Estado | Detalle |
+|---|---|---|
+| T1.4a — estructura base | ✅ Hecho | `app/recomendaciones/page.tsx`: mismo patrón que `/diagnostico` (Suspense, guard sin `?meta=`, header). Lee meta con `getMeta`, llama `calcularRecomendaciones(meta, MOCK_STATE)`, chip "Meta: {label}" desde `PREGUNTA_META.opciones` (sin duplicar labels/emojis del onboarding). |
+| T1.4b — `RecomendacionCard` | ✅ Hecho | `components/RecomendacionCard.tsx` (nuevo, ~75 líneas). Tabla `ESTILO_POR_RIESGO` mapea `nivelRiesgo` → emoji/etiqueta del badge, color de barra de acento, estilo del recuadro de beneficio y estilo del CTA (🟢 bajo = botón primario relleno, 🟡 medio = outline, 🟠 alto = link) — calca los 3 ejemplos de `tualiado_recomendaciones_v2/code.html`. CTA usa `recomendacion.accion` (texto que ya define el motor, sin inventar copy). Recibe `descripcion: string | null` para el texto Gemini. |
+| T1.4c — render 3 tarjetas + CTA primario | ✅ Hecho | El `.map` en `page.tsx` renderiza hasta 3 `RecomendacionCard`; el CTA "dominante" sale solo del estilo por `nivelRiesgo`. Verificado visualmente a 390x844 (ver abajo): sin overflow, jerarquía de colores correcta (verde/amarillo/naranja). |
+| T1.4d — texto Gemini en cada tarjeta | ✅ Hecho | Conectado `explicarRecomendacion(rec, perfil)` de `lib/gemini.ts` (existía sin usar). Como esa función necesita `GEMINI_API_KEY` server-side y la página es `"use client"`, se agregó: `app/api/explicar/route.ts` (POST, llama a `explicarRecomendacion` server-side, devuelve `{ descripcion: string \| null }`, mismo shape que `app/api/chat/route.ts`) + `lib/explicaciones.ts` (`obtenerExplicacion`, helper `fetch` cliente, mismo patrón que `enviarMensaje` en `lib/chat.ts`). En `app/recomendaciones/page.tsx`: estado `descripciones: Record<string, string \| null>` llenado vía `useEffect` (dependencia `[meta]`, con flag `cancelado` para evitar `setState` post-unmount) que dispara `obtenerExplicacion` por cada recomendación en paralelo y pasa `descripciones[rec.id] ?? null` como prop (ya no `null` fijo). |
 
-Puntos #5 (naming TuAliado/tuAliado) y #6 (bottom nav en inglés, afecta `/registro`) siguen
-pendientes de confirmar con la diseñadora — no bloquean T1.4.
+**Verificación:** `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio (nueva ruta
+`ƒ /api/explicar` aparece en el build junto a `/api/chat`).
+
+**Segunda opinión de Codex (agente secundario, solo lectura, `codex exec`)** sobre el diff de
+los 3 archivos nuevos/modificados — halló que `lib/explicaciones.ts` no capturaba rechazos de
+`fetch` (errores de red), a diferencia de `res.ok === false` que sí manejaba. Se corrigió
+envolviendo el `fetch` en `try/catch` → devuelve `null` en cualquier fallo, igual que el resto
+de casos (la UI ya degrada con gracia: `{descripcion && <p>...}` en `RecomendacionCard.tsx`).
+El resto de hallazgos de Codex (la ruta API podría 500 si Gemini lanza excepción, posibles
+duplicados en React Strict Mode al montar) son consistentes con el patrón ya existente en
+`app/api/chat/route.ts` / `lib/chat.ts` y se degradan sin romper la UI — no se tocaron para no
+introducir asimetría con el resto del proyecto.
+
+**Prueba visual en navegador (Chrome DevTools MCP, 390x844) en `/recomendaciones?meta=vender_mas`:**
+- Las 3 tarjetas se renderizan con los 3 niveles de riesgo (🟢 promo / 🟡 pedido por app / 🟠
+  reto de loyalty), colores y CTAs correctos, sin overflow horizontal.
+- `list_network_requests` confirma 3 `POST /api/explicar` (uno por recomendación) con `200` y
+  el payload correcto (`recomendacion.titulo`, `perfil.nombre: "Raúl"`).
+- La respuesta fue `{"descripcion": null}` en los 3 casos — **mismo límite de sandbox ya
+  documentado para `/api/chat`** (la API de Gemini no responde en este entorno, probablemente
+  acceso de red restringido; `GEMINI_API_KEY` sí está configurada). Las tarjetas se ven
+  perfectamente bien sin el párrafo de descripción — `{descripcion && <p>...}` degrada con
+  gracia, sin huecos ni layout roto. Falta probar con la API respondiendo de verdad (fuera de
+  este sandbox) para confirmar que el texto generado es corto y coherente.
+
+**Sigue pendiente, no bloquea T1.4:**
+- **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) — afecta el "Calculador de ganancia"
+  de esta misma pantalla (modal F6, T1.5). Confirmar con la diseñadora cuál es la fuente correcta
+  antes de construir esa sección.
+- Puntos #5 (naming TuAliado/tuAliado) y #6 (bottom nav en inglés, afecta `/registro`).

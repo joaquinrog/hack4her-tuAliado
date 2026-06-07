@@ -211,9 +211,36 @@
 
 ---
 
+### Uso de Codex como agente secundario
+
+- **Decisión:** Claude Code sigue siendo el agente principal del proyecto (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código). Codex se permite como agente **secundario y de apoyo**, limitado a tareas de solo lectura que no dependen de las convenciones específicas de tuAliado: investigación externa (librerías, configs, debugging de herramientas), segunda opinión/revisión de un diff, lectura y resumen de documentación. Codex **no edita código del proyecto, no toca `docs/`/`.ai/`, ni toma decisiones de producto**. Su rol y alcance quedan documentados en `AGENTS.md` (sección "Codex — Agente secundario") para que los lea directamente al ser invocado en este repo.
+- **Estado:** Confirmado — 2026-06-06
+- **Razón:** Joaquín tiene Claude Pro y GPT Plus, ambos con ventana de uso que se renueva cada ~5 horas — el recurso escaso real es esa ventana, no "tokens" en abstracto. Las MCP tools de Claude Code (chrome-devtools, etc.) y el contexto profundo del proyecto son no-transferibles a Codex, así que conviene proteger la ventana de Claude para ese trabajo exclusivo y descargar en Codex el trabajo genérico que no requiere ese contexto — minimizando el "peaje" de explicarle las convenciones del proyecto cada vez.
+- **Nota:** Esto matiza la regla histórica "un solo agente, un solo loop, sin coordinación entre herramientas externas" — actualizada en `AGENTS.md`.
+
+---
+
+### Modelo de Gemini a usar
+
+- **Decisión:** Usar **Gemini Flash / Flash-Lite** (no Pro) en `lib/gemini.ts`.
+- **Estado:** Confirmado — 2026-06-06
+- **Razón:** La capa de explicación solo traduce recomendaciones ya calculadas a 1-3 oraciones simples — no requiere razonamiento complejo, que es donde Pro aportaría. Según pricing oficial de Gemini (ai.google.dev/gemini-api/docs/pricing): Flash-Lite ≈ $0.25/M tokens input + $1.50/M output, frente a Pro ≈ $2/M + $12/M (~8x más caro). Para un request típico de este caso de uso (~300 tokens input + 60 output), Flash-Lite cuesta ≈ $0.000165 vs. Pro ≈ $0.00132. Google describe Flash/Flash-Lite como optimizados para baja latencia y alto volumen — encaja con el patrón de llamadas frecuentes y cortas de la capa de explicación.
+- **Fuente:** Investigación de costo/latencia delegada a Codex como agente secundario (ver `AGENTS.md` y entrada "Uso de Codex como agente secundario" arriba) — comparó pricing oficial vigente con fuentes (ai.google.dev). Confirmado por Joaquín.
+
+---
+
+### Criterio de delegación a Codex en planes de Claude
+
+- **Decisión:** Al armar un plan, Claude Code marca qué subtareas delega a Codex (solo lectura, genéricas) vs. cuáles hace él mismo. Por defecto asume que Codex tiene presupuesto disponible y decide el nivel de esfuerzo según la tarea — no pregunta a Joaquín antes de delegar. Si Codex responde con un error de cuota agotada ("usage limit reached", "tokens restart at..."), Claude asume la tarea directamente sin reintentar ni esperar.
+- **Estado:** Confirmado — 2026-06-06
+- **Razón:** `codex exec` (modo no-interactivo, el que usa Claude para delegar) no expone `/status` — ese comando solo existe en el modo interactivo de Codex, así que no hay forma de consultar la cuota de antemano. Preguntar a Joaquín cada vez añadiría fricción innecesaria; las tareas delegadas hasta ahora han gastado poco presupuesto (la última, ~2% de la ventana de 5h de Codex). Reaccionar al error real es más simple y confiable que estimar de antemano.
+- **Nota:** Detalle operativo en `AGENTS.md` (sección "Codex — Agente secundario" → "Cómo decide Claude Code cuándo y cómo delegar").
+
+---
+
 ## Decisiones pendientes
 
-- Definir modelo de Gemini a usar (Flash vs Pro — por costo y latencia)
+- ~~Definir modelo de Gemini a usar (Flash vs Pro — por costo y latencia)~~ → Resuelto: Gemini Flash/Flash-Lite (ver "Modelo de Gemini a usar" arriba, 2026-06-06)
 - Pantallas mínimas para el demo (flujo core a confirmar con el Tech Lead)
 - ~~Diseño visual: paleta de colores, tipografía, componentes base~~ → Resuelto: assets de Stitch recibidos (sistema "Warm & Approachable Advisor", ver `docs/handoff-context.md` 2026-06-06 20:11)
 
