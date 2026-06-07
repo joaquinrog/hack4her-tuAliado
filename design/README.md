@@ -84,13 +84,15 @@ Antes de implementar las pantallas de FASE 1 hay que resolver estas correcciones
      punto 3 de arriba — si se decide revertir el motor del diagnóstico, esta recomendación
      seguiría siendo válida y coherente (no hay que tocarla).
 
-5. **Capitalización de marca — "TuAliado" vs "tuAliado"**
+5. **EN PROGRESO - Capitalización de marca — "TuAliado" vs "tuAliado"**
    - Archivo a corregir: `assets/brand identity/wordmark.svg`
    - Cambio: el `<tspan>` con texto "TuAli" + "ado" renderiza "TuAliado" (A mayúscula). Debe decir **"tuAliado"** (t minúscula) para coincidir con `docs/decisions.md` y `CLAUDE.md`.
+   - Estado: ya lo están trabajando; no duplicar el cambio desde ingeniería.
 
-6. **Bottom nav bar en inglés (Progress / Check-in / Insights / Profile)**
+6. **EN PROGRESO - Bottom nav bar en inglés (Progress / Check-in / Insights / Profile)**
    - Archivos a corregir: `assets/registro/tualiado_check_in_paso_2/code.html` y `.../tualiado_check_in_paso_3/code.html`
    - Cambio: quitar la barra de navegación inferior por tabs (no existe en el flujo lineal confirmado
      Diagnóstico → Meta → Recomendación → Acción → Seguimiento, ni en las rutas creadas:
      `/onboarding`, `/diagnostico`, `/recomendaciones`, `/registro`, `/seguimiento`).
      Si se necesita navegación, debe ser en español y coincidir con rutas reales.
+   - Estado: ya lo están trabajando; no copiar ese bottom nav al frontend mientras se corrige.
