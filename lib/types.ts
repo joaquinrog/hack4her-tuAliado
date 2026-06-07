@@ -146,6 +146,7 @@ export interface Recomendacion {
   beneficioEstimado: string | null  // ESTIMACION o null si faltan preciosVenta
   accion: string                    // texto del CTA
   productoIds: string[]
+  nivelRiesgo: "bajo" | "medio" | "alto"
 }
 
 // ── Chatbot ──────────────────────────────────────────────────────────────────
