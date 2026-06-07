@@ -5,6 +5,30 @@
 
 ---
 
+## ✅ Chatbot Gemini restaurado con modelo Free Tier (Codex) (2026-06-07 09:31)
+
+Joaquín reportó que el chatbot respondía siempre `"No pude generar una respuesta. Intenta de
+nuevo."`. Se diagnosticó desde terminal llamando directamente a Gemini:
+
+- Las keys anteriores respondían `429 RESOURCE_EXHAUSTED`:
+  - `GEMINI_API_KEY`: créditos/prepago agotados.
+  - `GEMINI_API_KEY_2`: cuota free tier en `0` para el modelo usado.
+- Las dos keys nuevas de Joaquín respondieron `200 OK` con `gemini-2.5-flash-lite`.
+- Las mismas keys nuevas respondieron `429 RESOURCE_EXHAUSTED` con `gemini-2.0-flash-lite`
+  porque ese modelo tiene cuota free tier en `0` para esos proyectos.
+
+Cambios aplicados:
+- **`.env.local`**: reemplazadas `GEMINI_API_KEY` y `GEMINI_API_KEY_2` por las nuevas keys de
+  Joaquín (archivo local, no se commitea).
+- **`lib/gemini.ts`**: endpoint cambiado de `gemini-2.0-flash` a
+  `gemini-2.5-flash-lite`.
+
+Razón: `gemini-2.5-flash-lite` es el modelo Gemini orientado a costo/alto volumen y fue el único
+probado que respondió correctamente con las nuevas keys en Free Tier. Para que la app tome las
+nuevas variables y el modelo, hay que reiniciar el dev server.
+
+---
+
 ## ✅ README.md reescrito para jueces/DevTools/MLH (Claude) (2026-06-07 09:30)
 
 Joaquín pidió revisar la merge `993e460` (que respondió las preguntas clave de
