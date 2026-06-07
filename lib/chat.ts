@@ -1,7 +1,7 @@
 import type { ChatContexto } from "./types"
 
 export const MENSAJE_INICIAL =
-  "Hola, soy TuAliado 👋 ¿Tienes dudas sobre alguna de tus recomendaciones?"
+  "Hola, soy tuAliado 👋 ¿Tienes dudas sobre alguna de tus recomendaciones?"
 
 export const CHIPS_RESPUESTA_RAPIDA = [
   "¿Qué es esta promo?",

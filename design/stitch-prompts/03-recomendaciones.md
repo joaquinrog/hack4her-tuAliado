@@ -7,7 +7,7 @@
 ## Prompt para Google Stitch — Vista de tarjetas
 
 ```
-Design a mobile recommendations screen (375x812px) for "TuAliado". Shows 3 recommendation cards ordered by risk level.
+Design a mobile recommendations screen (375x812px) for "tuAliado". Shows 3 recommendation cards ordered by risk level.
 
 Screen purpose: present 3 concrete actions the user can take, each with risk level and estimated benefit.
 
@@ -58,7 +58,7 @@ Design constraints:
 ## Prompt para el Modal — Precio de venta (F6)
 
 ```
-Design a mobile bottom sheet modal (375px wide) for "TuAliado". The user is asked for their sale price to calculate estimated earnings.
+Design a mobile bottom sheet modal (375px wide) for "tuAliado". The user is asked for their sale price to calculate estimated earnings.
 
 Trigger: user taps "Activar esta promo" on a recommendation card
 

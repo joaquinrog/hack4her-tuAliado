@@ -1,4 +1,4 @@
-# Funciones de la App — TuAliado
+# Funciones de la App — tuAliado
 
 > Lista completa sin depurar. Incluye funciones del equipo + las ya definidas.
 > Próximo paso: depurar cuáles entran al MVP/Demo del hackathon.
@@ -27,7 +27,7 @@ Le presenta 4 opciones con botón grande e ícono:
 ## F2: Perfil del cliente
 
 **Qué hace:**
-Captura información del cliente para personalizar la experiencia. Los datos básicos (nombre, correo, teléfono) vienen de Tuali. Lo que se pregunta en el onboarding de TuAliado:
+Captura información del cliente para personalizar la experiencia. Los datos básicos (nombre, correo, teléfono) vienen de Tuali. Lo que se pregunta en el onboarding de tuAliado:
 
 **Perfil del tendero:**
 - Fecha de nacimiento.

@@ -9,7 +9,7 @@ Datos del mock de Raúl: ticket promedio ~$450 MXN, canal 80% promotor / 20% app
 ## Prompt para Google Stitch
 
 ```
-Design a mobile diagnostic screen (375x812px) for "TuAliado". This screen shows the user's current business performance inside Tuali.
+Design a mobile diagnostic screen (375x812px) for "tuAliado". This screen shows the user's current business performance inside Tuali.
 
 Screen purpose: show 3-4 key metrics visually, then present 3 detected opportunities and a CTA.
 

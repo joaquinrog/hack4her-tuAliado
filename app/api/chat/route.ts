@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   const meta = contexto?.meta ?? "crecer su negocio"
   const ticket = contexto?.ticketPromedio ?? 450
 
-  const prompt = `Eres TuAliado, asistente de crecimiento de ${nombre} en Tuali.
+  const prompt = `Eres tuAliado, asistente de crecimiento de ${nombre} en Tuali.
 Meta del cliente: ${meta}. Ticket promedio: $${ticket} MXN.
 Responde en máximo 2 oraciones cortas en español, sin tecnicismos. Sé amigable y práctico.
 Pregunta: ${message}`

@@ -7,7 +7,7 @@ El chatbot es apoyo, no el centro del producto. Aparece como botón flotante en 
 ## Prompt para Google Stitch — Botón flotante (FAB)
 
 ```
-Design a mobile floating action button (FAB) for a chat assistant in "TuAliado".
+Design a mobile floating action button (FAB) for a chat assistant in "tuAliado".
 
 Position: fixed, bottom-right corner, 24px from bottom, 24px from right edge.
 Size: 56x56px circle.
@@ -24,7 +24,7 @@ State variants:
 ## Prompt para Google Stitch — Bottom sheet de chat
 
 ```
-Design a mobile chat bottom sheet (375px wide) for "TuAliado"'s AI assistant named "TuAliado".
+Design a mobile chat bottom sheet (375px wide) for "tuAliado"'s AI assistant named "tuAliado".
 
 Trigger: user taps the FAB button
 
@@ -34,7 +34,7 @@ Layout (top to bottom):
 
 1. Handle + header:
    - Drag handle at very top (centered pill, 40x4px, gray)
-   - Assistant name: "TuAliado" — 16px bold, with small sparkle icon left
+   - Assistant name: "tuAliado" — 16px bold, with small sparkle icon left
    - Close button (X) — top right, 44x44px tap target
 
 2. Message history area (scrollable):
@@ -48,7 +48,7 @@ Layout (top to bottom):
      - Rounded-2xl (less rounded on top-right)
 
    First message from assistant (always shown):
-   "Hola, soy TuAliado 👋 ¿Tienes dudas sobre alguna de tus recomendaciones?"
+   "Hola, soy tuAliado 👋 ¿Tienes dudas sobre alguna de tus recomendaciones?"
 
 3. Quick reply chips (contextual, above input):
    - 3 horizontal chips: "¿Qué es esta promo?", "¿Cómo activo los retos?", "Explícame más simple"

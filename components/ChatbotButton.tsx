@@ -166,7 +166,7 @@ function ChatbotButtonContent() {
     <>
       <button
         type="button"
-        aria-label="Abrir chat con TuAliado"
+        aria-label="Abrir chat con tuAliado"
         onClick={() => setAbierto(true)}
         // bottom-[136px]: deja libre la barra de CTA fija (~124px) de Diagnóstico/Recomendaciones/Registro
         className="fixed right-6 bottom-[136px] z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-transform active:scale-90"

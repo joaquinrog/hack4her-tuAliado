@@ -1,4 +1,4 @@
-# TuAliado — Tuali Growth Agent
+# tuAliado — Tuali Growth Agent
 
 **Hackathon:** Hack4Her
 **Reto:** Tuali Growth Agent
@@ -12,7 +12,7 @@ Los clientes de Tuali (dueños de tiendas de abarrotes y similares) tienen acces
 
 El resultado: el cliente no sabe qué le conviene pedir, no aprovecha las promociones de forma óptima, y depende del promotor para tomar decisiones que podría tomar solo.
 
-## Solución: TuAliado
+## Solución: tuAliado
 
 Un agente de crecimiento para clientes de Tuali que:
 

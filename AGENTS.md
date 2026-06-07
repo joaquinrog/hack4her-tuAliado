@@ -48,7 +48,7 @@ Este documento define cómo se usa AI en este proyecto — aplica tanto para Cla
 - `codex exec` no expone `/status` (es un comando del modo interactivo, no de `exec`), así que no hay forma de consultar la cuota de antemano — decidir el nivel de esfuerzo según la tarea y simplemente intentar.
 - Si Codex regresa un error de cuota agotada (p. ej. "usage limit reached", "tokens restart at..."), Claude Code asume la tarea directamente sin reintentar ni esperar.
 
-Para entender el producto (qué es TuAliado, reglas de mobile/visuales, métricas), lee `CLAUDE.md` y `docs/handoff-context.md` antes de investigar — así tu reporte llega ya alineado con el contexto real.
+Para entender el producto (qué es tuAliado, reglas de mobile/visuales, métricas), lee `CLAUDE.md` y `docs/handoff-context.md` antes de investigar — así tu reporte llega ya alineado con el contexto real.
 
 ---
 

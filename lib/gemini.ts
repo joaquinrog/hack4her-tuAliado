@@ -38,7 +38,7 @@ export async function responderChat(
   mensaje: string,
   ctx: { nombre: string; meta: string; ticketPromedio: number }
 ): Promise<string> {
-  const prompt = `Eres TuAliado, el asistente de crecimiento de ${ctx.nombre} en Tuali.
+  const prompt = `Eres tuAliado, el asistente de crecimiento de ${ctx.nombre} en Tuali.
 Meta del cliente: ${ctx.meta}. Ticket promedio actual: $${ctx.ticketPromedio} MXN.
 Responde en 1-2 oraciones cortas en español, sin tecnicismos. Sé amigable y práctico.
 Pregunta del cliente: ${mensaje}`

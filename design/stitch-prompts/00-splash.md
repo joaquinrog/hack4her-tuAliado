@@ -2,18 +2,18 @@
 
 ## Contexto
 
-Primera pantalla que ve el usuario. El objetivo es comunicar en 2 segundos qué es TuAliado y invitarlo a empezar.
+Primera pantalla que ve el usuario. El objetivo es comunicar en 2 segundos qué es tuAliado y invitarlo a empezar.
 
 ## Prompt para Google Stitch
 
 ```
-Design a mobile splash screen (375x812px) for "TuAliado", a business growth advisor inside the Tuali app.
+Design a mobile splash screen (375x812px) for "tuAliado", a business growth advisor inside the Tuali app.
 
 Screen purpose: first impression — communicate the product value and invite action.
 
 Layout (top to bottom):
 1. Top 60% — centered hero area:
-   - TuAliado logo (icon + wordmark), large, centered
+   - tuAliado logo (icon + wordmark), large, centered
    - Tagline below the logo: "Tu asesor de crecimiento" in 18px, text-muted color, centered
    - Optional: a very simple illustration of a tienda with an upward arrow, warm and friendly style
 2. Bottom 40% — action area:

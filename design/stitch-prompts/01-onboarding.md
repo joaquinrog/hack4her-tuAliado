@@ -7,7 +7,7 @@ El usuario elige su meta de crecimiento. Una sola pregunta, 4 opciones con ícon
 ## Prompt para Google Stitch
 
 ```
-Design a mobile onboarding screen (375x812px) for "TuAliado". The user must pick ONE growth goal.
+Design a mobile onboarding screen (375x812px) for "tuAliado". The user must pick ONE growth goal.
 
 Screen purpose: let the user choose their main goal. One question, four big visual options.
 
