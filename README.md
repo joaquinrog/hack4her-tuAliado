@@ -1,11 +1,17 @@
 # tuAliado
 
-> TuAliado es un sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para cada tendero.
+> tuAliado es un sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para cada tendero.
 
-**Hackathon:** Hack4Her — Reto **Tuali Growth Agent**
-**Equipo:** Picafresitas
-**Demo en vivo:** https://hack4her-tu-aliado.vercel.app/
-**Video / capturas / Devpost:** https://devpost.com/software/tualiado · https://youtube.com/shorts/Dmv-8YtmCt8?feature=share
+| | |
+|---|---|
+| 🏆 **Hackathon** | Hack4Her — Reto **Tuali Growth Agent** |
+| 👥 **Equipo** | Picafresitas |
+| 🚀 **Demo en vivo** | [hack4her-tu-aliado.vercel.app](https://hack4her-tu-aliado.vercel.app/) |
+| 🎬 **Video demo** | [Ver en YouTube](https://youtube.com/shorts/Dmv-8YtmCt8?feature=share) |
+| 📋 **Devpost** | [devpost.com/software/tualiado](https://devpost.com/software/tualiado) |
+
+[![Video demo de tuAliado](https://img.youtube.com/vi/Dmv-8YtmCt8/hqdefault.jpg)](https://youtube.com/shorts/Dmv-8YtmCt8?feature=share)
+<p align="center"><sub>↑ clic para ver el video (grabado como YouTube Short, formato vertical 9:16 — por eso no se incrusta en 16:9)</sub></p>
 
 ---
 
