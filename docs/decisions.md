@@ -16,9 +16,10 @@
 
 ### Nombre de trabajo del producto
 
-- **Decisión:** TuAliado
+- **Decisión:** tuAliado
 - **Estado:** Confirmado
-- **Actualización (2026-06-07):** se cambió la capitalización confirmada de "tuAliado" (t minúscula) a **"TuAliado"** (A mayúscula), a petición del Tech Lead — para que el copy de la app coincida con el wordmark del logo (`brand identity/wordmark.svg`), que ya usaba "TuAliado". Resuelve el punto "Capitalización de marca" de la sección de pendientes más abajo.
+- **Actualización (2026-06-07 03:25):** se había cambiado la capitalización confirmada de "tuAliado" (t minúscula) a "TuAliado" (A mayúscula), a petición del Tech Lead — para que el copy de la app coincidiera con el wordmark del logo viejo (`brand identity/wordmark.svg`, hecho a mano), que usaba "TuAliado".
+- **Actualización (2026-06-07 04:10) — revertido:** llegó el logo de marca real (Katia Uribe, branch `design`, commit `55a87ea`, "feat(branding): update tuAliado assets") y su wordmark usa **"tuAliado"** (t minúscula). El asset de diseño real prevalece sobre el wordmark hecho a mano que había motivado el cambio anterior — se revierte la capitalización confirmada de vuelta a **"tuAliado"** en código, docs y prompts (84 ocurrencias revertidas) para que vuelvan a coincidir con el logo. Esto deja "tuAliado" como la capitalización definitiva mientras el asset de marca no vuelva a cambiar.
 
 ---
 
@@ -214,7 +215,7 @@
 
 ### Uso de Codex como agente secundario
 
-- **Decisión:** Claude Code sigue siendo el agente principal del proyecto (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código). Codex se permite como agente **secundario y de apoyo**, limitado a tareas de solo lectura que no dependen de las convenciones específicas de TuAliado: investigación externa (librerías, configs, debugging de herramientas), segunda opinión/revisión de un diff, lectura y resumen de documentación. Codex **no edita código del proyecto, no toca `docs/`/`.ai/`, ni toma decisiones de producto**. Su rol y alcance quedan documentados en `AGENTS.md` (sección "Codex — Agente secundario") para que los lea directamente al ser invocado en este repo.
+- **Decisión:** Claude Code sigue siendo el agente principal del proyecto (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código). Codex se permite como agente **secundario y de apoyo**, limitado a tareas de solo lectura que no dependen de las convenciones específicas de tuAliado: investigación externa (librerías, configs, debugging de herramientas), segunda opinión/revisión de un diff, lectura y resumen de documentación. Codex **no edita código del proyecto, no toca `docs/`/`.ai/`, ni toma decisiones de producto**. Su rol y alcance quedan documentados en `AGENTS.md` (sección "Codex — Agente secundario") para que los lea directamente al ser invocado en este repo.
 - **Estado:** Confirmado — 2026-06-06
 - **Razón:** Joaquín tiene Claude Pro y GPT Plus, ambos con ventana de uso que se renueva cada ~5 horas — el recurso escaso real es esa ventana, no "tokens" en abstracto. Las MCP tools de Claude Code (chrome-devtools, etc.) y el contexto profundo del proyecto son no-transferibles a Codex, así que conviene proteger la ventana de Claude para ese trabajo exclusivo y descargar en Codex el trabajo genérico que no requiere ese contexto — minimizando el "peaje" de explicarle las convenciones del proyecto cada vez.
 - **Nota:** Esto matiza la regla histórica "un solo agente, un solo loop, sin coordinación entre herramientas externas" — actualizada en `AGENTS.md`.
@@ -239,18 +240,20 @@
 
 ---
 
-## Decisiones pendientes
+## Decisiones pendientes / resueltas recientes
 
 - ~~Definir modelo de Gemini a usar (Flash vs Pro — por costo y latencia)~~ → Resuelto: Gemini Flash/Flash-Lite (ver "Modelo de Gemini a usar" arriba, 2026-06-06)
-- Pantallas mínimas para el demo (flujo core a confirmar con el Tech Lead)
+- ~~Pantallas mínimas para el demo (flujo core a confirmar con el Tech Lead)~~ → Resuelto: flujo core implementado y verificado como FASE 1 / T1: Splash → Onboarding → Diagnóstico → Recomendaciones → Registro → Seguimiento (ver `docs/handoff-context.md`, 2026-06-07 12:30)
 - ~~Diseño visual: paleta de colores, tipografía, componentes base~~ → Resuelto: assets de Stitch recibidos (sistema "Warm & Approachable Advisor", ver `docs/handoff-context.md` 2026-06-06 20:11)
 
-### Nuevas — surgidas al revisar assets de diseño Stitch (2026-06-06 20:11)
+No quedan decisiones abiertas en esta sección; se conserva como historial de cierres recientes.
+
+### Contradicciones surgidas al revisar assets de diseño Stitch (2026-06-06 20:11)
 
 Detalle completo en `docs/handoff-context.md` sección "Contradicciones encontradas". Resumen para decidir:
 
-- **Precio Coca-Cola 600ml**: diseño muestra $15.50, mock tiene `precioCosto: 11.5` — ¿cuál es el dato correcto? (riesgo de "incoherencia de datos", el problema #1 que Tuali no quiere ver)
-- **¿Agregamos `nivelRiesgo` a `Recomendacion`?**: el diseño de recomendaciones muestra 3 badges de riesgo (🟢🟡🟠) que no existen en `lib/types.ts` ni en el motor
-- **¿Alineamos los textos de "oportunidades" del diagnóstico y de recomendaciones con el copy del diseño?**: el diseño está más orientado a "autonomía de canal" (pedir por app vs. promotor) que el motor actual
-- ~~**Capitalización de marca**~~ → Resuelto (2026-06-07): se cambió la decisión confirmada de "tuAliado" a "TuAliado" para que coincida con el logo (ver sección "Nombre de trabajo del producto" arriba).
-- **Bottom nav bar en inglés** (Progress/Check-in/Insights/Profile) en pantallas de registro — no coincide con el flujo lineal confirmado, ¿es scaffolding genérico de Stitch a descartar?
+- ~~**Precio Coca-Cola 600ml**~~ → Resuelto: el diseño actual muestra `$11.50 en Tuali`, igual que `precioCosto: 11.5` en `lib/mock-data.ts`; el `$15.50` quedó como referencia histórica en docs, no en assets actuales.
+- ~~**¿Agregamos `nivelRiesgo` a `Recomendacion`?**~~ → Resuelto: `nivelRiesgo: "bajo" | "medio" | "alto"` agregado a `Recomendacion` y calculado por el motor.
+- ~~**¿Alineamos los textos de "oportunidades" del diagnóstico y de recomendaciones con el copy del diseño?**~~ → Resuelto: diagnóstico y recomendaciones usan autonomía de canal cuando corresponde (`porcentajePedidosTuali < 50`).
+- ~~**Capitalización de marca**~~ → Resuelto definitivamente (2026-06-07 04:10): tras dos vueltas (tuAliado → TuAliado → tuAliado), el logo de marca real de Katia confirma "tuAliado" (t minúscula) — esa es la capitalización final (ver sección "Nombre de trabajo del producto" arriba).
+- ~~**Bottom nav bar en inglés** (Progress/Check-in/Insights/Profile) en pantallas de registro~~ → Resuelto: se descartó como scaffolding genérico de Stitch; `/registro` implementa stepper lineal con indicador "X de Y", sin navegación por tabs.

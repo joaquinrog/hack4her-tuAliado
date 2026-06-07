@@ -5,6 +5,40 @@
 
 ---
 
+## ✅ Demo path documentado (2026-06-07 04:27)
+
+Nuevo archivo `docs/demo-flow.md`: define cómo mostrar la demo, qué pantallas enseñar y cómo
+explicar que `/diagnostico` sea igual para las 4 metas. La decisión documentada es usar
+**Vender más** como camino principal y no recorrer las 4 metas completas, porque el diagnóstico
+es la foto base de Raúl; la personalización por meta ocurre en recomendaciones, registro y
+seguimiento.
+
+Actualizado `.ai/task-board.md`: "Preparar demo path para presentación" queda marcado como
+completado. Sigue pendiente la narrativa final del pitch.
+
+---
+
+## ✅ Documentación y tracking alineados con FASE 1 cerrada (2026-06-07 04:22)
+
+Se corrigió la desalineación entre la entrada superior de FASE 1 cerrada y los documentos de
+seguimiento:
+- `.ai/task-board.md` ahora marca como completadas las tareas ya implementadas/verificadas:
+  pantallas mínimas del demo, modelo Gemini, mock-data, motor determinístico, flujo core,
+  capa LLM, seguimiento y validación visual/de datos.
+- `docs/decisions.md` ahora marca como resueltas las decisiones/contradicciones que ya habían
+  quedado cerradas en este handoff: pantallas mínimas del demo, precio Coca-Cola 600ml,
+  `nivelRiesgo`, oportunidades/recomendaciones alineadas y bottom nav de Stitch descartada.
+- La tabla "Qué está hecho y qué falta" se actualizó para reflejar que Registro y Seguimiento
+  ya no son placeholders.
+
+Pendiente real que permanece: polish final de frontend/copy y tareas de pitch que aún no tienen
+cierre explícito. También queda una anomalía histórica de timestamp: la entrada T1.6 está
+registrada como `2026-06-07 12:30`, que es posterior al reloj local al momento de esta
+corrección (`2026-06-07 04:22`). No se reescribió esa hora porque no hay evidencia de la
+hora real de cierre.
+
+---
+
 ## ✅ T1.6 — Seguimiento implementada, FASE 1 / T1 cerrada (2026-06-07 12:30)
 
 `app/seguimiento/page.tsx` reescrito (placeholder → pantalla completa). Codex (`codex exec`)
@@ -43,7 +77,7 @@ Recomendaciones, Registro y Seguimiento implementados y verificados.
 |---|---|
 | Hackathon | Hack4Her |
 | Reto | Tuali Growth Agent |
-| Producto de trabajo | TuAliado |
+| Producto de trabajo | tuAliado |
 | Tech Lead | Tech Lead del equipo |
 
 ### Qué está hecho y qué falta
@@ -59,20 +93,52 @@ Recomendaciones, Registro y Seguimiento implementados y verificados.
 | `lib/state.ts` — URL params + localStorage | ✅ Hecho |
 | Splash, Onboarding, Diagnóstico (T1.1–T1.3) | ✅ Hecho |
 | Recomendaciones (T1.4) | ✅ Hecho — 3 tarjetas + texto Gemini vía `/api/explicar` |
-| Pantallas core restantes (registro, seguimiento) | 🔄 Placeholders listos |
+| Registro diario (T1.5b) | ✅ Hecho — check-in diario, racha y redirección a seguimiento |
+| Seguimiento (T1.6) | ✅ Hecho — avance visual, comparación de canal y promos aplicadas |
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | ✅ Hecho — integrado en `ChatbotButton`/`ChatSheet`, ver entrada 23:01 |
 
-## ✅ Cambio de decisión confirmada: "tuAliado" → "TuAliado" (2026-06-07 03:25)
+## ✅ Logo de marca real (Katia) integrado + capitalización revertida a "tuAliado" (2026-06-07 04:10)
 
-A petición explícita del Tech Lead, se cambió la capitalización confirmada del nombre de marca
-de **"tuAliado"** (t minúscula) a **"TuAliado"** (A mayúscula) — para que el copy de toda la app
-coincida con el wordmark del logo (`design/assets/brand identity/wordmark.svg`), que ya usaba
-"TuAliado". Antes, esta era exactamente la incoherencia documentada en el punto #5 de
-"Contradicciones encontradas" (ver más abajo).
+Se integró el logo nuevo de marca subido por Katia Uribe a la branch `design`
+(commit `55a87ea`, "feat(branding): update tuAliado assets") — reemplaza los 3 SVGs viejos
+hechos a mano (`logo-full.svg`/`logo-mark.svg`/`wordmark.svg`, vectores simples ~250-850 bytes)
+por los 3 assets de diseño reales (PNG exportados embebidos en SVG):
+- `icono_tualiado_transparente (1).svg` (296×224) → `public/logo-mark.svg` (usado en `/onboarding`)
+- `tuAliado_sin_fondo_sin_borde.svg` (862×216) → `public/logo-full.svg` (usado en Splash `/`)
+- `tuAliado_texto_sin_fondo.svg` (380×71) → `public/wordmark.svg` (sin uso directo en código)
 
-**Archivos actualizados (reemplazo `tuAliado` → `TuAliado` en texto/copy, no en rutas/nombres de
-asset que usan minúsculas como `tualiado_chat_con_asistente`):**
+Ajustadas las dimensiones `width`/`height` de los `<Image>` en `app/page.tsx` (240×96 → 240×60,
+proporción ≈4:1 del logo nuevo) y `app/onboarding/page.tsx` (32×32 → 32×24, el ícono nuevo no
+es cuadrado, ≈4:3) para que Next.js calcule el aspect ratio correcto sin distorsión.
+
+**Hallazgo que cambió el alcance — vuelta atrás de la decisión de capitalización:**
+El wordmark del logo nuevo dice **"tuAliado"** (t minúscula), justo lo opuesto a lo que se
+había decidido el mismo día por la mañana (entrada de las 03:25, ahora corregida abajo): cambiar
+de "tuAliado" a "TuAliado" porque el wordmark *viejo* (hecho a mano) usaba mayúscula. Con el
+asset de marca real ya disponible, el Tech Lead confirmó: usar el logo nuevo tal cual y
+**revertir la capitalización del copy de vuelta a "tuAliado"** — para que código, docs y logo
+vuelvan a coincidir (esto es justo "incoherencia de datos" que Tuali no quiere ver, aplicado a
+naming/branding).
+
+**Revertidas 84 ocurrencias de "TuAliado" → "tuAliado"** (mismo conjunto de archivos que la
+entrada de las 03:25 había cambiado, reemplazo de string literal exacto, sin tocar rutas/nombres
+de asset en minúsculas como `tualiado_chat_con_asistente`). `docs/decisions.md` actualizado con
+el historial completo de las dos vueltas (sección "Nombre de trabajo del producto") — **"tuAliado"
+queda como capitalización definitiva** mientras el asset de marca no cambie de nuevo.
+
+---
+
+### Historial — entrada original (2026-06-07 03:25), corregida para mantener precisión:
+
+A petición explícita del Tech Lead, se había cambiado la capitalización confirmada del nombre de
+marca de **"tuAliado"** (t minúscula) a **"TuAliado"** (A mayúscula) — para que el copy de toda
+la app coincidiera con el wordmark del logo *viejo* (`design/assets/brand identity/wordmark.svg`,
+hecho a mano), que usaba "TuAliado". En ese momento, esa parecía la resolución correcta de la
+incoherencia documentada en el punto #5 de "Contradicciones encontradas" (ver más abajo) — pero
+quedó superada horas después al llegar el logo de marca real (ver entrada arriba, 04:10).
+
+**Archivos que se tocaron entonces (y que la entrada de las 04:10 revirtió de vuelta):**
 `CLAUDE.md`, `AGENTS.md`, `README.md`, `app/layout.tsx`, `app/page.tsx`, `app/onboarding/page.tsx`,
 `components/ChatbotButton.tsx`, `components/ChatSheet.tsx`, `components/ChatVoiceView.tsx`,
 `lib/chat.ts`, `lib/gemini.ts`, `app/api/chat/route.ts`, `docs/decisions.md`,
@@ -80,10 +146,6 @@ asset que usan minúsculas como `tualiado_chat_con_asistente`):**
 `docs/project-brief.md`, `docs/pitch-context.md`, `docs/app-functions.md`,
 `docs/validation-plan.md`, `design/README.md`, `design/stitch-prompts/*.md`,
 `02-posible-mvp-tuali-crece.md`.
-
-**Decisión actualizada en `docs/decisions.md`** (sección "Nombre de trabajo del producto") y el
-punto "Capitalización de marca" de la lista de pendientes se marcó como resuelto. No se tocó
-`wordmark.svg` — ya estaba correcto con la nueva decisión.
 
 ## ✅ Dev server por IP LAN habilitado para pruebas mobile (2026-06-07)
 
@@ -332,13 +394,13 @@ que ambos lados usan el mismo texto. No se requiere ningún cambio adicional en 
 ## ✅ Modo Voz integrado al chatbot — F13 (2026-06-06 23:01)
 
 Se conectó `lib/voice.ts` (ya completo desde antes) a la UI del chatbot. Diferenciador clave del
-MVP: Raúl no quiere leer, así que ahora puede hablar con TuAliado y escuchar la respuesta.
+MVP: Raúl no quiere leer, así que ahora puede hablar con tuAliado y escuchar la respuesta.
 
 **Archivos:**
 - **Nuevo** `components/ChatVoiceView.tsx` (77 líneas) — vista de presentación pura: anillos tipo
   ecualizador (con `animate-pulse` + `animationDelay` escalonado, mismo patrón que
   `ChatTypingBubble`, sin CSS custom nuevo), status pill por estado, caption en vivo
-  ("Tú dijiste" / "TuAliado dice"), botón pill de ancho completo y link "¿Prefieres escribir?".
+  ("Tú dijiste" / "tuAliado dice"), botón pill de ancho completo y link "¿Prefieres escribir?".
 - **Modificado** `components/ChatSheet.tsx` — toggle "Hablar en su lugar" / "Escribir en su lugar"
   en el header (solo visible si `soportaVoz` es `true`) + render condicional `ChatVoiceView` vs.
   lista de mensajes + `ChatInputBar`.
@@ -457,7 +519,7 @@ Los clientes de Tuali tienen datos útiles disponibles (pedidos, promociones, lo
 | ¿Qué no quieren ver? | Incoherencia en los datos. | Crítico: cualquier número debe tener origen claro. |
 | ¿Cómo debe comportarse? | Evaluar comportamiento del usuario dentro de la app. | El agente debe usar señales de la app. |
 
-## Dirección del MVP: TuAliado
+## Dirección del MVP: tuAliado
 
 Flujo base:
 ```
@@ -558,7 +620,7 @@ Todos los módulos de lógica están listos:
 | `app/api/chat/route.ts` | POST `/api/chat` → `{ reply }` usando Gemini Flash |
 | `lib/mock-data.ts` | +`ENTRADAS_DEMO` (4 entradas coherentes con historial de Raúl) |
 | `lib/onboarding-questions.ts` | Corregidas metas a valores confirmados (`vender_mas`, `aprovechar_promos`, `surtir_tienda`, `como_voy`) |
-| `app/layout.tsx` | `max-w-[430px]`, `lang="es"`, `bg-white`, title="TuAliado" |
+| `app/layout.tsx` | `max-w-[430px]`, `lang="es"`, `bg-white`, title="tuAliado" |
 | Rutas placeholder | `/onboarding`, `/diagnostico`, `/recomendaciones`, `/registro`, `/seguimiento` |
 
 **Build Next.js pasa limpio. TypeScript 0 errores.**
@@ -580,7 +642,7 @@ Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approa
 
 Se creó `design/stitch-prompts/07-chat-de-voz.md` — prompt para el **modo voz** dentro del chatbot
 (diferenciador clave F13, ver fila "Chat de voz" arriba). Diseñado a propósito para no verse como
-micrófono/walkie-talkie/Alexa: usa la marca de TuAliado animada, anillos suaves tipo ecualizador,
+micrófono/walkie-talkie/Alexa: usa la marca de tuAliado animada, anillos suaves tipo ecualizador,
 caption en vivo del transcript y un botón pill de ancho completo. Falta correrlo en Google Stitch
 y exportar el resultado a `design/assets/`.
 
@@ -652,7 +714,7 @@ nada de `app/`, así que no tuvo solapamiento con T1.
 |---|---|
 | `soportaVoz()` | Feature detection de `SpeechRecognition`/`webkitSpeechRecognition` + `speechSynthesis` — para el fallback a modo texto si el navegador no soporta voz |
 | `iniciarEscucha(opciones)` / `detenerEscucha()` | STT: transcripción en vivo (resultados parciales y finales vía `onResultado`), una sola instancia activa a la vez |
-| `hablar(texto, opciones)` / `detenerHabla()` | TTS vía `speechSynthesis`, con callbacks `onInicio`/`onFin` para mapear a los estados "Pensando…" / "TuAliado te responde" del diseño |
+| `hablar(texto, opciones)` / `detenerHabla()` | TTS vía `speechSynthesis`, con callbacks `onInicio`/`onFin` para mapear a los estados "Pensando…" / "tuAliado te responde" del diseño |
 
 Incluye también las interfaces ambientales mínimas para `SpeechRecognition` (no están en
 `lib.dom.d.ts` de TypeScript, sólo `SpeechSynthesisUtterance` sí lo está).
@@ -724,11 +786,15 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
    - `surtir_tienda` + `!usaPedidoSugerido` → se queda igual, "Activa el pedido sugerido"
      (`rec-pedido-sugerido`) — este sí encaja con el concepto de resurtido de esa meta.
 
-5. **✅ RESUELTO (2026-06-07) — Naming de marca — mayúscula/minúscula:**
-   El logo (`brand identity/wordmark.svg`) usaba "TuAliado" (A mayúscula) mientras `decisions.md`
-   y `CLAUDE.md` confirmaban "tuAliado" (t minúscula). El Tech Lead decidió cambiar la decisión
-   confirmada a **"TuAliado"** para igualar el logo — se actualizó el copy en código y en toda
-   la documentación (ver `docs/decisions.md`, sección "Nombre de trabajo del producto").
+5. **✅ RESUELTO (2026-06-07, dos vueltas) — Naming de marca — mayúscula/minúscula:**
+   El logo viejo (`brand identity/wordmark.svg`, hecho a mano) usaba "TuAliado" (A mayúscula)
+   mientras `decisions.md` y `CLAUDE.md` confirmaban "tuAliado" (t minúscula). A las 03:25 el
+   Tech Lead decidió cambiar la decisión confirmada a **"TuAliado"** para igualar ese logo — se
+   actualizó el copy en código y en toda la documentación. Horas después (04:10) llegó el logo
+   de marca *real* (Katia Uribe, branch `design`, commit `55a87ea`) cuyo wordmark usa
+   **"tuAliado"** (t minúscula) — el asset real prevalece sobre el wordmark hecho a mano, así
+   que se revirtió todo de vuelta a "tuAliado" (ver `docs/decisions.md`, sección "Nombre de
+   trabajo del producto", y la entrada de las 04:10 arriba en este documento).
 
 6. **Bottom nav bar en inglés con secciones que no existen en nuestro flujo:**
    Las pantallas `/registro` paso 2 y 3 incluyen una barra de navegación inferior fija con 4 tabs:
@@ -779,7 +845,7 @@ introducir asimetría con el resto del proyecto.
 - **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) — afecta el "Calculador de ganancia"
   de esta misma pantalla (modal F6, T1.5). Confirmar con la diseñadora cuál es la fuente correcta
   antes de construir esa sección.
-- Punto #6 (bottom nav en inglés, afecta `/registro`). El punto #5 (naming TuAliado/tuAliado) ya
+- Punto #6 (bottom nav en inglés, afecta `/registro`). El punto #5 (naming tuAliado/TuAliado) ya
   quedó resuelto — ver entrada "Capitalización de marca" en esta misma sección.
 
 ## ✅ T1.5b — `/registro` (check-in diario): completa y verificada (2026-06-07 03:20)
@@ -835,7 +901,7 @@ funciona para que se sienta terminado y coherente. Candidatos ya identificados:
 
 - Concordancia singular/plural en textos dinámicos (ej. "1 días seguidos" → "1 día seguido" en
   `/registro`, y revisar si `/seguimiento` u otras pantallas tienen el mismo patrón con conteos).
-- Confirmar que toda la app usa "TuAliado" consistentemente (contradicción #5, naming).
+- Confirmar que toda la app usa "tuAliado" consistentemente (contradicción #5, naming).
 - Revisar transiciones/animaciones entre pasos del stepper y hacia la pantalla de cierre — hoy
   son instantáneas, podría sentirse más "premiado" con una transición suave.
 - Pasada de consistencia visual entre pantallas implementadas en momentos distintos
