@@ -8,9 +8,9 @@ export default function Splash() {
         <div className="mb-stack-lg w-full max-w-[240px]">
           <Image
             src="/logo-full.svg"
-            alt="TuAliado"
+            alt="tuAliado"
             width={240}
-            height={96}
+            height={60}
             priority
             className="h-auto w-full"
           />

@@ -25,7 +25,7 @@ export default function Onboarding() {
         <span className="mb-stack-md rounded-full bg-surface-container-high px-3 py-1 font-sans text-caption text-on-surface-variant">
           1 de 1
         </span>
-        <Image src="/logo-mark.svg" alt="TuAliado" width={32} height={32} className="mb-stack-md h-8 w-auto" />
+        <Image src="/logo-mark.svg" alt="tuAliado" width={32} height={24} className="mb-stack-md h-8 w-auto" />
         <h1 className="mb-2 text-center font-sans text-headline-lg-mobile text-on-background">
           ¿Qué quieres lograr?
         </h1>
