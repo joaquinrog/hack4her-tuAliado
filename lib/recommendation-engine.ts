@@ -25,6 +25,19 @@ function nivelEngagement(c: EstadoMock["comportamiento"]): Diagnostico["nivelEng
   return "bajo"
 }
 
+// Nivel de riesgo por tipo de recomendación — calca los ejemplos de
+// design/stitch-prompts/03-recomendaciones.md (Card A=promo/bajo, B=pedido_sugerido/medio,
+// C=loyalty/mayor ganancia):
+// - promo → "bajo" (aprovechar un descuento ya activo, acción segura e inmediata)
+// - pedido_sugerido → "medio" (implica cambiar un hábito, requiere algo de esfuerzo)
+// - loyalty / precio_venta → "alto" (badge: 🟠 Mayor ganancia — más cambio, mayor potencial)
+const NIVEL_RIESGO_POR_TIPO: Record<Recomendacion["tipo"], Recomendacion["nivelRiesgo"]> = {
+  promo: "bajo",
+  pedido_sugerido: "medio",
+  loyalty: "alto",
+  precio_venta: "alto",
+}
+
 // ── Diagnóstico ────────────────────────────────────────────────────────────
 
 export function calcularDiagnostico(estado: EstadoMock): Diagnostico {
@@ -71,6 +84,7 @@ export function calcularRecomendaciones(
     recs.push({
       id: "rec-promo-a",
       tipo: "promo",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.promo,
       titulo: `Usa: ${promoSinUsar.nombre}`,
       beneficioEstimado: `${promoSinUsar.descuentoPct}% menos en tu próximo pedido`,
       accion: "Pedir con esta promoción",
@@ -79,10 +93,26 @@ export function calcularRecomendaciones(
   }
 
   // Rec B — según meta
-  if ((meta === "vender_mas" || meta === "surtir_tienda") && !estado.comportamiento.usaPedidoSugerido) {
+  // "vender_mas": apunta a autonomía de canal (mismo criterio usado para resolver
+  // la oportunidad "Pides por promotor, no por app" del diagnóstico).
+  if (meta === "vender_mas" && estado.comportamiento.porcentajePedidosTuali < 50) {
+    recs.push({
+      id: "rec-pide-por-app",
+      tipo: "pedido_sugerido",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
+      titulo: "Pide por la app esta semana",
+      beneficioEstimado: "Llevas tu historial y acumulas puntos automáticamente",
+      accion: "Hacer pedido por la app",
+      productoIds: [],
+    })
+  }
+
+  // "surtir_tienda": apunta a resurtido — pedido sugerido es la herramienta correcta.
+  if (meta === "surtir_tienda" && !estado.comportamiento.usaPedidoSugerido) {
     recs.push({
       id: "rec-pedido-sugerido",
       tipo: "pedido_sugerido",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
       titulo: "Activa el pedido sugerido",
       beneficioEstimado: "Nunca te quedas sin producto en momentos de venta",
       accion: "Ver pedido sugerido",
@@ -95,6 +125,7 @@ export function calcularRecomendaciones(
     recs.push({
       id: "rec-promo-b",
       tipo: "promo",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.promo,
       titulo: `También: ${promo2.nombre}`,
       beneficioEstimado: `${promo2.descuentoPct}% de descuento`,
       accion: "Agregar al pedido",
@@ -106,6 +137,7 @@ export function calcularRecomendaciones(
     recs.push({
       id: "rec-app",
       tipo: "pedido_sugerido",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.pedido_sugerido,
       titulo: "Empieza a pedir por la app",
       beneficioEstimado: "Ves tu historial y acumulas puntos automáticamente",
       accion: "Hacer pedido por app",
@@ -119,6 +151,7 @@ export function calcularRecomendaciones(
     recs.push({
       id: "rec-loyalty",
       tipo: "loyalty",
+      nivelRiesgo: NIVEL_RIESGO_POR_TIPO.loyalty,
       titulo: `Reto: gana ${retoActivo.puntosRecompensa} puntos`,
       beneficioEstimado: retoActivo.descripcion,
       accion: "Activar reto",

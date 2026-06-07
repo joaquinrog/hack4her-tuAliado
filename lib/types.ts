@@ -142,6 +142,7 @@ export interface Diagnostico {
 export interface Recomendacion {
   id: string
   tipo: "promo" | "loyalty" | "pedido_sugerido" | "precio_venta"
+  nivelRiesgo: "bajo" | "medio" | "alto"
   titulo: string
   beneficioEstimado: string | null  // ESTIMACION o null si faltan preciosVenta
   accion: string                    // texto del CTA
