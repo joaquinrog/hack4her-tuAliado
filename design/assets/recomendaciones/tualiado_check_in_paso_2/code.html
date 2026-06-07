@@ -1,0 +1,242 @@
+<!DOCTYPE html><html class="light" lang="es"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .active-scale:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
+    .tap-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#ffdbca",
+            "on-surface-variant": "#584237",
+            "on-primary-fixed": "#341100",
+            "surface-tint": "#9d4300",
+            "on-surface": "#1e1b19",
+            "inverse-on-surface": "#f7efeb",
+            "tertiary-container": "#00a2f4",
+            "primary": "#9d4300",
+            "tertiary-fixed-dim": "#93ccff",
+            "on-background": "#1e1b19",
+            "surface-dim": "#e0d8d5",
+            "outline-variant": "#e0c0b1",
+            "outline": "#8c7164",
+            "on-tertiary-container": "#003554",
+            "on-primary-container": "#582200",
+            "surface-container-highest": "#e9e1dd",
+            "inverse-surface": "#33302d",
+            "background": "#fff8f5",
+            "on-secondary-fixed-variant": "#4b4641",
+            "inverse-primary": "#ffb690",
+            "secondary-container": "#eae1da",
+            "primary-fixed-dim": "#ffb690",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed": "#eae1da",
+            "on-primary": "#ffffff",
+            "surface": "#fff8f5",
+            "secondary-fixed-dim": "#cec5bf",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#6a635e",
+            "surface-variant": "#e9e1dd",
+            "tertiary": "#006398",
+            "surface-container-low": "#faf2ee",
+            "surface-container-high": "#eee7e3",
+            "on-tertiary-fixed": "#001d32",
+            "on-primary-fixed-variant": "#783200",
+            "tertiary-fixed": "#cde5ff",
+            "primary-container": "#f97316",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#1f1b17",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed-variant": "#004b74",
+            "surface-bright": "#fff8f5",
+            "secondary": "#645d58",
+            "on-error-container": "#93000a",
+            "surface-container": "#f4ece8",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "container-max": "1120px",
+            "stack-lg": "48px",
+            "gutter": "24px",
+            "margin-mobile": "20px",
+            "margin-desktop": "40px",
+            "unit": "8px",
+            "stack-sm": "12px",
+            "stack-md": "24px"
+          },
+          "fontFamily": {
+            "headline-lg-mobile": ["Outfit"],
+            "caption": ["Outfit"],
+            "body-md": ["Outfit"],
+            "body-lg": ["Outfit"],
+            "headline-md": ["Outfit"],
+            "display-mobile": ["Outfit"],
+            "headline-lg": ["Outfit"],
+            "display": ["Outfit"],
+            "label-md": ["Outfit"]
+          },
+          "fontSize": {
+            "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+            "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+            "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+            "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+            "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+            "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+            "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased overflow-x-hidden">
+<!-- TopAppBar Shell Mapping -->
+<nav class="bg-background w-full top-0 z-50 sticky">
+<div class="flex justify-between items-center px-margin-mobile py-4 max-w-container-max mx-auto h-16">
+<!-- Leading Icon -->
+<button aria-label="Go back" class="tap-target active-scale hover:bg-surface-container-low transition-colors rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<!-- Step Indicator (Injected Content) -->
+<div class="flex flex-col items-center">
+<span class="text-primary font-label-md text-label-md">2 de 3</span>
+<div class="flex gap-1 mt-1">
+<div class="h-1.5 w-6 rounded-full bg-primary-fixed"></div>
+<div class="h-1.5 w-6 rounded-full bg-primary"></div>
+<div class="h-1.5 w-6 rounded-full bg-primary-fixed"></div>
+</div>
+</div>
+<!-- Trailing Icon -->
+<button aria-label="More options" class="tap-target active-scale hover:bg-surface-container-low transition-colors rounded-full flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-grow flex flex-col px-margin-mobile pt-stack-md pb-stack-lg max-w-container-max mx-auto w-full">
+<!-- Hero Image Area -->
+<div class="mb-stack-md flex justify-center w-full">
+<div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-sm">
+<img alt="Abastecimiento" class="w-full h-full object-cover" data-alt="A warm and inviting neighborhood small business owner standing in front of organized shelves filled with colorful fresh produce and essential goods. The lighting is soft and natural, emphasizing a bright and professional atmosphere that conveys trust and community. The color palette features earthy tones with vibrant pops of primary orange, reflecting a supportive and accessible environment for digital growth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdnAkST2opQyLuQQeeWTy6pDdkQDAJ2sU7uHu6UZcFigXx2kdrFOeFCwSmSxl046cTiUZn03Kh79zi9O5F1lZXff67LBEXM1R3F85GxoxwSK9gSf5qPliJnfRE7tJmWBYuxczKgq9ynk21z4JY00Hyg28K_yHEziJJxUcfhFuxfRMCYXGN1xMegAKEwLPjaNkPIx742XmvCcT9kASGewyRkn2Ka26ekMnizFtBGuzG4WaVjBD62hd3X28fW_Wtlezv7_uAwM6hzpc">
+<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+</div>
+</div>
+<!-- Question Section -->
+<section class="text-center mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">
+        ¿Pediste productos a Tuali hoy?
+      </h1>
+<p class="text-on-surface-variant font-body-md text-body-md mt-2">
+        Cuéntanos para registrar tu progreso diario.
+      </p>
+</section>
+<!-- Options List (Asymmetric Stack) -->
+<div class="space-y-4">
+<!-- Option 1: Sí, por la app -->
+<button class="w-full h-[72px] bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 flex items-center gap-4 active-scale transition-all hover:border-primary group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="smartphone">smartphone</span>
+</div>
+<span class="font-bold text-[17px] text-on-surface leading-tight text-left">
+          Sí, por la app
+        </span>
+<span class="material-symbols-outlined ml-auto text-outline group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Option 2: Sí, con el promotor -->
+<button class="w-full h-[72px] bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 flex items-center gap-4 active-scale transition-all hover:border-primary group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:bg-tertiary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="handshake">handshake</span>
+</div>
+<span class="font-bold text-[17px] text-on-surface leading-tight text-left">
+          Sí, con el promotor
+        </span>
+<span class="material-symbols-outlined ml-auto text-outline group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- Option 3: No pedí hoy -->
+<button class="w-full h-[72px] bg-surface-container-lowest border border-outline-variant rounded-2xl px-6 flex items-center gap-4 active-scale transition-all hover:border-primary group shadow-sm">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-container group-hover:bg-secondary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[28px]" data-icon="remove">remove</span>
+</div>
+<span class="font-bold text-[17px] text-on-surface leading-tight text-left">
+          No pedí hoy
+        </span>
+<span class="material-symbols-outlined ml-auto text-outline group-hover:text-primary" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Motivational Tip (Bento Card Style) -->
+<div class="mt-stack-lg p-6 bg-primary-fixed/30 rounded-2xl border border-primary-fixed/50 flex items-start gap-4">
+<span class="material-symbols-outlined text-primary" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-primary-fixed-variant">Tip del día</h4>
+<p class="text-on-surface-variant font-caption text-caption mt-1">
+          Registrar tus pedidos te ayuda a ver cuánto has crecido este mes. ¡Sigue así!
+        </p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Shell Mapping (Active: Check-in) -->
+<nav class="fixed bottom-0 w-full z-50 bg-surface border-t border-outline-variant shadow-md h-16 flex justify-around items-center px-4">
+<!-- Progress -->
+<button class="flex flex-col items-center justify-center text-on-secondary-container tap-target active-scale transition-all hover:bg-secondary-container rounded-lg px-2">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Progreso</span>
+</button>
+<!-- Check-in (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active-scale transition-all">
+<span class="material-symbols-outlined" data-icon="edit_note" style="font-variation-settings: 'FILL' 1;">edit_note</span>
+<span class="font-label-md text-label-md">Check-in</span>
+</button>
+<!-- Insights -->
+<button class="flex flex-col items-center justify-center text-on-secondary-container tap-target active-scale transition-all hover:bg-secondary-container rounded-lg px-2">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-md text-label-md">Consejos</span>
+</button>
+<!-- Profile -->
+<button class="flex flex-col items-center justify-center text-on-secondary-container tap-target active-scale transition-all hover:bg-secondary-container rounded-lg px-2">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-md text-label-md">Perfil</span>
+</button>
+</nav>
+<!-- Bottom safe area for mobile -->
+<div class="h-20 w-full"></div>
+<script>
+    // Micro-interaction: Visual feedback on button clicks
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Optional: Trigger haptic feedback if available
+        if (window.navigator && window.navigator.vibrate) {
+          window.navigator.vibrate(10);
+        }
+      });
+    });
+  </script>
+
+
+</body></html>

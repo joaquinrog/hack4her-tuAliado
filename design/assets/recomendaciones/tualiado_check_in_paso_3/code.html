@@ -1,0 +1,220 @@
+<!DOCTYPE html><html lang="es" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-fixed": "#ffdbca",
+                    "on-surface-variant": "#584237",
+                    "on-primary-fixed": "#341100",
+                    "surface-tint": "#9d4300",
+                    "on-surface": "#1e1b19",
+                    "inverse-on-surface": "#f7efeb",
+                    "tertiary-container": "#00a2f4",
+                    "primary": "#9d4300",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "on-background": "#1e1b19",
+                    "surface-dim": "#e0d8d5",
+                    "outline-variant": "#e0c0b1",
+                    "outline": "#8c7164",
+                    "on-tertiary-container": "#003554",
+                    "on-primary-container": "#582200",
+                    "surface-container-highest": "#e9e1dd",
+                    "inverse-surface": "#33302d",
+                    "background": "#fff8f5",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "inverse-primary": "#ffb690",
+                    "secondary-container": "#eae1da",
+                    "primary-fixed-dim": "#ffb690",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#eae1da",
+                    "on-primary": "#ffffff",
+                    "surface": "#fff8f5",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-container": "#6a635e",
+                    "surface-variant": "#e9e1dd",
+                    "tertiary": "#006398",
+                    "surface-container-low": "#faf2ee",
+                    "surface-container-high": "#eee7e3",
+                    "on-tertiary-fixed": "#001d32",
+                    "on-primary-fixed-variant": "#783200",
+                    "tertiary-fixed": "#cde5ff",
+                    "primary-container": "#f97316",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed": "#1f1b17",
+                    "error-container": "#ffdad6",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "surface-bright": "#fff8f5",
+                    "secondary": "#645d58",
+                    "on-error-container": "#93000a",
+                    "surface-container": "#f4ece8",
+                    "error": "#ba1a1a",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1120px",
+                    "stack-lg": "48px",
+                    "gutter": "24px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px",
+                    "unit": "8px",
+                    "stack-sm": "12px",
+                    "stack-md": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Outfit"],
+                    "caption": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "body-lg": ["Outfit"],
+                    "headline-md": ["Outfit"],
+                    "display-mobile": ["Outfit"],
+                    "headline-lg": ["Outfit"],
+                    "display": ["Outfit"],
+                    "label-md": ["Outfit"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-selection-si {
+            background-color: #f97316 !important;
+            color: white !important;
+            border-color: #f97316 !important;
+            transform: scale(0.98);
+        }
+        .active-selection-no {
+            background-color: #e9e1dd !important;
+            color: #1e1b19 !important;
+            border-color: #8c7164 !important;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="w-full top-0 bg-background flex justify-between items-center px-margin-mobile py-4 max-w-container-max mx-auto z-40">
+<button aria-label="Volver" class="w-12 h-12 flex items-center justify-start text-primary transition-transform active:scale-90">
+<span class="material-symbols-outlined text-[28px]">arrow_back</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="font-label-md text-label-md text-on-surface-variant">Paso 3 de 3</span>
+<div class="flex gap-1 mt-1">
+<div class="h-1.5 w-4 rounded-full bg-primary-fixed"></div>
+<div class="h-1.5 w-4 rounded-full bg-primary-fixed"></div>
+<div class="h-1.5 w-8 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="w-12"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile py-stack-lg max-w-container-max mx-auto text-center">
+<!-- Illustration / Mood Area -->
+<div class="mb-stack-md relative">
+<div class="absolute inset-0 bg-primary-fixed opacity-20 blur-3xl rounded-full"></div>
+<img alt="Dueño de negocio revisando inventario" class="w-48 h-48 object-cover rounded-full border-4 border-white shadow-sm relative z-10 mx-auto" data-alt="A warm, tactile photograph of a small business owner in a modern, brightly lit boutique environment. They are smiling thoughtfully while checking wooden shelves with artisanal products. The lighting is soft and natural, emphasizing a light-mode aesthetic with clean white surfaces and warm wood accents. The overall mood is expert, humble, and encouraging, capturing a human-centric moment of business growth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAya6Xs-5dOL7MqLr4i9NhzuZj5NDkmnD1qkL2iukvJ2UoSjaAG23lTOGC5jOT59J-WYetvze3x-pWVwI9OGRhc5eRXUt6B5IdcQ4IPe2AYyHnUV36nXaJ4o8uSp0paYdKCtC_iw4HYNsdeyE4EPzIFMK_IfniHCBlEE51Y_VObN_xIscHXCCq20SJq5Rswvm3hjcZ-Q1xxTMdoGKP1f569l1N7MQSqzcUy87mUCvXkzOnDXurpD6rt6Xdb03HXakSqfIaPrU1XPc">
+</div>
+<!-- Question Section -->
+<section class="max-w-xs mx-auto mb-stack-lg">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-stack-sm">
+                ¿Te pidieron algo que no tenías?
+            </h1>
+<p class="font-body-md text-body-md text-on-secondary-container">
+                Conocer lo que tus clientes buscan te ayuda a vender más mañana.
+            </p>
+</section>
+<!-- Action Buttons -->
+<div class="flex gap-4 w-full justify-center">
+<button class="w-[160px] h-20 flex flex-col items-center justify-center bg-white border border-outline-variant rounded-xl transition-all duration-200 active:scale-95 shadow-sm hover:border-primary group" id="btn-si" onclick="selectOption('si')">
+<span class="material-symbols-outlined text-[32px] mb-1 group-[.active-selection-si]:fill-1" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+<span class="font-label-md text-label-md">Sí</span>
+</button>
+<button class="w-[160px] h-20 flex flex-col items-center justify-center bg-white border border-outline-variant rounded-xl transition-all duration-200 active:scale-95 shadow-sm hover:border-secondary group" id="id-no" onclick="selectOption('no')">
+<span class="material-symbols-outlined text-[32px] mb-1" style="font-variation-settings: 'FILL' 0;">cancel</span>
+<span class="font-label-md text-label-md">No</span>
+</button>
+</div>
+</main>
+<!-- Contextual FAB / Footer Action -->
+<footer class="p-margin-mobile max-w-container-max mx-auto w-full mb-20 md:mb-8">
+<button class="w-full bg-primary-fixed text-on-primary-fixed opacity-50 cursor-not-allowed py-4 rounded-xl font-headline-md text-headline-md shadow-sm transition-all duration-200" disabled="" id="next-button">
+            Finalizar Check-in
+        </button>
+</footer>
+<!-- Bottom Navigation Bar (Shell) -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-16 bg-surface px-4 border-t border-outline-variant shadow-md">
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-secondary-container transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-[12px]">Progreso</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-all" href="#">
+<span class="material-symbols-outlined">edit_note</span>
+<span class="font-label-md text-[12px]">Check-in</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-secondary-container transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined">lightbulb</span>
+<span class="font-label-md text-[12px]">Consejos</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-secondary-container hover:bg-secondary-container transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-[12px]">Perfil</span>
+</a>
+</nav>
+<script>
+        function selectOption(option) {
+            const btnSi = document.getElementById('btn-si');
+            const btnNo = document.getElementById('id-no');
+            const nextBtn = document.getElementById('next-button');
+
+            // Reset states
+            btnSi.classList.remove('active-selection-si');
+            btnNo.classList.remove('active-selection-no');
+
+            // Set active state
+            if (option === 'si') {
+                btnSi.classList.add('active-selection-si');
+            } else {
+                btnNo.classList.add('active-selection-no');
+            }
+
+            // Enable finish button
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('bg-primary-fixed', 'text-on-primary-fixed', 'opacity-50', 'cursor-not-allowed');
+            nextBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'opacity-100', 'active:scale-95');
+        }
+    </script>
+
+
+</body></html>
