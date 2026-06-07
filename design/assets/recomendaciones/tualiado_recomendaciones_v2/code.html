@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>tuAliado - Recomendaciones</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fff8f5",
+                        "surface-variant": "#e9e1dd",
+                        "on-secondary-fixed-variant": "#4b4641",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed-variant": "#783200",
+                        "surface-dim": "#e0d8d5",
+                        "on-primary-container": "#582200",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#eae1da",
+                        "outline": "#8c7164",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#f97316",
+                        "secondary-container": "#eae1da",
+                        "outline-variant": "#e0c0b1",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "tertiary": "#006398",
+                        "tertiary-container": "#00a2f4",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "on-primary-fixed": "#341100",
+                        "surface-container": "#f4ece8",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdbca",
+                        "on-secondary-fixed": "#1f1b17",
+                        "on-error-container": "#93000a",
+                        "inverse-on-surface": "#f7efeb",
+                        "inverse-surface": "#33302d",
+                        "background": "#fff8f5",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#ffb690",
+                        "surface-bright": "#fff8f5",
+                        "on-surface-variant": "#584237",
+                        "on-background": "#1e1b19",
+                        "surface-container-low": "#faf2ee",
+                        "tertiary-fixed": "#cde5ff",
+                        "surface-container-high": "#eee7e3",
+                        "on-tertiary-fixed": "#001d32",
+                        "on-secondary-container": "#6a635e",
+                        "surface-container-highest": "#e9e1dd",
+                        "on-tertiary-container": "#003554",
+                        "inverse-primary": "#ffb690",
+                        "primary": "#9d4300",
+                        "on-error": "#ffffff",
+                        "on-surface": "#1e1b19",
+                        "surface-tint": "#9d4300",
+                        "secondary-fixed-dim": "#cec5bf",
+                        "secondary": "#645d58"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-md": "24px",
+                        "stack-lg": "48px",
+                        "margin-mobile": "20px",
+                        "container-max": "1120px",
+                        "stack-sm": "12px",
+                        "margin-desktop": "40px",
+                        "unit": "8px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Outfit"],
+                        "display-mobile": ["Outfit"],
+                        "display": ["Outfit"],
+                        "headline-lg": ["Outfit"],
+                        "label-md": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "caption": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "body-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                        "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; background-color: #fff8f5; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex justify-center pb-24">
+<!-- Mobile Container -->
+<div class="w-full max-w-[375px] bg-background min-h-screen relative shadow-lg mx-auto flex flex-col">
+<!-- TopAppBar: Non-destination screen, so BottomNavBar is suppressed -->
+<header class="flex justify-between items-center w-full px-margin-mobile h-14 bg-surface dark:bg-background pt-2 sticky top-0 z-10">
+<button aria-label="Volver" class="text-primary hover:bg-surface-container-low transition-colors duration-200 active:scale-95 transition-transform duration-100 rounded-full p-2 -ml-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-body-lg text-body-lg font-bold text-on-surface">Tus recomendaciones</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin-mobile pt-stack-sm pb-stack-lg flex flex-col gap-stack-md">
+<!-- Context Chip -->
+<div class="inline-flex items-center gap-2 bg-surface-container-highest px-4 py-2 rounded-full self-start mb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1; font-size: 18px;">shopping_bag</span>
+<span class="font-label-md text-label-md text-on-surface">Meta: Vender más</span>
+</div>
+<!-- Card A: Low Risk -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative shadow-sm">
+<!-- Green Accent Bar -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#22c55e]"></div>
+<div class="p-5 pl-7 flex flex-col gap-3">
+<div class="inline-flex items-center gap-1.5 bg-[#22c55e]/10 text-[#166534] px-3 py-1 rounded-full w-max">
+<span class="text-sm">🟢</span>
+<span class="font-label-md text-caption font-bold">Bajo riesgo</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Activa la promo de Coca-Cola 600ml</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Esta promo tiene 10% de descuento y tus clientes ya la piden seguido. Es la más segura para empezar.</p>
+<div class="bg-[#22c55e]/5 p-3 rounded-lg border border-[#22c55e]/20 mt-1">
+<p class="font-label-md text-label-md text-[#166534] flex items-center gap-2">
+<span>💰</span> Ganarías ~$4.50 más por pedido
+                        </p>
+</div>
+<button class="mt-2 w-full h-[48px] bg-primary text-on-primary font-label-md text-label-md rounded-full shadow-[0_4px_14px_0_rgba(157,67,0,0.2)] active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+                        Activar esta promo
+                        <span class="material-symbols-outlined" style="font-size: 20px;">bolt</span>
+</button>
+</div>
+</div>
+<!-- Card B: Medium Risk -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative shadow-sm">
+<!-- Yellow Accent Bar -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-[#eab308]"></div>
+<div class="p-5 pl-7 flex flex-col gap-3">
+<div class="inline-flex items-center gap-1.5 bg-[#eab308]/10 text-[#854d0e] px-3 py-1 rounded-full w-max">
+<span class="text-sm">🟡</span>
+<span class="font-label-md text-caption font-bold">Riesgo medio</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Pide por la app esta semana</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Ahorra tiempo y accede a descuentos exclusivos pidiendo directamente desde tu celular.</p>
+<div class="bg-[#eab308]/5 p-3 rounded-lg border border-[#eab308]/20 mt-1">
+<p class="font-label-md text-label-md text-[#854d0e] flex items-center gap-2">
+<span>⭐</span> Gana +50 puntos de loyalty
+                        </p>
+</div>
+<button class="mt-2 w-full h-[48px] bg-transparent border-2 border-primary text-primary font-label-md text-label-md rounded-full active:bg-primary/5 transition-colors flex items-center justify-center gap-2">
+                        Ver cómo hacerlo
+                    </button>
+</div>
+</div>
+<!-- Card C: High Reward -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden relative shadow-sm">
+<!-- Orange Accent Bar -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary"></div>
+<div class="p-5 pl-7 flex flex-col gap-3">
+<div class="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full w-max">
+<span class="text-sm">🟠</span>
+<span class="font-label-md text-caption font-bold">Mayor ganancia</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Activa el reto de loyalty</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Alcanza tus metas de compra mensuales y desbloquea bonos en efectivo para tu tienda.</p>
+<div class="bg-primary/5 p-3 rounded-lg border border-primary/20 mt-1">
+<p class="font-label-md text-label-md text-primary flex items-center gap-2">
+<span>📈</span> Aumenta tu margen en 5%
+                        </p>
+</div>
+<button class="mt-2 w-full h-[48px] bg-transparent text-primary font-label-md text-label-md active:opacity-70 transition-opacity flex items-center justify-center gap-2">
+                        Ver detalles
+                        <span class="material-symbols-outlined" style="font-size: 20px;">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

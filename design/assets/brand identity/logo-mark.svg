@@ -1,0 +1,10 @@
+<svg width="48" height="48" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Friendly 2D Shop Icon -->
+  <rect x="10" y="35" width="35" height="30" rx="4" fill="#F97316" />
+  <path d="M5 35 L27.5 15 L50 35 Z" fill="#F97316" />
+  <rect x="20" y="48" width="15" height="17" rx="1" fill="#FFFFFF" />
+  
+  <!-- Friendly 2D Growth Arrow -->
+  <path d="M50 55 L65 40 L65 50 M65 40 L75 30" stroke="#F97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+  <polyline points="68,30 75,30 75,37" fill="none" stroke="#F97316" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

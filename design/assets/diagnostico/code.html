@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Tu diagnóstico - tuAliado</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "surface-container-highest": "#e9e1dd",
+                    "surface-bright": "#fff8f5",
+                    "secondary-fixed-dim": "#cec5bf",
+                    "primary-fixed": "#ffdbca",
+                    "primary-container": "#f97316",
+                    "primary": "#9d4300",
+                    "on-primary-container": "#582200",
+                    "on-surface-variant": "#584237",
+                    "on-tertiary-fixed-variant": "#004b74",
+                    "on-primary-fixed-variant": "#783200",
+                    "on-background": "#1e1b19",
+                    "on-secondary-fixed-variant": "#4b4641",
+                    "tertiary-container": "#00a2f4",
+                    "on-surface": "#1e1b19",
+                    "tertiary": "#006398",
+                    "surface-container-lowest": "#ffffff",
+                    "surface": "#fff8f5",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#eee7e3",
+                    "secondary-fixed": "#eae1da",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#93ccff",
+                    "inverse-surface": "#33302d",
+                    "secondary": "#645d58",
+                    "inverse-on-surface": "#f7efeb",
+                    "surface-variant": "#e9e1dd",
+                    "surface-tint": "#9d4300",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#e0c0b1",
+                    "on-tertiary-fixed": "#001d32",
+                    "on-secondary-fixed": "#1f1b17",
+                    "surface-dim": "#e0d8d5",
+                    "secondary-container": "#eae1da",
+                    "primary-fixed-dim": "#ffb690",
+                    "tertiary-fixed": "#cde5ff",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#6a635e",
+                    "background": "#fff8f5",
+                    "on-secondary": "#ffffff",
+                    "surface-container-low": "#faf2ee",
+                    "on-tertiary-container": "#003554",
+                    "on-primary-fixed": "#341100",
+                    "on-primary": "#ffffff",
+                    "outline": "#8c7164",
+                    "inverse-primary": "#ffb690",
+                    "surface-container": "#f4ece8"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1120px",
+                    "gutter": "24px",
+                    "stack-sm": "12px",
+                    "unit": "8px",
+                    "stack-md": "24px",
+                    "stack-lg": "48px",
+                    "margin-mobile": "20px",
+                    "margin-desktop": "40px"
+            },
+            "fontFamily": {
+                    "caption": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "label-md": ["Outfit"],
+                    "body-lg": ["Outfit"],
+                    "display": ["Outfit"],
+                    "headline-md": ["Outfit"],
+                    "display-mobile": ["Outfit"],
+                    "headline-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}],
+                    "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { background-color: #FAFAF9; } /* Enforcing Level 0 background */
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="antialiased text-on-background min-h-screen flex flex-col items-center">
+<!-- Mobile Container (Max 375px for preview purposes, fluid on actual device) -->
+<div class="w-full max-w-[375px] bg-[#FAFAF9] min-h-screen flex flex-col relative pb-[100px] shadow-sm">
+<!-- TopAppBar (Transactional Screen - Suppressed Main Nav) -->
+<header class="w-full top-0 sticky bg-surface z-10 border-b border-outline-variant flex items-center px-margin-mobile py-stack-sm h-16 shrink-0">
+<button aria-label="Go back" class="w-[48px] h-[48px] flex items-center justify-start text-primary hover:bg-primary-container/10 transition-colors rounded-full">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="flex-1 flex flex-col justify-center">
+<h1 class="font-body-lg text-body-lg text-on-surface font-bold leading-tight">Tu diagnóstico</h1>
+<p class="font-caption text-caption text-on-surface-variant text-[13px] leading-tight">Basado en tus últimos 90 días</p>
+</div>
+<div class="w-[48px]"></div> <!-- Spacer to center text -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-margin-mobile pt-stack-md gap-stack-lg">
+<!-- Hero Metric Section -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-[16px] p-stack-md flex flex-col items-center text-center shadow-sm relative overflow-hidden">
+<!-- Subtle background decorative element -->
+<div class="absolute top-0 right-0 -mt-10 -mr-10 w-32 h-32 bg-primary-container/5 rounded-full blur-2xl pointer-events-none"></div>
+<h2 class="font-label-md text-label-md text-on-surface-variant font-normal text-[14px]">Ticket promedio</h2>
+<div class="mt-stack-sm font-display-mobile text-display-mobile text-primary-container font-extrabold tracking-tight">
+                    $450
+                </div>
+<p class="mt-unit font-caption text-caption text-on-surface-variant text-[13px]">por pedido</p>
+</section>
+<!-- Secondary Metrics Grid -->
+<section class="grid grid-cols-2 gap-gutter">
+<!-- Left Pill -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-stack-sm flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-secondary-container/50 text-secondary flex items-center justify-center mb-unit">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-caption text-caption text-on-surface-variant text-[13px]">Por app</span>
+<span class="font-label-md text-label-md text-on-surface mt-1">20%</span>
+</div>
+<!-- Right Pill -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-stack-sm flex flex-col items-center text-center">
+<div class="w-10 h-10 rounded-full bg-secondary-container/50 text-secondary flex items-center justify-center mb-unit">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<span class="font-caption text-caption text-on-surface-variant text-[13px]">Por promotor</span>
+<span class="font-label-md text-label-md text-on-surface mt-1">80%</span>
+</div>
+</section>
+<!-- Loyalty Badge -->
+<section class="bg-surface-container flex items-center rounded-full p-unit pr-stack-sm border border-outline-variant gap-stack-sm">
+<div class="w-10 h-10 rounded-full bg-[#16a34a]/10 text-[#16a34a] flex items-center justify-center shrink-0">
+<svg class="w-6 h-6" fill="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-label-md text-label-md text-[#15803d]">180 puntos</span>
+<span class="font-caption text-caption text-on-surface-variant text-[12px] leading-tight">Gana con Tuali</span>
+</div>
+<svg class="w-5 h-5 text-outline shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</section>
+<!-- Opportunities Section -->
+<section class="flex flex-col gap-stack-sm">
+<h3 class="font-label-md text-label-md text-on-surface font-bold text-[14px] px-unit">3 oportunidades detectadas</h3>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-[16px] overflow-hidden">
+<!-- Row 1 -->
+<button class="w-full flex items-center gap-stack-sm p-stack-sm border-b border-surface-variant hover:bg-surface-container-low transition-colors text-left min-h-[48px]">
+<svg class="w-3 h-3 shrink-0 text-error" fill="currentColor" viewbox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="6"></circle></svg>
+<span class="flex-1 font-caption text-caption text-on-surface">No usas las promociones activas</span>
+<svg class="w-5 h-5 text-outline shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Row 2 -->
+<button class="w-full flex items-center gap-stack-sm p-stack-sm border-b border-surface-variant hover:bg-surface-container-low transition-colors text-left min-h-[48px]">
+<svg class="w-3 h-3 shrink-0 text-primary-container" fill="currentColor" viewbox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="6"></circle></svg>
+<span class="flex-1 font-caption text-caption text-on-surface">Pides por promotor, no por app</span>
+<svg class="w-5 h-5 text-outline shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Row 3 -->
+<button class="w-full flex items-center gap-stack-sm p-stack-sm hover:bg-surface-container-low transition-colors text-left min-h-[48px]">
+<svg class="w-3 h-3 shrink-0 text-[#eab308]" fill="currentColor" viewbox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="6" r="6"></circle></svg>
+<span class="flex-1 font-caption text-caption text-on-surface">Retos de loyalty sin activar</span>
+<svg class="w-5 h-5 text-outline shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 w-full max-w-[375px] bg-gradient-to-t from-[#FAFAF9] via-[#FAFAF9] to-transparent pt-stack-lg pb-margin-mobile px-margin-mobile z-20">
+<button class="w-full h-[56px] bg-primary-container text-white font-label-md text-label-md rounded-[16px] flex items-center justify-center shadow-[0_4px_14px_rgba(249,115,22,0.1)] hover:bg-primary transition-colors active:scale-95 duration-150">
+                Ver mis recomendaciones
+            </button>
+</div>
+</div>
+</body></html>

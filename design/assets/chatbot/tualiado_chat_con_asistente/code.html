@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>tuAliado AI Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#00a2f4",
+                      "surface-tint": "#9d4300",
+                      "surface-container": "#f4ece8",
+                      "tertiary-fixed": "#cde5ff",
+                      "surface-variant": "#e9e1dd",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#eae1da",
+                      "on-surface": "#1e1b19",
+                      "surface-bright": "#fff8f5",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#001d32",
+                      "on-secondary-container": "#6a635e",
+                      "primary-container": "#f97316",
+                      "on-secondary-fixed-variant": "#4b4641",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#004b74",
+                      "surface-container-low": "#faf2ee",
+                      "outline": "#8c7164",
+                      "inverse-surface": "#33302d",
+                      "tertiary": "#006398",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#003554",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#cec5bf",
+                      "primary-fixed-dim": "#ffb690",
+                      "on-background": "#1e1b19",
+                      "surface": "#fff8f5",
+                      "background": "#fff8f5",
+                      "on-primary-fixed-variant": "#783200",
+                      "primary-fixed": "#ffdbca",
+                      "on-surface-variant": "#584237",
+                      "primary": "#9d4300",
+                      "surface-dim": "#e0d8d5",
+                      "on-secondary-fixed": "#1f1b17",
+                      "tertiary-fixed-dim": "#93ccff",
+                      "inverse-primary": "#ffb690",
+                      "secondary": "#645d58",
+                      "inverse-on-surface": "#f7efeb",
+                      "on-primary-container": "#582200",
+                      "outline-variant": "#e0c0b1",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#eee7e3",
+                      "secondary-fixed": "#eae1da",
+                      "surface-container-highest": "#e9e1dd",
+                      "on-primary-fixed": "#341100"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-md": "24px",
+                      "gutter": "24px",
+                      "unit": "8px",
+                      "container-max": "1120px",
+                      "stack-lg": "48px",
+                      "margin-mobile": "20px",
+                      "stack-sm": "12px",
+                      "margin-desktop": "40px"
+              },
+              "fontFamily": {
+                      "label-md": ["Outfit"],
+                      "headline-lg-mobile": ["Outfit"],
+                      "display-mobile": ["Outfit"],
+                      "caption": ["Outfit"],
+                      "headline-md": ["Outfit"],
+                      "body-md": ["Outfit"],
+                      "headline-lg": ["Outfit"],
+                      "display": ["Outfit"],
+                      "body-lg": ["Outfit"]
+              },
+              "fontSize": {
+                      "label-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "display-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "caption": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                      "body-md": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                      "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-lg": ["20px", {"lineHeight": "30px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dot-animation span {
+            animation: dot-blink 1.4s infinite both;
+        }
+        .dot-animation span:nth-child(2) { animation-delay: 0.2s; }
+        .dot-animation span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dot-blink {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            20% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0.2; transform: scale(0.8); }
+        }
+        .bottom-sheet-shadow {
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.12);
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background flex items-center justify-center min-h-screen">
+<!-- Device Frame (375x812) -->
+<div class="relative w-[375px] h-[812px] bg-black rounded-[60px] border-[8px] border-black overflow-hidden shadow-2xl">
+<!-- Background: Dimmed Recommendations Screen -->
+<div class="absolute inset-0 z-0">
+<!-- Simulated background content representing Screen 2 -->
+<div class="w-full h-full bg-surface-container opacity-40 blur-sm pointer-events-none">
+<div class="p-margin-mobile pt-16">
+<div class="h-6 w-32 bg-secondary/20 rounded-full mb-4"></div>
+<div class="h-40 w-full bg-white rounded-xl mb-4"></div>
+<div class="h-40 w-full bg-white rounded-xl mb-4"></div>
+<div class="h-40 w-full bg-white rounded-xl"></div>
+</div>
+</div>
+<!-- Overlay to dim the background further -->
+<div class="absolute inset-0 bg-black/20"></div>
+</div>
+<!-- Bottom Sheet Layer -->
+<div class="absolute bottom-0 left-0 right-0 h-3/4 bg-surface-container-lowest rounded-t-[32px] bottom-sheet-shadow z-10 flex flex-col overflow-hidden">
+<!-- Drag Handle -->
+<div class="flex justify-center pt-3 pb-2">
+<div class="w-10 h-1 bg-secondary-fixed-dim rounded-full"></div>
+</div>
+<!-- Header Row -->
+<div class="flex items-center justify-between px-margin-mobile py-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-label-md text-label-md text-on-surface">tuAliado</span>
+</div>
+<button class="w-11 h-11 flex items-center justify-center rounded-full bg-surface-container-low text-secondary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Chat Message History -->
+<div class="flex-1 overflow-y-auto px-margin-mobile space-y-stack-md py-4 hide-scrollbar">
+<!-- Assistant Message -->
+<div class="max-w-[85%]">
+<div class="bg-white border border-surface-variant p-4 rounded-2xl rounded-tl-none shadow-sm">
+<p class="font-body-md text-[15px] leading-relaxed text-on-surface">
+                            Hola, soy tuAliado 👋 ¿Tienes dudas sobre alguna de tus recomendaciones?
+                        </p>
+</div>
+<span class="block mt-1 font-caption text-secondary/60 text-[11px] ml-1">10:30 AM</span>
+</div>
+<!-- User Message -->
+<div class="flex justify-end">
+<div class="max-w-[85%] bg-primary-container text-on-primary rounded-2xl rounded-tr-none p-4 shadow-sm">
+<p class="font-body-md text-[15px] leading-relaxed">
+                            ¿Cuánto ganaría si activo la de Coca-Cola?
+                        </p>
+</div>
+</div>
+<!-- Assistant Loading State -->
+<div class="max-w-[60px]">
+<div class="bg-white border border-surface-variant p-3 rounded-2xl rounded-tl-none shadow-sm flex items-center justify-center">
+<div class="dot-animation flex gap-1">
+<span class="w-2 h-2 bg-secondary/40 rounded-full"></span>
+<span class="w-2 h-2 bg-secondary/40 rounded-full"></span>
+<span class="w-2 h-2 bg-secondary/40 rounded-full"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Chips & Input -->
+<div class="bg-surface-container-lowest pt-2 pb-safe">
+<!-- Quick Reply Chips -->
+<div class="flex overflow-x-auto gap-2 px-margin-mobile py-2 hide-scrollbar">
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-primary-container text-primary-container font-label-md text-sm hover:bg-primary-fixed transition-colors">
+                        ¿Qué es esta promo?
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-primary-container text-primary-container font-label-md text-sm hover:bg-primary-fixed transition-colors">
+                        ¿Cómo activo los retos?
+                    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full border border-primary-container text-primary-container font-label-md text-sm hover:bg-primary-fixed transition-colors">
+                        Explícame más simple
+                    </button>
+</div>
+<!-- Input Bar -->
+<div class="flex items-center gap-3 px-margin-mobile py-4 bg-white border-t border-surface-variant">
+<div class="flex-1 relative">
+<input class="w-full h-12 bg-surface-container-low border-none rounded-full px-5 font-body-md text-[16px] focus:ring-2 focus:ring-primary-container outline-none text-on-surface placeholder:text-secondary/50" placeholder="Escríbeme algo..." type="text"/>
+</div>
+<button class="w-12 h-12 bg-primary-container rounded-full flex items-center justify-center text-white shadow-sm active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[28px]">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Status Bar (Simulated) -->
+<div class="absolute top-0 left-0 right-0 h-11 px-8 flex items-center justify-between text-on-surface z-20">
+<span class="text-[14px] font-semibold">9:41</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[18px]">wifi</span>
+<span class="material-symbols-outlined text-[18px]">battery_full</span>
+</div>
+</div>
+<!-- Home Indicator -->
+<div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/20 rounded-full z-20"></div>
+</div>
+<script>
+        // Simple micro-interaction for chips
+        document.querySelectorAll('button.whitespace-nowrap').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const input = document.querySelector('input');
+                input.value = chip.innerText;
+                input.focus();
+            });
+        });
+
+        // Close button simulated action
+        document.querySelector('button .material-symbols-outlined[textContent="close"]').parentElement.addEventListener('click', () => {
+            alert('Cerrando el asistente...');
+        });
+    </script>
+</body></html>
