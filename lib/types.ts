@@ -163,6 +163,9 @@ export interface ChatContexto {
   ticketPromedio: number
 }
 
+// Estados del modo voz (F13) — ver lib/voice.ts y components/ChatVoiceView.tsx
+export type EstadoVoz = "idle" | "escuchando" | "pensando" | "respondiendo"
+
 // ── Estado global del mock ───────────────────────────────────────────────────
 export interface EstadoMock {
   perfil: PerfilCliente

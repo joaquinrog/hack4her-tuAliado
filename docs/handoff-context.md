@@ -29,7 +29,7 @@
 | Recomendaciones (T1.4) | ✅ Hecho — 3 tarjetas + texto Gemini vía `/api/explicar` |
 | Pantallas core restantes (registro, seguimiento) | 🔄 Placeholders listos |
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
-| **Chat de voz** (diferenciador clave — F13) | 🔄 `lib/voice.ts` listo. Modo voz se integrará dentro del bottom sheet de `ChatbotButton` |
+| **Chat de voz** (diferenciador clave — F13) | ✅ Hecho — integrado en `ChatbotButton`/`ChatSheet`, ver entrada 23:01 |
 
 ## ✅ ChatbotButton montado en layout.tsx (2026-06-06 22:05)
 
@@ -108,6 +108,61 @@ para no generar otra ronda de incoherencia. Posibles caminos: (a) que Isabel rev
 un error sin contexto del cambio anterior, o (b) volver a cambiar el motor — pero eso afectaría
 también la lógica de "Rec B" en `calcularRecomendaciones` que ya usa `porcentajePedidosTuali` para
 generar "Pide por la app esta semana" (T1.4, ver arriba), que sí está alineada con autonomía de canal.
+
+## ✅ Modo Voz integrado al chatbot — F13 (2026-06-06 23:01)
+
+Se conectó `lib/voice.ts` (ya completo desde antes) a la UI del chatbot. Diferenciador clave del
+MVP: Raúl no quiere leer, así que ahora puede hablar con tuAliado y escuchar la respuesta.
+
+**Archivos:**
+- **Nuevo** `components/ChatVoiceView.tsx` (77 líneas) — vista de presentación pura: anillos tipo
+  ecualizador (con `animate-pulse` + `animationDelay` escalonado, mismo patrón que
+  `ChatTypingBubble`, sin CSS custom nuevo), status pill por estado, caption en vivo
+  ("Tú dijiste" / "tuAliado dice"), botón pill de ancho completo y link "¿Prefieres escribir?".
+- **Modificado** `components/ChatSheet.tsx` — toggle "Hablar en su lugar" / "Escribir en su lugar"
+  en el header (solo visible si `soportaVoz` es `true`) + render condicional `ChatVoiceView` vs.
+  lista de mensajes + `ChatInputBar`.
+- **Modificado** `components/ChatbotButton.tsx` — orquestación completa: máquina de estados
+  `idle → escuchando → pensando → respondiendo`, conexión con `iniciarEscucha`/`detenerEscucha`/
+  `hablar`/`detenerHabla`, helper compartido `obtenerRespuesta` (reutilizado por texto y voz para
+  no duplicar el armado de contexto de `/api/chat`).
+- **Modificado** `lib/types.ts` — nuevo tipo `EstadoVoz = "idle" | "escuchando" | "pensando" | "respondiendo"`.
+
+**Decisiones de diseño relevantes:**
+- Los intercambios de voz se guardan en el mismo array `mensajes` que el chat de texto — al
+  alternar "¿Prefieres escribir?" se conserva el historial completo, sin duplicar estado.
+- Sin soporte de Web Speech API (`soportaVoz()` → `false`), el toggle no aparece — fallback
+  silencioso a texto, sin mensajes de error visibles para el usuario.
+
+**Delegado a Codex (agente secundario, solo lectura) para ahorrar tokens de Claude:**
+1. Investigación de quirks de Web Speech API en Android/Chrome — hallazgo clave incorporado:
+   `continuous: true` **no** garantiza escucha indefinida (Chrome puede cortar por silencio sin
+   disparar error, solo `onend`). Por eso el flujo NO depende solo del toque manual de "terminar":
+   procesa la transcripción también cuando llega un resultado final (`esFinal`) o cuando el
+   reconocimiento se corta solo (`onFin`), con una ref (`sesionVozProcesadaRef`) que evita
+   procesar la misma sesión dos veces.
+2. Borrador de animación CSS/Tailwind para los anillos — se evaluó pero se optó por reusar el
+   patrón `animate-pulse` ya existente en el proyecto (más simple, consistente, sin agregar
+   `@keyframes` nuevos a `globals.css`).
+3. Segunda opinión sobre el diff final (mismo patrón que T1.4) — encontró 2 bugs reales que se
+   corrigieron antes de cerrar la tarea:
+   - **Respuesta async podía "revivir" el modo voz** tras cerrar el chat o volver a texto
+     mientras se esperaba `/api/chat` (seguía mutando estado y disparando TTS). Fix: ref de
+     generación (`generacionVozRef`) que invalida respuestas en vuelo cuando cambia el contexto.
+   - **Doble toque rápido podía iniciar dos sesiones de reconocimiento** antes del re-render.
+     Fix: ref síncrona `escuchaActivaRef` que bloquea el reingreso.
+
+**Verificación (Chrome DevTools MCP, 390x844):**
+- Activar modo voz → aparecen anillos + pill "Toca para hablar" + botón correcto. ✅
+- Tocar el botón → transición a "escuchando" ("Te escucho…" / "Toca para terminar"). ✅
+- Tocar de nuevo sin transcripción real (sandbox sin micrófono) → vuelve a "idle" limpio. ✅
+- "¿Prefieres escribir?" → regresa a modo texto conservando el historial completo. ✅
+- Sin soporte de voz (`SpeechRecognition`/`webkitSpeechRecognition` removidos vía `initScript`) →
+  el toggle no aparece y el chat de texto funciona igual que antes. ✅
+- `npx tsc --noEmit` y `npm run build` → 0 errores, ambos antes y después de los fixes de Codex.
+- **Limitación de entorno (esperada, ya documentada antes para `/api/chat`):** el sandbox no
+  tiene micrófono real ni acceso a la API de Gemini, así que no se pudo probar el flujo completo
+  "pensando → respondiendo" con audio real — solo los estados que dependen de interacción/UI.
 
 ## Contexto del equipo
 
