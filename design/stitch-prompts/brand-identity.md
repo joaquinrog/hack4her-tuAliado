@@ -1,9 +1,9 @@
-# Brand Identity — tuAliado
+# Brand Identity — TuAliado
 
 ## Prompt para Google Stitch
 
 ```
-Design a brand identity for "tuAliado", a mobile growth advisor app for small business owners in Mexico. The app lives inside Tuali, a B2B delivery marketplace for tiendas de abarrotes.
+Design a brand identity for "TuAliado", a mobile growth advisor app for small business owners in Mexico. The app lives inside Tuali, a B2B delivery marketplace for tiendas de abarrotes.
 
 Product personality:
 - A trusted ally, not a boss or a consultant
@@ -13,11 +13,11 @@ Product personality:
 
 Target user: Raúl, 63, tienda de abarrotes owner, low-tech confidence, relies on his Tuali promotor
 
-Brand name: tuAliado (Spanish for "your ally" — note lowercase "tu")
+Brand name: TuAliado (Spanish for "your ally" — note lowercase "tu")
 
 Visual identity to generate:
 1. Logo mark — a simple icon suggesting growth + partnership. Ideas: two upward arrows intertwined, a handshake with an upward trend, a small sprout with a bar chart. Keep it geometric and bold, readable at 24x24px.
-2. Wordmark — "tuAliado" in a rounded, approachable sans-serif. Lowercase "tu" in regular weight, uppercase "A" and rest in bold. 
+2. Wordmark — "TuAliado" in a rounded, approachable sans-serif. Lowercase "tu" in regular weight, uppercase "A" and rest in bold. 
 3. Color palette — 4 colors:
    - Primary: a warm, energetic orange (#F97316 range) — action, growth, warmth
    - Secondary: a trustworthy blue (#2563EB range) — information, trust, progress

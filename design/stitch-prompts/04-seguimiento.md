@@ -7,7 +7,7 @@ Muestra al usuario su avance hacia la meta. Componentes clave: barra de progreso
 ## Prompt para Google Stitch
 
 ```
-Design a mobile progress tracking screen (375x812px) for "tuAliado". Shows the user's progress toward their chosen goal.
+Design a mobile progress tracking screen (375x812px) for "TuAliado". Shows the user's progress toward their chosen goal.
 
 Screen purpose: visual progress at a glance — one dominant metric, supporting stats, next action.
 

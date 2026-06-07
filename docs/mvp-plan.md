@@ -1,4 +1,4 @@
-# MVP Plan — tuAliado (Hack4Her)
+# MVP Plan — TuAliado (Hack4Her)
 
 > Documento vivo. Última actualización: 2026-06-06 15:02
 > Deadline: 2026-06-07 10:00 AM (buffer de 1h antes de deadline real 11 AM)
@@ -77,7 +77,7 @@ En orden de impacto para el demo:
 
 | # | Función | Razón |
 |---|---|---|
-| F7 | Confirmación de pedido | Feature de Tuali core, no de tuAliado |
+| F7 | Confirmación de pedido | Feature de Tuali core, no de TuAliado |
 | F13 | Chat de voz | ~~Movido a IN — ver abajo~~ |
 | F15 | Chat con agente humano | Requiere backend real |
 

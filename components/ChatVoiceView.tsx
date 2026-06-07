@@ -13,7 +13,7 @@ const COPY_POR_ESTADO: Record<EstadoVoz, { pill: string; pillClase: string; boto
   idle: { pill: "Toca para hablar", pillClase: "bg-tertiary-container/15 text-on-tertiary-container", boton: "Toca para hablar" },
   escuchando: { pill: "Te escucho…", pillClase: "bg-primary-container/15 text-on-primary-container", boton: "Toca para terminar" },
   pensando: { pill: "Pensando…", pillClase: "bg-surface-container-high text-on-surface-variant", boton: "Pensando…" },
-  respondiendo: { pill: "tuAliado te responde", pillClase: "bg-tertiary-container/15 text-on-tertiary-container", boton: "tuAliado está hablando" },
+  respondiendo: { pill: "TuAliado te responde", pillClase: "bg-tertiary-container/15 text-on-tertiary-container", boton: "TuAliado está hablando" },
 }
 
 export function ChatVoiceView({ estado, transcript, hablante, error, onTocarBoton, onCambiarAModoTexto }: ChatVoiceViewProps) {
@@ -57,7 +57,7 @@ export function ChatVoiceView({ estado, transcript, hablante, error, onTocarBoto
           {transcript && (
             <>
               <span className="font-sans text-[12px] text-on-surface-variant">
-                {hablante === "usuario" ? "Tú dijiste" : "tuAliado dice"}
+                {hablante === "usuario" ? "Tú dijiste" : "TuAliado dice"}
               </span>
               <p className="line-clamp-2 font-sans text-body-lg text-on-surface">{transcript}</p>
             </>

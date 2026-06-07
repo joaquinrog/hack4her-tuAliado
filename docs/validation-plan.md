@@ -63,7 +63,7 @@ Una vez elegido el stack, agregar aquí:
 
 La ruta feliz para la presentación debería cubrir:
 
-1. Entrar a tuAliado.
+1. Entrar a TuAliado.
 2. Ver diagnóstico o resumen del cliente.
 3. Elegir o ver meta activa.
 4. Ver recomendaciones concretas.

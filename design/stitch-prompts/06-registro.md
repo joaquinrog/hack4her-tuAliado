@@ -7,7 +7,7 @@ El usuario registra cómo le fue en el día. Máximo 3 preguntas según la meta 
 ## Prompt para Google Stitch
 
 ```
-Design a mobile daily check-in screen (375x812px) for "tuAliado". The user answers 2–3 quick questions about their day. Each question fills the screen — one at a time, no scrolling needed.
+Design a mobile daily check-in screen (375x812px) for "TuAliado". The user answers 2–3 quick questions about their day. Each question fills the screen — one at a time, no scrolling needed.
 
 Screen purpose: collect daily signals in under 30 seconds. Big buttons, no typing.
 

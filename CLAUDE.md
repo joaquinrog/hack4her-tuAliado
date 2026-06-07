@@ -4,7 +4,7 @@
 
 Este repositorio es el proyecto de hackathon **Hack4Her** para el reto **Tuali Growth Agent**.
 
-El nombre de trabajo del producto es **tuAliado**.
+El nombre de trabajo del producto es **TuAliado**.
 
 El Tech Lead y único programador es el responsable de ingeniería del equipo.
 

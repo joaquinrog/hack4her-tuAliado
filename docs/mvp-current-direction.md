@@ -1,11 +1,11 @@
-# Dirección del MVP — tuAliado
+# Dirección del MVP — TuAliado
 
 > Este documento refleja únicamente lo que ya ha sido discutido y confirmado.
 > No agregar funcionalidades no mencionadas en los docs fuente.
 
 ## Nombre de trabajo
 
-**tuAliado**
+**TuAliado**
 
 Descripción:
 > Un asesor enfocado en objetivos que sugiere pasos a seguir a la medida, detalla niveles de riesgo y beneficio, integra ofertas y programas de lealtad, y facilita resúmenes para comunicación vía WhatsApp o con asesores.

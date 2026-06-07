@@ -48,7 +48,7 @@ Este documento define cómo se usa AI en este proyecto — aplica tanto para Cla
 - `codex exec` no expone `/status` (es un comando del modo interactivo, no de `exec`), así que no hay forma de consultar la cuota de antemano — decidir el nivel de esfuerzo según la tarea y simplemente intentar.
 - Si Codex regresa un error de cuota agotada (p. ej. "usage limit reached", "tokens restart at..."), Claude Code asume la tarea directamente sin reintentar ni esperar.
 
-Para entender el producto (qué es tuAliado, reglas de mobile/visuales, métricas), lee `CLAUDE.md` y `docs/handoff-context.md` antes de investigar — así tu reporte llega ya alineado con el contexto real.
+Para entender el producto (qué es TuAliado, reglas de mobile/visuales, métricas), lee `CLAUDE.md` y `docs/handoff-context.md` antes de investigar — así tu reporte llega ya alineado con el contexto real.
 
 ---
 
@@ -76,13 +76,27 @@ Ejemplo: "Revisa la task #3 y haz /dev"
 
 - Si el path del archivo ya se conoce, leerlo directo con `Read`/`grep` — no delegar a un subagent `Explore`. Spawnear un subagent duplica el costo: primero procesa el archivo completo, luego lo vuelve a transcribir de regreso.
 - Reservar `Explore` para cuando el path NO se conoce (búsquedas, "¿dónde está X?", exploración de estructura desconocida) o cuando la tarea requiere síntesis/juicio sobre varios archivos a la vez.
+- Si la pregunta es "¿en qué estado está la tarea X / qué falta?", esa respuesta ya
+  vive en `docs/handoff-context.md`, `docs/mvp-current-direction.md` o
+  `docs/decisions.md` — leerlos directo primero. No delegar a `Explore` la
+  re-derivación de un estado que ya está documentado (medido: un agente gastó 42k
+  tokens redescubriendo una tabla que ya estaba en `handoff-context.md`).
 
 ### Verificación de frontend (chrome-devtools)
 
 - Para confirmar que algo *funciona* (clic dispara acción, dato se actualiza, no hay error), usar herramientas de texto: `evaluate_script`, `list_console_messages`, `list_network_requests` — son baratas. Evitar `take_snapshot` para esto.
 - Reservar `take_screenshot` para cuando de verdad hace falta ver el layout (validar que algo "se ve bien", acorde a la regla de "visuales sobre texto" del proyecto).
-- Antes de capturar, hacer `resize_page` al viewport móvil (375-430px) — este proyecto es mobile-only, una captura grande no aporta nada extra.
-- Por defecto, delegar la sesión de verificación al skill `verify` (o un subagent) en vez de manejar chrome-devtools desde el hilo principal: así las capturas/snapshots pesados quedan aislados y solo regresa un veredicto corto en texto.
+- Antes de capturar, hacer `resize_page` al viewport móvil (390x844) — este proyecto es mobile-only, una captura grande no aporta nada extra.
+- Parámetros de captura — esto no es opcional, es la diferencia entre ~90K y ~10K
+  caracteres por captura (medido en sesiones reales de este proyecto):
+  - `format: "jpeg", quality: 60` — nunca dejar el `png` por defecto (sin comprimir).
+  - Nunca `fullPage: true` salvo que se esté validando explícitamente un layout largo
+    con scroll; por defecto solo el viewport visible.
+  - Si la captura es "para que la vea Joaquín" y no para que Claude la analice, usar
+    `filePath` para guardarla en disco — así no se adjunta al contexto de la conversación.
+- Por defecto, manejar la sesión de chrome-devtools desde un subagent (no desde el
+  hilo principal): así las capturas/snapshots pesados quedan aislados ahí y solo
+  regresa un veredicto corto en texto al hilo principal.
 
 ---
 

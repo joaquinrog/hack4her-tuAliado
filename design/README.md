@@ -1,4 +1,4 @@
-# Design — tuAliado
+# Design — TuAliado
 
 Recursos de diseño del producto.
 
@@ -84,10 +84,12 @@ Antes de implementar las pantallas de FASE 1 hay que resolver estas correcciones
      punto 3 de arriba — si se decide revertir el motor del diagnóstico, esta recomendación
      seguiría siendo válida y coherente (no hay que tocarla).
 
-5. **EN PROGRESO - Capitalización de marca — "TuAliado" vs "tuAliado"**
-   - Archivo a corregir: `assets/brand identity/wordmark.svg`
-   - Cambio: el `<tspan>` con texto "TuAli" + "ado" renderiza "TuAliado" (A mayúscula). Debe decir **"tuAliado"** (t minúscula) para coincidir con `docs/decisions.md` y `CLAUDE.md`.
-   - Estado: ya lo están trabajando; no duplicar el cambio desde ingeniería.
+5. **✅ RESUELTO (2026-06-07) — Capitalización de marca**
+   - El logo (`assets/brand identity/wordmark.svg`) ya usaba "TuAliado" (A mayúscula). En vez de
+     pedir que se cambie el logo, el Tech Lead decidió actualizar la decisión confirmada en
+     `docs/decisions.md` y `CLAUDE.md` de "tuAliado" a **"TuAliado"** — así coincide con el
+     wordmark sin tocar el asset de diseño. Se actualizó el copy en código (`app/`, `components/`,
+     `lib/`) y en toda la documentación.
 
 6. **EN PROGRESO - Bottom nav bar en inglés (Progress / Check-in / Insights / Profile)**
    - Archivos a corregir: `assets/registro/tualiado_check_in_paso_2/code.html` y `.../tualiado_check_in_paso_3/code.html`

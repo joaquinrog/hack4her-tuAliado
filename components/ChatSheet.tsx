@@ -43,7 +43,7 @@ export function ChatSheet(props: ChatSheetProps) {
           >
             auto_awesome
           </span>
-          <span className="font-sans text-label-md text-on-surface">tuAliado</span>
+          <span className="font-sans text-label-md text-on-surface">TuAliado</span>
         </div>
         <div className="flex items-center gap-2">
           {soportaVoz && (

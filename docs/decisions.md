@@ -16,8 +16,9 @@
 
 ### Nombre de trabajo del producto
 
-- **Decisión:** tuAliado
+- **Decisión:** TuAliado
 - **Estado:** Confirmado
+- **Actualización (2026-06-07):** se cambió la capitalización confirmada de "tuAliado" (t minúscula) a **"TuAliado"** (A mayúscula), a petición del Tech Lead — para que el copy de la app coincida con el wordmark del logo (`brand identity/wordmark.svg`), que ya usaba "TuAliado". Resuelve el punto "Capitalización de marca" de la sección de pendientes más abajo.
 
 ---
 
@@ -213,7 +214,7 @@
 
 ### Uso de Codex como agente secundario
 
-- **Decisión:** Claude Code sigue siendo el agente principal del proyecto (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código). Codex se permite como agente **secundario y de apoyo**, limitado a tareas de solo lectura que no dependen de las convenciones específicas de tuAliado: investigación externa (librerías, configs, debugging de herramientas), segunda opinión/revisión de un diff, lectura y resumen de documentación. Codex **no edita código del proyecto, no toca `docs/`/`.ai/`, ni toma decisiones de producto**. Su rol y alcance quedan documentados en `AGENTS.md` (sección "Codex — Agente secundario") para que los lea directamente al ser invocado en este repo.
+- **Decisión:** Claude Code sigue siendo el agente principal del proyecto (dueño del contexto, de las MCP tools exclusivas como chrome-devtools, y de las decisiones de producto/código). Codex se permite como agente **secundario y de apoyo**, limitado a tareas de solo lectura que no dependen de las convenciones específicas de TuAliado: investigación externa (librerías, configs, debugging de herramientas), segunda opinión/revisión de un diff, lectura y resumen de documentación. Codex **no edita código del proyecto, no toca `docs/`/`.ai/`, ni toma decisiones de producto**. Su rol y alcance quedan documentados en `AGENTS.md` (sección "Codex — Agente secundario") para que los lea directamente al ser invocado en este repo.
 - **Estado:** Confirmado — 2026-06-06
 - **Razón:** Joaquín tiene Claude Pro y GPT Plus, ambos con ventana de uso que se renueva cada ~5 horas — el recurso escaso real es esa ventana, no "tokens" en abstracto. Las MCP tools de Claude Code (chrome-devtools, etc.) y el contexto profundo del proyecto son no-transferibles a Codex, así que conviene proteger la ventana de Claude para ese trabajo exclusivo y descargar en Codex el trabajo genérico que no requiere ese contexto — minimizando el "peaje" de explicarle las convenciones del proyecto cada vez.
 - **Nota:** Esto matiza la regla histórica "un solo agente, un solo loop, sin coordinación entre herramientas externas" — actualizada en `AGENTS.md`.
@@ -251,5 +252,5 @@ Detalle completo en `docs/handoff-context.md` sección "Contradicciones encontra
 - **Precio Coca-Cola 600ml**: diseño muestra $15.50, mock tiene `precioCosto: 11.5` — ¿cuál es el dato correcto? (riesgo de "incoherencia de datos", el problema #1 que Tuali no quiere ver)
 - **¿Agregamos `nivelRiesgo` a `Recomendacion`?**: el diseño de recomendaciones muestra 3 badges de riesgo (🟢🟡🟠) que no existen en `lib/types.ts` ni en el motor
 - **¿Alineamos los textos de "oportunidades" del diagnóstico y de recomendaciones con el copy del diseño?**: el diseño está más orientado a "autonomía de canal" (pedir por app vs. promotor) que el motor actual
-- **Capitalización de marca**: logo usa "TuAliado", docs confirman "tuAliado" — ¿el logo es excepción tipográfica o hay que pedir ajuste?
+- ~~**Capitalización de marca**~~ → Resuelto (2026-06-07): se cambió la decisión confirmada de "tuAliado" a "TuAliado" para que coincida con el logo (ver sección "Nombre de trabajo del producto" arriba).
 - **Bottom nav bar en inglés** (Progress/Check-in/Insights/Profile) en pantallas de registro — no coincide con el flujo lineal confirmado, ¿es scaffolding genérico de Stitch a descartar?
