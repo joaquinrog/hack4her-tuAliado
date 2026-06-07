@@ -14,17 +14,49 @@ Estas respuestas alcanzan para armar una primera version solida del README.
 
 1. **[Clave]** ¿Cual es la frase de 1 linea que queremos que recuerden los jueces sobre tuAliado?
 
+TuAliado es un sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para cada tendero. 
+
 2. **[Clave]** ¿Por que elegimos a Raul / dueño apoyado como usuario principal?
+
+Elegimos a Raúl porque representa el perfil con mayor dificultad digital dentro de nuestras protopersonas usando Tuali. Es un usuario que depende constantemente de otras personas para utilizar herramientas tecnológicas y que suele evitar procesos complejos dentro de apps.
+Diseñar para Raúl significa diseñar para el caso más complicado: un usuario con baja adopción tecnológica, resistencia al cambio y poca autonomía digital, que además depende frecuentemente del promotor para tomar decisiones.
+Si el producto funciona para Raúl, automáticamente mejora la experiencia para perfiles más digitales. Además, este perfil representa directamente la oportunidad social del reto: transformar tecnología compleja en acompañamiento accesible y accionable.
 
 3. **[Clave]** ¿Cual sera el camino exacto que se mostrara en vivo en la demo?
 
+La demo seguirá un flujo corto y enfocado en acompañamiento práctico.
+Primero se presentará a Raúl y su contexto como tendero tradicional con baja habilidad digital. Después, tuAliado realizará un diagnóstico utilizando historial de compras, comportamiento y contexto del negocio para detectar oportunidades de crecimiento.
+A partir de ahí, Raúl seleccionará una meta concreta:
+“Quiero vender más esta semana.”
+El sistema responderá con recomendaciones accionables conectadas directamente a esa meta: productos sugeridos, promociones relevantes, oportunidades de loyalty 
+y explicación clara del beneficio esperado.
+Posteriormente se mostrará la interacción por voz, simulando una conversación natural similar a la que tendría con un promotor:
+“¿Qué me conviene pedir hoy?”
+Finalmente, se mostrará el seguimiento de avance, progreso de meta y visualización de impacto para demostrar que tuAliado no solo recomienda acciones, sino que acompaña continuamente el crecimiento del negocio.
+
 4. **[Clave]** ¿Como vamos a decir claramente que el dataset es mock, pero basado en protopersonas y journeys del reto?
+
+Para la demo utilizamos información simulada basada en las protopersonas, journeys y contexto del reto proporcionado por Tuali.
+No trabajamos con datos reales de clientes; el objetivo del prototipo fue demostrar cómo funcionaría el flujo de acompañamiento, personalización y seguimiento dentro de escenarios realistas inspirados en los perfiles del reto.
 
 5. **[Clave]** ¿Cual es la promesa principal para Tuali / Arca: subir ticket promedio, autonomia digital, engagement o todo junto?
 
+La principal propuesta de valor para Tuali y Arca Continental es convertir automatización en inteligencia comercial, ya que tuAliado no solo mejora la experiencia del tendero, también transforma interacciones diarias en información útil para entender mejor a los clientes, personalizar recomendaciones y aumentar el engagement dentro de la plataforma.
+Como resultado, se impulsa el uso de promociones y loyalty, se fortalece la autonomía digital del cliente y se genera crecimiento medible para Arca Continental.
+
 6. **[Clave]** ¿Que diferenciador queremos vender mas fuerte: flujo estructurado, motor deterministico, voz, UX para baja habilidad digital o seguimiento?
 
+El diferenciador principal de tuAliado es su enfoque de acompañamiento accesible para usuarios con baja habilidad digital.
+Más que un chatbot, el producto funciona como una guía estructurada que convierte metas en acciones concretas y fáciles de entender. La experiencia prioriza practicidad sobre tecnicidad:
+lenguaje claro, decisiones simplificadas, recomendaciones justificadas y seguimiento continuo.
+La interacción por voz complementa esta experiencia al permitir una comunicación mucho más natural para usuarios que no están acostumbrados a escribir o navegar interfaces complejas.
+
 7. **[Clave]** ¿Que esta implementado hoy y que es vision futura?
+
+Nuestro prototipo ya cuenta con:
+flujo principal de acompañamiento, onboarding y diagnóstico, definición de metas, recomendaciones personalizadas, seguimiento de progreso, sistema de streak, UX enfocada en accesibilidad y prototipo funcional de interacción por voz.
+También existe una integración conceptual con funcionalidades ya presentes dentro de Tuali, permitiendo demostrar cómo el agente aprovecha herramientas existentes en lugar de crear un sistema externo.
+A futuro, buscamos incorporar aprendizaje adaptativo en tiempo real, modelos predictivos de comportamiento, predicciones estacionales, evaluación dinámica de riesgo y conexión completa con datos productivos reales de Tuali y Arca Continental.
 
 8. **[Clave]** ¿Cual es el link final de Vercel que ira arriba del README?
 
@@ -34,11 +66,25 @@ Estas respuestas alcanzan para armar una primera version solida del README.
 
 9. ¿Como explicamos tuAliado sin que suene a "otro chatbot con IA"?
 
-10. ¿Que dolor especifico de Raul resolvemos primero: vender mas, entender promos, pedir mejor o depender menos del promotor?
+tuAliado no es un chatbot que responde preguntas. Es un sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para cada tendero.
+La IA no es el producto principal, sino el motor que permite personalizar recomendaciones, interpretar comportamiento, adaptar el acompañamiento y llevar un seguimiento más cercano según el contexto de cada usuario.
+Más que conversar, tuAliado analiza, prioriza y da seguimiento.
+
+10. ¿Qué dolor especifico de Raúl resolvemos primero: vender mas, entender promos, pedir mejor o depender menos del promotor?
+
+El primer dolor que resolvemos es depender menos del promotor para tomar decisiones.
+A partir de ahí, tuAliado ayuda a entender promociones, saber qué pedir
+y eventualmente crecer el negocio.
+La autonomía digital es el punto de partida, porque actualmente Raúl no tiene claridad ni confianza para usar la plataforma por sí solo.
 
 11. ¿Que parte del problema viene directamente del reto de Tuali y que parte es interpretacion nuestra?
 
+Del reto de Tuali tomamos la necesidad de crear un agente que ayude a los clientes a crecer su negocio mediante recomendaciones personalizadas, seguimiento y uso inteligente de herramientas ya existentes dentro de la plataforma.
+Nuestra interpretación fue entender que el verdadero problema no era la falta de funcionalidades, sino la falta de acompañamiento claro, accesible y accionable para usuarios con baja habilidad digital. A partir de eso, diseñamos una experiencia enfocada en autonomía, simplicidad y crecimiento guiado.
+
 12. ¿Cual es el "antes y despues" de Raul en una frase?
+
+Antes, Raúl dependía solo del promotor y otras personas para tomar decisiones; ahora, tuAliado le dice qué hacer, por qué le conviene y cómo crecer su negocio.
 
 13. ¿Que nombre/copy queremos usar para describir el producto: agente de crecimiento, asesor, copiloto, aliado u otro?
 
