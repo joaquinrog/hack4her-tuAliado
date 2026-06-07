@@ -215,4 +215,14 @@
 
 - Definir modelo de Gemini a usar (Flash vs Pro — por costo y latencia)
 - Pantallas mínimas para el demo (flujo core a confirmar con el Tech Lead)
-- Diseño visual: paleta de colores, tipografía, componentes base
+- ~~Diseño visual: paleta de colores, tipografía, componentes base~~ → Resuelto: assets de Stitch recibidos (sistema "Warm & Approachable Advisor", ver `docs/handoff-context.md` 2026-06-06 20:11)
+
+### Nuevas — surgidas al revisar assets de diseño Stitch (2026-06-06 20:11)
+
+Detalle completo en `docs/handoff-context.md` sección "Contradicciones encontradas". Resumen para decidir:
+
+- **Precio Coca-Cola 600ml**: diseño muestra $15.50, mock tiene `precioCosto: 11.5` — ¿cuál es el dato correcto? (riesgo de "incoherencia de datos", el problema #1 que Tuali no quiere ver)
+- **¿Agregamos `nivelRiesgo` a `Recomendacion`?**: el diseño de recomendaciones muestra 3 badges de riesgo (🟢🟡🟠) que no existen en `lib/types.ts` ni en el motor
+- **¿Alineamos los textos de "oportunidades" del diagnóstico y de recomendaciones con el copy del diseño?**: el diseño está más orientado a "autonomía de canal" (pedir por app vs. promotor) que el motor actual
+- **Capitalización de marca**: logo usa "TuAliado", docs confirman "tuAliado" — ¿el logo es excepción tipográfica o hay que pedir ajuste?
+- **Bottom nav bar en inglés** (Progress/Check-in/Insights/Profile) en pantallas de registro — no coincide con el flujo lineal confirmado, ¿es scaffolding genérico de Stitch a descartar?

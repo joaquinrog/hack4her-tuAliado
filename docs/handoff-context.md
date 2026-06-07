@@ -171,7 +171,55 @@ Todos los módulos de lógica están listos:
 
 Ticket promedio de Raúl (calculado por motor): **$450 MXN**. Objetivo sugerido: **$518 MXN** (+15%).
 
+## Assets de diseño Stitch recibidos (2026-06-06 20:11)
+
+La compañera de diseño subió exports de Stitch para 6 pantallas + brand identity en `design/assets/`:
+splash, onboarding, diagnóstico, recomendaciones (+ calculador de ganancia), registro (4 pasos), chatbot.
+Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approachable Advisor").
+
+**Validado contra el código actual — esto SÍ coincide:**
+- Las 4 metas del onboarding coinciden exactamente con `decisions.md` y `lib/onboarding-questions.ts`.
+- Números del diagnóstico ($450 ticket, 20%/80% canal, 180 puntos loyalty) coinciden con `mock-data.ts`.
+- Viewport consistente en 375px, sin breakpoints `lg:`/`xl:`/`2xl:`. Tap targets de 56–160px (superan el mínimo de 44px).
+
+## ⚠️ Contradicciones encontradas — requieren decisión antes de implementar pantallas (2026-06-06 20:11)
+
+1. **Incoherencia de precio (CRÍTICO — esto es justo lo que Tuali no quiere ver):**
+   El diseño "Calculador de ganancia" (`design/assets/recomendaciones/tualiado_calculador_de_ganancia_v3`) muestra
+   *"Coca-Cola 600ml · $15.50 en Tuali"*, pero `lib/mock-data.ts` (p-001) tiene `precioCosto: 11.5`.
+   → Hay que avisar a la diseñadora que use los precios de `mock-data.ts` como fuente única, o corregir el mock si $15.50 es el dato correcto.
+
+2. **Falta el campo `nivelRiesgo` en `Recomendacion`:**
+   `mvp-plan.md` (F4) dice "Recomendaciones (3 niveles de riesgo)" y el diseño `tualiado_recomendaciones_v2`
+   muestra explícitamente 3 badges: 🟢 Bajo riesgo / 🟡 Riesgo medio / 🟠 Mayor ganancia — pero
+   `lib/types.ts → Recomendacion` no tiene ningún campo de riesgo, y el motor tampoco lo asigna.
+   → Pendiente: agregar `nivelRiesgo: "bajo" | "medio" | "alto"` (o equivalente) a `Recomendacion` y que `calcularRecomendaciones` lo determine.
+
+3. **Las "oportunidades" del diagnóstico no calzan con lo que genera el motor:**
+   Diseño muestra: "No usas las promociones activas" / **"Pides por promotor, no por app"** / "Retos de loyalty sin activar".
+   Motor genera (`calcularDiagnostico`): "Tienes N promociones sin usar" / **"No usas el pedido sugerido todavía"** / "Tienes N reto(s) de puntos sin activar".
+   → La oportunidad #2 no coincide: el diseño apunta a **autonomía de canal** (métrica secundaria confirmada), el motor apunta a pedido sugerido.
+   Si se implementa la pantalla con el texto del diseño tal cual, quedaría incoherente con lo que el motor realmente detecta.
+
+4. **Recomendación B para "Vender más" no coincide:**
+   Diseño muestra "Pide por la app esta semana" (autonomía de canal); el motor genera "Activa el pedido sugerido" para esa meta.
+   Refuerza el punto 3 — el diseño está más alineado con la métrica de autonomía que el motor actual.
+
+5. **Naming de marca — mayúscula/minúscula:**
+   El logo (`brand identity/wordmark.svg`) usa **"TuAliado"** (A mayúscula); `decisions.md` y `CLAUDE.md` confirman el nombre como **"tuAliado"** (t minúscula).
+   → Puede ser intencional por legibilidad tipográfica del logo, pero el texto de la app debe usar "tuAliado". Confirmar con la diseñadora.
+
+6. **Bottom nav bar en inglés con secciones que no existen en nuestro flujo:**
+   Las pantallas `/registro` paso 2 y 3 incluyen una barra de navegación inferior fija con 4 tabs:
+   "Progress", "Check-in", "Insights", "Profile" — **en inglés**.
+   - Raúl no lee inglés (ni mucho texto en general).
+   - Implica una arquitectura de navegación por tabs que no coincide con el flujo lineal confirmado
+     (Diagnóstico → Meta → Recomendación → Acción → Seguimiento) ni con las rutas ya creadas.
+   → Probablemente sea scaffolding genérico de Stitch sin personalizar. Confirmar con la diseñadora antes de implementar — no copiar tal cual.
+
 ## Próximo paso
+
+**Antes de FASE 1:** resolver los puntos 1–6 de arriba con la diseñadora/Tech Lead (decisiones de producto, no técnicas).
 
 **FASE 1 — Pantallas core.** Empezar por:
 1. `app/page.tsx` — Splash (T1.1)
