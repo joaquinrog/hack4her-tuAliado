@@ -1,0 +1,59 @@
+"use client"
+
+import { useEffect, useRef } from "react"
+import type { Mensaje } from "@/lib/types"
+import { ChatMessageBubble, ChatTypingBubble } from "./ChatMessageBubble"
+import { ChatInputBar } from "./ChatInputBar"
+
+interface ChatSheetProps {
+  mensajes: Mensaje[]
+  escribiendo: boolean
+  onEnviar: (texto: string) => void
+  onCerrar: () => void
+}
+
+export function ChatSheet({ mensajes, escribiendo, onEnviar, onCerrar }: ChatSheetProps) {
+  const finRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    finRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [mensajes, escribiendo])
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-50 flex h-3/4 w-full max-w-[430px] flex-col self-center rounded-t-[32px] bg-surface-container-lowest shadow-[0_-10px_40px_rgba(0,0,0,0.12)]">
+      <div className="flex justify-center pt-3 pb-2">
+        <div className="h-1 w-10 rounded-full bg-outline-variant" />
+      </div>
+
+      <div className="flex items-center justify-between px-margin-mobile py-2">
+        <div className="flex items-center gap-2">
+          <span
+            className="material-symbols-outlined text-[20px] text-primary"
+            style={{ fontVariationSettings: "'FILL' 1" }}
+          >
+            auto_awesome
+          </span>
+          <span className="font-sans text-label-md text-on-surface">tuAliado</span>
+        </div>
+        <button
+          type="button"
+          aria-label="Cerrar chat"
+          onClick={onCerrar}
+          className="material-symbols-outlined flex h-11 w-11 items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant"
+        >
+          close
+        </button>
+      </div>
+
+      <div className="hide-scrollbar flex-1 space-y-stack-md overflow-y-auto px-margin-mobile py-4">
+        {mensajes.map((mensaje, i) => (
+          <ChatMessageBubble key={i} mensaje={mensaje} />
+        ))}
+        {escribiendo && <ChatTypingBubble />}
+        <div ref={finRef} />
+      </div>
+
+      <ChatInputBar onEnviar={onEnviar} deshabilitado={escribiendo} />
+    </div>
+  )
+}

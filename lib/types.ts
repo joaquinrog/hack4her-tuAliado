@@ -148,6 +148,20 @@ export interface Recomendacion {
   productoIds: string[]
 }
 
+// ── Chatbot ──────────────────────────────────────────────────────────────────
+export interface Mensaje {
+  rol: "usuario" | "asistente"
+  texto: string
+  hora: string
+}
+
+// Espeja el contrato de POST /api/chat (ver app/api/chat/route.ts)
+export interface ChatContexto {
+  nombre: string
+  meta: string
+  ticketPromedio: number
+}
+
 // ── Estado global del mock ───────────────────────────────────────────────────
 export interface EstadoMock {
   perfil: PerfilCliente
