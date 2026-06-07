@@ -27,23 +27,33 @@
 | `lib/state.ts` — URL params + localStorage | ✅ Hecho |
 | Splash, Onboarding, Diagnóstico (T1.1–T1.3) | ✅ Hecho |
 | Pantallas core restantes (recomendaciones, registro, seguimiento) | 🔄 Placeholders listos |
-| Chatbot flotante (modo texto) + `/api/chat` | 🔄 `components/ChatbotButton.tsx` listo — falta montarlo en `layout.tsx` |
+| Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | 🔄 `lib/voice.ts` listo. Modo voz se integrará dentro del bottom sheet de `ChatbotButton` |
 
-## 🔜 Próxima tarea síncrona (requiere coordinar con el otro agente)
+## ✅ ChatbotButton montado en layout.tsx (2026-06-06 22:05)
 
-**Montar `<ChatbotButton />` en `app/layout.tsx`.**
+Se integró `<ChatbotButton />` en `app/layout.tsx` (import + render dentro de `<body>`, como
+hermano del contenedor `max-w-[430px]` que envuelve `{children}`). El bloqueo de "layout.tsx en
+edición activa" ya no aplicaba — FASE 1 (T1) está completa.
 
-Es un cambio de una línea (import + `<ChatbotButton />` dentro del `<body>`, junto al resto de
-children), pero `layout.tsx` está siendo editado activamente por el agente de T1 — por eso se
-dejó fuera del trabajo en paralelo (ver sección `components/ChatbotButton.tsx` más abajo).
-
-Hacerlo en síncrono, una vez que T1 converja, porque:
-- Es el único punto de integración real entre ambos focos de trabajo.
-- Es también el primer momento en que se puede probar el chatbot visualmente en navegador
-  (hasta ahora solo se verificó con `tsc --noEmit` y `npm run build`, nunca renderizado).
-- Conviene revisar juntos que el FAB no choque visualmente con elementos de T1 (headers,
-  bottom nav, CTAs) en las pantallas ya implementadas (Splash, Onboarding, Diagnóstico).
+**Verificación:**
+- `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio.
+- Prueba visual con Chrome DevTools MCP a 390x844 en `/`, `/onboarding` y `/diagnostico`:
+  - El FAB abre el bottom sheet (`ChatSheet`) con el mensaje inicial y los chips de respuesta
+    rápida.
+  - Enviar un mensaje dispara `POST /api/chat` con el contexto correcto
+    (`{ nombre: "Raúl", meta: "crecer su negocio" (fallback), ticketPromedio: 440 }`) y
+    devuelve `200`. La respuesta mostrada es el fallback de `lib/gemini.ts`
+    ("No pude generar una respuesta...") — la API de Gemini no respondió en este entorno
+    sandbox (probablemente acceso de red restringido); no es un problema de la integración,
+    `GEMINI_API_KEY` sí está configurada en `.env.local`.
+- **Bug encontrado y corregido durante la verificación:** el FAB en su posición original
+  (`bottom-6`, 24px del fondo, según el prompt original de Stitch) chocaba visualmente con la
+  barra de CTA fija de Diagnóstico (`fixed bottom-0`, ~124px de alto:
+  `pt-stack-lg` 48px + botón 56px + `pb-margin-mobile` 20px). Se ajustó a `bottom-[136px]` en
+  `components/ChatbotButton.tsx` para que quede libre de esa barra — afecta también a
+  Recomendaciones/Registro/Seguimiento, que siguen el mismo patrón de CTA fijo. En Splash y
+  Onboarding (sin barra fija) se ve igual de bien con el nuevo offset.
 
 ## Contexto del equipo
 
@@ -307,11 +317,9 @@ fallback `"crecer su negocio"` si no hay `?meta=` en la URL, igual que ya hace l
 
 **Verificación:** `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio.
 
-**⚠️ Pendiente — paso de integración (1 línea, intencionalmente no hecho aquí):**
-Falta montar `<ChatbotButton />` en `app/layout.tsx` para que aparezca en todas las pantallas.
-No se tocó porque `layout.tsx` está modificado activamente por el otro agente ahora mismo —
-para evitar conflicto, el componente quedó listo pero sin montar. Tampoco se pudo probar
-visualmente en navegador por la misma razón (no está renderizado en ninguna ruta todavía).
+**✅ Integración completada (2026-06-06 22:05):** ver sección "ChatbotButton montado en
+layout.tsx" más arriba — montado, probado en navegador y con un ajuste de posición del FAB
+(`bottom-[136px]`) para no chocar con las barras de CTA fijas del flujo core.
 
 ## ⚠️ Contradicciones encontradas — requieren decisión antes de implementar pantallas (2026-06-06 20:11)
 
@@ -348,10 +356,11 @@ visualmente en navegador por la misma razón (no está renderizado en ninguna ru
      (Diagnóstico → Meta → Recomendación → Acción → Seguimiento) ni con las rutas ya creadas.
    → Probablemente sea scaffolding genérico de Stitch sin personalizar. Confirmar con la diseñadora antes de implementar — no copiar tal cual.
 
-## Próximo paso (actualizado 2026-06-06 21:40)
+## Próximo paso (actualizado 2026-06-06 22:05)
 
-**T1.1, T1.2 y T1.3 (Splash, Onboarding, Diagnóstico) ya están implementadas** — ver sección
-"FASE 1 — Splash, Onboarding y Diagnóstico implementados" arriba.
+**T1.1, T1.2 y T1.3 (Splash, Onboarding, Diagnóstico) ya están implementadas**, y el chatbot
+flotante ya está montado e integrado — ver secciones "FASE 1" y "ChatbotButton montado en
+layout.tsx" arriba.
 
 **Siguiente: T1.4 — Recomendaciones (`app/recomendaciones/page.tsx`).**
 Ahí se deben resolver las contradicciones pendientes que tocan esta pantalla:

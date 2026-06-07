@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Outfit } from "next/font/google"
+import { ChatbotButton } from "@/components/ChatbotButton"
 import "./globals.css"
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" })
@@ -22,6 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <div className="mx-auto max-w-[430px] min-h-full flex flex-col">
           {children}
         </div>
+        <ChatbotButton />
       </body>
     </html>
   )
