@@ -11,7 +11,7 @@
 |---|---|
 | Hackathon | Hack4Her |
 | Reto | Tuali Growth Agent |
-| Producto de trabajo | tuAliado |
+| Producto de trabajo | TuAliado |
 | Tech Lead | Tech Lead del equipo |
 
 ### Qué está hecho y qué falta
@@ -30,6 +30,28 @@
 | Pantallas core restantes (registro, seguimiento) | 🔄 Placeholders listos |
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | ✅ Hecho — integrado en `ChatbotButton`/`ChatSheet`, ver entrada 23:01 |
+
+## ✅ Cambio de decisión confirmada: "tuAliado" → "TuAliado" (2026-06-07 03:25)
+
+A petición explícita del Tech Lead, se cambió la capitalización confirmada del nombre de marca
+de **"tuAliado"** (t minúscula) a **"TuAliado"** (A mayúscula) — para que el copy de toda la app
+coincida con el wordmark del logo (`design/assets/brand identity/wordmark.svg`), que ya usaba
+"TuAliado". Antes, esta era exactamente la incoherencia documentada en el punto #5 de
+"Contradicciones encontradas" (ver más abajo).
+
+**Archivos actualizados (reemplazo `tuAliado` → `TuAliado` en texto/copy, no en rutas/nombres de
+asset que usan minúsculas como `tualiado_chat_con_asistente`):**
+`CLAUDE.md`, `AGENTS.md`, `README.md`, `app/layout.tsx`, `app/page.tsx`, `app/onboarding/page.tsx`,
+`components/ChatbotButton.tsx`, `components/ChatSheet.tsx`, `components/ChatVoiceView.tsx`,
+`lib/chat.ts`, `lib/gemini.ts`, `app/api/chat/route.ts`, `docs/decisions.md`,
+`docs/handoff-context.md`, `docs/mvp-current-direction.md`, `docs/mvp-plan.md`,
+`docs/project-brief.md`, `docs/pitch-context.md`, `docs/app-functions.md`,
+`docs/validation-plan.md`, `design/README.md`, `design/stitch-prompts/*.md`,
+`02-posible-mvp-tuali-crece.md`.
+
+**Decisión actualizada en `docs/decisions.md`** (sección "Nombre de trabajo del producto") y el
+punto "Capitalización de marca" de la lista de pendientes se marcó como resuelto. No se tocó
+`wordmark.svg` — ya estaba correcto con la nueva decisión.
 
 ## ✅ Dev server por IP LAN habilitado para pruebas mobile (2026-06-07)
 
@@ -61,6 +83,74 @@ Esto permite que el celular use la IP LAN durante desarrollo sin que Next bloque
 
 **Pendiente reportado por Joaquín antes de dormir (2026-06-07):** en su teléfono, el flujo de voz no está pidiendo permisos de micrófono; aparece/queda el mensaje "Necesito permiso para usar tu micrófono". Claude debe revisar después si el navegador móvil está bloqueando permisos por origen/IP, si `SpeechRecognition` requiere HTTPS/contexto seguro en ese dispositivo, o si la UI necesita guiar al usuario a habilitar el micrófono manualmente.
 
+→ **Resuelto, ver entrada siguiente "Investigación delegada a Codex"** (2026-06-07 09:30): causa confirmada — IP LAN por HTTP no es "secure context".
+
+## ✅ Investigación delegada a Codex — bottom nav en inglés (#6) y permiso de micrófono Android (2026-06-07 09:30)
+
+Mientras otro agente trabajaba en T1 (pantallas core), se delegaron a Codex (`codex exec`,
+agente secundario, solo lectura, en background) dos investigaciones que no tocan esos archivos.
+Reporte completo en `/tmp/codex-investigacion.txt` (no versionado).
+
+**0. Hallazgo previo (de Claude, antes de delegar) — contradicción #1 (precio Coca-Cola) ya no existe:**
+Se revisó `design/assets/recomendaciones/tualiado_calculador_de_ganancia_v3/tuAliado_calcular_ganancia_completo.html`
+— el archivo actual del diseño muestra **"Coca-Cola 600ml · $11.50 en Tuali"**, igual que
+`precioCosto: 11.5` en `lib/mock-data.ts` (p-001). El "$15.50" documentado como contradicción #1
+ya no aparece en ningún asset de diseño actual — solo en nuestros propios docs, como referencia
+histórica del problema. **Contradicción #1 cerrada: diseño y mock ya coinciden, no requiere
+ningún cambio de código.**
+
+**1. Contradicción #6 — bottom nav en inglés (`Progress`/`Check-in`/`Insights`/`Profile`):**
+Codex confirmó, leyendo los 4 `code.html` de `/registro`, que la barra:
+- SÍ aparece en `tualiado_check_in_paso_2` y `tualiado_check_in_paso_3` (4 labels en inglés,
+  iconos Material Symbols `analytics`/`edit_note`/`lightbulb`/`person`, `nav fixed bottom-0 h-16`).
+- NO aparece en `tualiado_check_in_paso_1` ni `tualiado_check_in_logrado` (esta última trae el
+  comentario "Transactional screen, no TopAppBar/BottomNavBar").
+- NO aparece en ningún otro grupo de pantallas (splash, diagnóstico, onboarding, recomendaciones,
+  chatbot) — confirma que es scaffolding genérico de Stitch aplicado de forma inconsistente, no
+  un patrón de navegación intencional del producto.
+
+Propuesta de Codex para Isabel/Tech Lead (3 opciones, de mayor a menor preferencia):
+1. **No incluirla** — el flujo confirmado es lineal (Diagnóstico → Meta → Recomendación → Acción
+   → Seguimiento); una barra de tabs sugiere navegación libre entre secciones que no existe en
+   el producto.
+2. **Convertirla en footer de acción del flujo** — un solo CTA grande ("Siguiente"/"Finalizar
+   registro"/"Ver mi avance") según el paso, alineado con "una pantalla = una idea + una acción".
+3. **Si se quiere conservar algo visual, solo indicador de progreso** ("1 de 3", "2 de 3"...)
+   sin tabs ni navegación persistente.
+
+→ **`app/registro/page.tsx` (T1.5b) ya implementa la opción 3** (stepper con indicador "X de Y",
+sin bottom nav) — el camino que tomamos coincide con la recomendación de Codex. Contradicción #6
+queda cerrada: no se requiere cambiar nada en código, solo informar a Isabel que la bottom nav de
+sus mockups de `/registro` no se va a implementar tal cual (es scaffolding de Stitch).
+
+**2. Permiso de micrófono en Android — causa confirmada:**
+Codex investigó por qué el navegador no muestra el diálogo nativo de permiso de micrófono al
+entrar por la IP LAN (`http://10.22.210.160:3000`):
+- **Causa raíz: `http://<ip-lan>` NO es un "secure context".** Chrome restringe
+  `getUserMedia`/`SpeechRecognition` (features "powerful") a orígenes seguros: `https://`,
+  `localhost`, `127.0.0.1`, `file://` (fuentes: Chromium security docs, MDN Secure Contexts —
+  ver `/tmp/codex-investigacion.txt` para URLs).
+- En ese caso Chrome **no muestra el diálogo nativo** — dispara `onerror` con
+  `not-allowed`/`service-not-allowed` directamente, que es exactamente lo que la app traduce a
+  "Necesito permiso para usar tu micrófono" vía `mensajeErrorEscucha` (`lib/voice.ts`, ya
+  implementado correctamente — **el código no tiene ningún bug aquí**).
+- Hay reportes confirmados de este mismo patrón en Android/Chrome (Stack Overflow): sin HTTPS,
+  Chrome deniega de inmediato; con HTTPS se resuelve.
+
+Opciones para que Joaquín pueda probar el modo voz en su Android (de más a menos recomendable):
+1. **Port forwarding USB de Chrome DevTools** → abrir `http://localhost:3000` en el teléfono
+   (Chrome trata `localhost` como confiable, sin necesitar HTTPS real). Guía oficial:
+   `developer.chrome.com/docs/devtools/remote-debugging/local-server`.
+2. **Túnel HTTPS** (`ngrok`, `cloudflared tunnel`) → abrir la URL `https://...` en Android.
+3. **HTTPS local con certificado self-signed/`mkcert`** — funciona pero consume más tiempo
+   (hay que confiar el certificado en el Android).
+4. Flag `chrome://flags/#unsafely-treat-insecure-origin-as-secure` — Codex no lo recomienda como
+   primera opción porque en Android suele requerir modo desarrollador/root.
+
+**Conclusión:** el comportamiento del código ya es correcto (degrada con un mensaje claro en
+español); el "bug" no está en `lib/voice.ts`/`ChatbotButton.tsx` sino en cómo se accede al dev
+server desde el teléfono. Recomendación para Joaquín: probar con **port forwarding USB →
+`localhost:3000`** (opción 1) la próxima vez que quiera probar el modo voz en su Android real.
 
 ## ✅ ChatbotButton montado en layout.tsx (2026-06-06 22:05)
 
@@ -86,6 +176,63 @@ edición activa" ya no aplicaba — FASE 1 (T1) está completa.
   `components/ChatbotButton.tsx` para que quede libre de esa barra — afecta también a
   Recomendaciones/Registro/Seguimiento, que siguen el mismo patrón de CTA fijo. En Splash y
   Onboarding (sin barra fija) se ve igual de bien con el nuevo offset.
+
+## ✅ Ahorro de tokens (parte 2): mediciones reales + parámetros concretos (2026-06-07 03:42)
+
+Sesión de seguimiento a la entrada de abajo "Ahorro de tokens: reglas de subagents +
+Codex como agente secundario" (2026-06-06 22:16) — esta vez con datos medidos
+directamente sobre los `.jsonl` de sesiones reales (`jq` sobre
+`~/.claude/projects/-home-joaquinrog-hack4her-tuAliado/`), sin spawnear subagentes
+(habría sido irónico gastar tokens investigando el gasto de tokens). Plan completo en
+`~/.claude/plans/investiga-o-delegale-a-whimsical-crayon.md`.
+
+**Hallazgo #1 — confirmado y cuantificado: las capturas de chrome-devtools dominan el gasto.**
+En una sola sesión, 7 `take_screenshot` consumieron 652,213 caracteres = 93% de todo
+el volumen de tool-results de esa sesión (~93K chars/captura, hasta 123K). Causa raíz
+verificada en los `tool_use.input` reales: se usaba `format: "png"` (default, sin
+comprimir) y/o `fullPage: true` (página completa, no solo viewport), sin resize
+consistente a viewport móvil. **Cambio aplicado en `AGENTS.md`** ("Verificación de
+frontend"): ahora prescribe parámetros concretos — `format: "jpeg", quality: 60`,
+nunca `fullPage: true` salvo necesidad explícita, `resize_page` a 390x844 antes de
+capturar, y usar `filePath` (guarda en disco sin adjuntar al contexto) cuando la
+captura es solo "para que la vea Joaquín".
+
+**Hallazgo #2 — el hook de TypeScript es menos costoso de lo que parecía.**
+Se sospechaba que el `PostToolUse` de `.claude/settings.json` (corre `npx tsc --noEmit`
+en cada Edit/Write a `app/`/`components/`, 233 ediciones históricas) era una fuente
+relevante de gasto. Medido: el `tsconfig.json` ya tiene `incremental: true`, cada
+corrida tarda ~0.9s y agrega solo ~1KB de output — no es un problema real. No se tocó
+nada aquí: cambiar `npx tsc` por el binario directo solo ahorraría ~0.15s/corrida, y
+requiere autorización explícita para editar `.claude/settings.json` (el clasificador
+de auto-mode lo bloqueó por ser un archivo que controla el propio comportamiento del
+agente — Joaquín decidirá si vale la pena).
+
+**Hallazgo #3 — reforzado con caso real: `Explore` re-derivando estado ya documentado.**
+Un agente gastó 42k tokens "encontrando el estado de T1" cuando esa tabla ya está en
+este mismo archivo (sección "Qué está hecho y qué falta", arriba). **Cambio aplicado
+en `AGENTS.md`** ("Uso de subagents"): regla explícita de leer `handoff-context.md` /
+`mvp-current-direction.md` / `decisions.md` antes de delegar preguntas de "¿en qué
+estado está X?" a `Explore`.
+
+**Hallazgo lateral:** `AGENTS.md` mencionaba un skill `verify` que no existe en el
+repo (busqué en `.claude/commands/`, `.claude/skills/`, plugins). Se reescribió esa
+línea para apuntar solo a "subagent" como alternativa real.
+
+### Cómo empezar una conversación nueva para ahorrar tokens (checklist rápido)
+
+1. **Leer primero esta tabla de arriba ("Qué está hecho y qué falta") y
+   `mvp-current-direction.md` / `decisions.md` directo con `Read`** — no preguntar
+   "¿en qué estamos?" a un subagente `Explore`; esa pregunta casi siempre ya tiene
+   respuesta documentada.
+2. **Si el path de un archivo se conoce, `Read`/`grep` directo** — no `Explore`.
+3. **Para verificar UI:** preferir `evaluate_script` / `list_console_messages` /
+   `list_network_requests` (texto, baratos) sobre capturas. Si hace falta una
+   captura: `format: "jpeg", quality: 60`, sin `fullPage`, `resize_page` a 390x844
+   primero, y manejar la sesión de chrome-devtools desde un subagent (aísla el
+   payload pesado del hilo principal).
+4. **Delegar a Codex** lo genérico/externo de solo lectura (investigación de
+   librerías, segunda opinión sobre diffs) — su ventana de ~5h es un recurso aparte
+   de la de Claude, no compite por el mismo presupuesto.
 
 ## ✅ Ahorro de tokens: reglas de subagents + Codex como agente secundario (2026-06-06 22:16)
 
@@ -153,13 +300,13 @@ que ambos lados usan el mismo texto. No se requiere ningún cambio adicional en 
 ## ✅ Modo Voz integrado al chatbot — F13 (2026-06-06 23:01)
 
 Se conectó `lib/voice.ts` (ya completo desde antes) a la UI del chatbot. Diferenciador clave del
-MVP: Raúl no quiere leer, así que ahora puede hablar con tuAliado y escuchar la respuesta.
+MVP: Raúl no quiere leer, así que ahora puede hablar con TuAliado y escuchar la respuesta.
 
 **Archivos:**
 - **Nuevo** `components/ChatVoiceView.tsx` (77 líneas) — vista de presentación pura: anillos tipo
   ecualizador (con `animate-pulse` + `animationDelay` escalonado, mismo patrón que
   `ChatTypingBubble`, sin CSS custom nuevo), status pill por estado, caption en vivo
-  ("Tú dijiste" / "tuAliado dice"), botón pill de ancho completo y link "¿Prefieres escribir?".
+  ("Tú dijiste" / "TuAliado dice"), botón pill de ancho completo y link "¿Prefieres escribir?".
 - **Modificado** `components/ChatSheet.tsx` — toggle "Hablar en su lugar" / "Escribir en su lugar"
   en el header (solo visible si `soportaVoz` es `true`) + render condicional `ChatVoiceView` vs.
   lista de mensajes + `ChatInputBar`.
@@ -278,7 +425,7 @@ Los clientes de Tuali tienen datos útiles disponibles (pedidos, promociones, lo
 | ¿Qué no quieren ver? | Incoherencia en los datos. | Crítico: cualquier número debe tener origen claro. |
 | ¿Cómo debe comportarse? | Evaluar comportamiento del usuario dentro de la app. | El agente debe usar señales de la app. |
 
-## Dirección del MVP: tuAliado
+## Dirección del MVP: TuAliado
 
 Flujo base:
 ```
@@ -379,7 +526,7 @@ Todos los módulos de lógica están listos:
 | `app/api/chat/route.ts` | POST `/api/chat` → `{ reply }` usando Gemini Flash |
 | `lib/mock-data.ts` | +`ENTRADAS_DEMO` (4 entradas coherentes con historial de Raúl) |
 | `lib/onboarding-questions.ts` | Corregidas metas a valores confirmados (`vender_mas`, `aprovechar_promos`, `surtir_tienda`, `como_voy`) |
-| `app/layout.tsx` | `max-w-[430px]`, `lang="es"`, `bg-white`, title="tuAliado" |
+| `app/layout.tsx` | `max-w-[430px]`, `lang="es"`, `bg-white`, title="TuAliado" |
 | Rutas placeholder | `/onboarding`, `/diagnostico`, `/recomendaciones`, `/registro`, `/seguimiento` |
 
 **Build Next.js pasa limpio. TypeScript 0 errores.**
@@ -401,7 +548,7 @@ Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approa
 
 Se creó `design/stitch-prompts/07-chat-de-voz.md` — prompt para el **modo voz** dentro del chatbot
 (diferenciador clave F13, ver fila "Chat de voz" arriba). Diseñado a propósito para no verse como
-micrófono/walkie-talkie/Alexa: usa la marca de tuAliado animada, anillos suaves tipo ecualizador,
+micrófono/walkie-talkie/Alexa: usa la marca de TuAliado animada, anillos suaves tipo ecualizador,
 caption en vivo del transcript y un botón pill de ancho completo. Falta correrlo en Google Stitch
 y exportar el resultado a `design/assets/`.
 
@@ -473,7 +620,7 @@ nada de `app/`, así que no tuvo solapamiento con T1.
 |---|---|
 | `soportaVoz()` | Feature detection de `SpeechRecognition`/`webkitSpeechRecognition` + `speechSynthesis` — para el fallback a modo texto si el navegador no soporta voz |
 | `iniciarEscucha(opciones)` / `detenerEscucha()` | STT: transcripción en vivo (resultados parciales y finales vía `onResultado`), una sola instancia activa a la vez |
-| `hablar(texto, opciones)` / `detenerHabla()` | TTS vía `speechSynthesis`, con callbacks `onInicio`/`onFin` para mapear a los estados "Pensando…" / "tuAliado te responde" del diseño |
+| `hablar(texto, opciones)` / `detenerHabla()` | TTS vía `speechSynthesis`, con callbacks `onInicio`/`onFin` para mapear a los estados "Pensando…" / "TuAliado te responde" del diseño |
 
 Incluye también las interfaces ambientales mínimas para `SpeechRecognition` (no están en
 `lib.dom.d.ts` de TypeScript, sólo `SpeechSynthesisUtterance` sí lo está).
@@ -545,9 +692,11 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
    - `surtir_tienda` + `!usaPedidoSugerido` → se queda igual, "Activa el pedido sugerido"
      (`rec-pedido-sugerido`) — este sí encaja con el concepto de resurtido de esa meta.
 
-5. **Naming de marca — mayúscula/minúscula:**
-   El logo (`brand identity/wordmark.svg`) usa **"TuAliado"** (A mayúscula); `decisions.md` y `CLAUDE.md` confirman el nombre como **"tuAliado"** (t minúscula).
-   → Puede ser intencional por legibilidad tipográfica del logo, pero el texto de la app debe usar "tuAliado". Confirmar con la diseñadora.
+5. **✅ RESUELTO (2026-06-07) — Naming de marca — mayúscula/minúscula:**
+   El logo (`brand identity/wordmark.svg`) usaba "TuAliado" (A mayúscula) mientras `decisions.md`
+   y `CLAUDE.md` confirmaban "tuAliado" (t minúscula). El Tech Lead decidió cambiar la decisión
+   confirmada a **"TuAliado"** para igualar el logo — se actualizó el copy en código y en toda
+   la documentación (ver `docs/decisions.md`, sección "Nombre de trabajo del producto").
 
 6. **Bottom nav bar en inglés con secciones que no existen en nuestro flujo:**
    Las pantallas `/registro` paso 2 y 3 incluyen una barra de navegación inferior fija con 4 tabs:
@@ -598,4 +747,69 @@ introducir asimetría con el resto del proyecto.
 - **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) — afecta el "Calculador de ganancia"
   de esta misma pantalla (modal F6, T1.5). Confirmar con la diseñadora cuál es la fuente correcta
   antes de construir esa sección.
-- Puntos #5 (naming TuAliado/tuAliado) y #6 (bottom nav en inglés, afecta `/registro`).
+- Punto #6 (bottom nav en inglés, afecta `/registro`). El punto #5 (naming TuAliado/tuAliado) ya
+  quedó resuelto — ver entrada "Capitalización de marca" en esta misma sección.
+
+## ✅ T1.5b — `/registro` (check-in diario): completa y verificada (2026-06-07 03:20)
+
+**Implementación delegada a Codex** (agente secundario, solo lectura, vía `codex exec` con un
+prompt que incluía el spec funcional completo, los contratos de tipos, las firmas de
+`lib/state.ts` y el código de referencia de `app/onboarding` y `app/diagnostico`). Codex produjo
+un borrador de texto (no tocó el repo); Claude lo revisó, corrigió un bug y lo aplicó:
+
+| Archivo | Estado | Detalle |
+|---|---|---|
+| `app/registro/OpcionPaso.tsx` | ✅ Nuevo (~26 líneas) | Botón de opción reutilizable del stepper (icono + label + estado seleccionado), aplicado del borrador de Codex sin cambios. |
+| `app/registro/PasoRegistro.tsx` | ✅ Nuevo (~13 líneas) | Wrapper de título + contenedor de opciones — separado del borrador de Codex (que lo traía inline en `page.tsx`) para seguir la convención del proyecto de sub-componentes en archivos propios (como `TicketCard`/`CanalGrid` en `/diagnostico`). |
+| `app/registro/page.tsx` | ✅ Reescrito | Stepper de 4 estados (`"dia" \| "pedido" \| "meta" \| "cierre"`), 2-3 preguntas según meta (P3 condicional se omite para `como_voy`), guarda con `guardarEntradaDiaria` + `actualizarRacha`, muestra "¡Llevas X días seguidos!" y redirige a `/seguimiento` tras 1.2s. |
+
+**Bug encontrado y corregido antes de aplicar (revisión de código, nunca llegó a producirse en runtime):**
+El borrador de Codex tenía un **stale closure** — `terminarRegistro` leía `respuestas.pedido` /
+`respuestas.respuestaMeta` del closure de `RegistroContent`, pero se invocaba inmediatamente
+después de `setRespuestas(...)` (actualización de estado asíncrona). En el flujo de 2 pasos
+(`meta === "como_voy"`), `seleccionarPedido` llamaba `terminarRegistro(null)` justo después de
+`setRespuestas`, y `respuestas.pedido` en el closure seguía siendo `null` → el guard
+`if (!respuestasFinales.pedido...)` retornaba temprano y **el registro no se guardaba, en
+silencio**. Corregido cambiando la firma a `terminarRegistro(respuestasFinales: RespuestasRegistro)`
+y construyendo el objeto actualizado (`{ ...respuestas, <campo> }`) en cada call site antes de
+pasarlo explícitamente.
+
+**Verificación:** `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio.
+
+**Prueba en navegador (Chrome DevTools MCP, 390x844)** — verdict **PASS**:
+- `/registro?meta=vender_mas` (3 pasos): indicador "1 de 3" → "2 de 3" → "3 de 3" cambia
+  correctamente; pregunta condicional de meta correcta ("¿Te pidieron algo que no tenías?");
+  opciones se resaltan al seleccionarse; sin overflow horizontal.
+- `/registro?meta=como_voy` (2 pasos, **el path exacto del bug corregido**): indicador "1 de 2"
+  → "2 de 2", sin pregunta de meta; al completar guardó correctamente en `tualiado_entradas` y
+  `tualiado_racha`, y redirigió a `/seguimiento`. El fix funcionó — sin él esta ruta habría
+  fallado en silencio.
+- Pantalla de cierre confirmada: `"¡Llevas 1 días seguidos!"` + "Listo por hoy", con ícono de
+  racha (`local_fire_department`).
+- 🔍 Probe: completar el registro dos veces el mismo día **sobrescribe** la entrada (no duplica)
+  y la racha no se infla (`rachaActual` se mantiene en 1) — comportamiento idempotente correcto.
+- Sin overflow horizontal (`scrollWidth === clientWidth`) en ninguna pantalla del flujo.
+
+**Hallazgo menor (no bloquea):**
+- ⚠️ Concordancia singular/plural en el copy de cierre: `"¡Llevas 1 días seguidos!"` debería
+  decir "1 día" cuando `rachaActual === 1`. Detalle de redacción visible solo el primer día de
+  uso o tras reiniciar racha — candidato para la tarea de polish de abajo.
+
+## 🔧 Polish de frontend — pendiente, hacer al final de FASE 1
+
+Una vez completas las pantallas core (T1.5, T1.6 y lo que siga), dedicar una pasada de
+**polish visual y de copy** a todo el flujo. No es una tarea de feature — es pulir lo que ya
+funciona para que se sienta terminado y coherente. Candidatos ya identificados:
+
+- Concordancia singular/plural en textos dinámicos (ej. "1 días seguidos" → "1 día seguido" en
+  `/registro`, y revisar si `/seguimiento` u otras pantallas tienen el mismo patrón con conteos).
+- Confirmar que toda la app usa "TuAliado" consistentemente (contradicción #5, naming).
+- Revisar transiciones/animaciones entre pasos del stepper y hacia la pantalla de cierre — hoy
+  son instantáneas, podría sentirse más "premiado" con una transición suave.
+- Pasada de consistencia visual entre pantallas implementadas en momentos distintos
+  (`/diagnostico`, `/recomendaciones`, `/registro`, `/onboarding`) — colores, spacing, iconos.
+- Revisar copy corto/simple en todas las pantallas con la pregunta "¿lo entiende Raúl?"
+  (regla de CLAUDE.md) — buscar frases que se puedan acortar o reemplazar por visuales.
+
+No empezar esta tarea hasta que el flujo funcional esté completo — evitar pulir algo que
+todavía puede cambiar de forma.
