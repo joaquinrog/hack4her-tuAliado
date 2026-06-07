@@ -16,6 +16,7 @@ interface ChatSheetProps {
   onToggleModoVoz: () => void
   estadoVoz: EstadoVoz
   transcript: string
+  errorVoz: string | null
   hablanteVoz: "usuario" | "asistente"
   onTocarBotonVoz: () => void
 }
@@ -69,6 +70,7 @@ export function ChatSheet(props: ChatSheetProps) {
         <ChatVoiceView
           estado={props.estadoVoz}
           transcript={props.transcript}
+          error={props.errorVoz}
           hablante={props.hablanteVoz}
           onTocarBoton={props.onTocarBotonVoz}
           onCambiarAModoTexto={onToggleModoVoz}

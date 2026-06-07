@@ -6,7 +6,7 @@ import { calcularTicketPromedio } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { getMeta } from "@/lib/state"
 import { enviarMensaje, MENSAJE_INICIAL } from "@/lib/chat"
-import { detenerEscucha, detenerHabla, hablar, iniciarEscucha, soportaVoz } from "@/lib/voice"
+import { detenerEscucha, detenerHabla, hablar, iniciarEscucha, mensajeErrorEscucha, soportaVoz } from "@/lib/voice"
 import type { EstadoVoz, Mensaje } from "@/lib/types"
 import { ChatSheet } from "./ChatSheet"
 
@@ -34,6 +34,7 @@ function ChatbotButtonContent() {
   const [modoVoz, setModoVoz] = useState(false)
   const [estadoVoz, setEstadoVoz] = useState<EstadoVoz>("idle")
   const [transcript, setTranscript] = useState("")
+  const [errorVoz, setErrorVoz] = useState<string | null>(null)
   const [hablanteVoz, setHablanteVoz] = useState<"usuario" | "asistente">("usuario")
 
   // Chrome/Android puede cortar el reconocimiento solo por silencio (onFin) sin que
@@ -59,6 +60,7 @@ function ChatbotButtonContent() {
       detenerHabla()
       setModoVoz(false)
       setEstadoVoz("idle")
+      setErrorVoz(null)
     }
     return () => {
       generacionVozRef.current += 1
@@ -127,6 +129,7 @@ function ChatbotButtonContent() {
       generacionVozRef.current += 1
       setHablanteVoz("usuario")
       setTranscript("")
+      setErrorVoz(null)
       setEstadoVoz("escuchando")
       iniciarEscucha({
         onResultado: ({ transcripcion, esFinal }) => {
@@ -134,10 +137,11 @@ function ChatbotButtonContent() {
           setTranscript(transcripcion)
           if (esFinal) procesarTranscriptVoz(transcripcion)
         },
-        onError: () => {
+        onError: (codigo) => {
           sesionVozProcesadaRef.current = true
           escuchaActivaRef.current = false
           setEstadoVoz("idle")
+          setErrorVoz(mensajeErrorEscucha(codigo))
         },
         // El reconocimiento puede terminar solo por silencio (Android/Chrome) sin
         // disparar un resultado final — usamos lo último capturado en ese caso.
@@ -154,6 +158,7 @@ function ChatbotButtonContent() {
     detenerHabla()
     setEstadoVoz("idle")
     setTranscript("")
+    setErrorVoz(null)
     setModoVoz((prev) => !prev)
   }
 
@@ -186,6 +191,7 @@ function ChatbotButtonContent() {
           onToggleModoVoz={alternarModoVoz}
           estadoVoz={estadoVoz}
           transcript={transcript}
+          errorVoz={errorVoz}
           hablanteVoz={hablanteVoz}
           onTocarBotonVoz={manejarToqueBotonVoz}
         />

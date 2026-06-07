@@ -4,6 +4,7 @@ interface ChatVoiceViewProps {
   estado: EstadoVoz
   transcript: string
   hablante: "usuario" | "asistente"
+  error: string | null
   onTocarBoton: () => void
   onCambiarAModoTexto: () => void
 }
@@ -15,10 +16,16 @@ const COPY_POR_ESTADO: Record<EstadoVoz, { pill: string; pillClase: string; boto
   respondiendo: { pill: "tuAliado te responde", pillClase: "bg-tertiary-container/15 text-on-tertiary-container", boton: "tuAliado está hablando" },
 }
 
-export function ChatVoiceView({ estado, transcript, hablante, onTocarBoton, onCambiarAModoTexto }: ChatVoiceViewProps) {
+export function ChatVoiceView({ estado, transcript, hablante, error, onTocarBoton, onCambiarAModoTexto }: ChatVoiceViewProps) {
   const copy = COPY_POR_ESTADO[estado]
   const anillosActivos = estado === "respondiendo"
   const botonDeshabilitado = estado === "pensando" || estado === "respondiendo"
+
+  // El error solo es relevante en idle: si el usuario ya volvió a tocar el botón,
+  // errorVoz se limpia y el estado avanza a "escuchando" antes de que esto se lea.
+  const mostrarError = estado === "idle" && Boolean(error)
+  const pillTexto = mostrarError ? error : copy.pill
+  const pillClase = mostrarError ? "bg-error-container/40 text-on-error-container" : copy.pillClase
 
   return (
     <div className="flex flex-1 flex-col items-center justify-between px-margin-mobile py-stack-md">
@@ -44,7 +51,7 @@ export function ChatVoiceView({ estado, transcript, hablante, onTocarBoton, onCa
           </div>
         </div>
 
-        <span className={`rounded-full px-4 py-2 font-sans text-label-md ${copy.pillClase}`}>{copy.pill}</span>
+        <span className={`rounded-full px-4 py-2 font-sans text-label-md ${pillClase}`}>{pillTexto}</span>
 
         <div className="flex min-h-[84px] w-full flex-col items-center gap-1 text-center">
           {transcript && (

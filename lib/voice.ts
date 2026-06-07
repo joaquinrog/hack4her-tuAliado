@@ -119,6 +119,24 @@ export function detenerEscucha(): void {
   reconocimientoActivo = null
 }
 
+// Traduce los códigos de error de SpeechRecognition (ver MDN SpeechRecognitionErrorEvent.error)
+// a mensajes en lenguaje simple para Raúl — nunca mostrar el código técnico crudo.
+export function mensajeErrorEscucha(codigo: string): string {
+  switch (codigo) {
+    case "no-speech":
+      return "No te escuché. Intenta de nuevo."
+    case "not-allowed":
+    case "service-not-allowed":
+      return "Necesito permiso para usar tu micrófono."
+    case "audio-capture":
+      return "No encontré un micrófono disponible."
+    case "network":
+      return "El servicio de voz no respondió. Intenta de nuevo o escribe."
+    default:
+      return "No pude escucharte. Intenta de nuevo o escribe."
+  }
+}
+
 // ── Síntesis de voz (TTS) ─────────────────────────────────────────────────────
 
 export function hablar(texto: string, opciones: OpcionesHabla = {}): void {

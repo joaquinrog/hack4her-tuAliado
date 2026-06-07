@@ -174,6 +174,45 @@ MVP: Raúl no quiere leer, así que ahora puede hablar con tuAliado y escuchar l
   tiene micrófono real ni acceso a la API de Gemini, así que no se pudo probar el flujo completo
   "pensando → respondiendo" con audio real — solo los estados que dependen de interacción/UI.
 
+## ✅ Diagnóstico: chat sin respuesta + voz que se corta sola — ambos externos al código (2026-06-06 23:30)
+
+Joaquín reportó en máquina real (localhost): "mando hola y no me contesta" + "toco 'Toca para
+hablar' y luego luego se baja, y mantenerlo tampoco jala". Se reprodujo y diagnosticó ambos con
+Chrome DevTools MCP — **ninguno es un bug del código de la app**:
+
+**1. Chat de texto sin respuesta real:**
+- Causa: la API key de Gemini agotó su cuota gratuita. `curl` directo a Gemini devuelve
+  `429 RESOURCE_EXHAUSTED — limit: 0, model: gemini-2.0-flash`.
+- `app/api/chat/route.ts` ya maneja esto correctamente: cae al fallback
+  `"No pude generar una respuesta. Intenta de nuevo."` (por eso sí aparece un mensaje, solo que
+  no es una respuesta de Gemini).
+- Acción pendiente (fuera del código): activar facturación o esperar reinicio de cuota / nueva
+  API key en `.env.local` (`GEMINI_API_KEY`).
+
+**2. Modo voz se corta solo al tocar "Toca para hablar":**
+- El botón es de un solo toque (toggle), no de mantener presionado — eso ya funciona como está
+  diseñado (`onClick`, no `onMouseDown`/`onTouchStart`).
+- Causa real: instrumentando `SpeechRecognition` directo en el navegador (mic `granted`,
+  `isSecureContext: true`, conectividad general a internet OK), la secuencia observada es
+  `start → audiostart → error: "network" → end` — el backend de reconocimiento de voz de Chrome
+  responde con error de red casi al instante. Es un problema conocido de ese servicio en ciertos
+  entornos (Linux/redes), no algo que el código pueda arreglar.
+- El código ya manejaba el error sin tronar (vuelve a `idle`), pero lo hacía en silencio — un
+  error de runtime se veía idéntico a "no pasó nada", lo cual confundía.
+
+**Fix aplicado (acotado a la capa de voz):**
+- Nuevo helper `mensajeErrorEscucha(codigo)` en `lib/voice.ts` — traduce los códigos de
+  `SpeechRecognitionErrorEvent.error` (`no-speech`, `not-allowed`, `service-not-allowed`,
+  `audio-capture`, `network`, default) a mensajes simples en español, nunca el código técnico crudo.
+- `ChatbotButton.tsx` — nuevo estado `errorVoz: string | null`; se limpia al iniciar una nueva
+  escucha, al alternar modo texto/voz y al cerrar el chat (mismo patrón que `transcript`/`estadoVoz`).
+- `ChatVoiceView.tsx` — nuevo prop `error`; en estado `idle` con error presente, la pill cambia a
+  estilo `error-container` (paleta ya existente en `globals.css`) y muestra el mensaje en vez de
+  "Toca para hablar".
+- Verificado en navegador (Chrome DevTools MCP): al fallar el reconocimiento ahora se ve
+  "El servicio de voz no respondió. Intenta de nuevo o escribe." en vez de un silencio confuso.
+- `npx tsc --noEmit` y `npm run build` → 0 errores.
+
 ## Contexto del equipo
 
 El Tech Lead es el único programador. El proyecto depende de continuidad de contexto entre sesiones de AI, por eso existe esta documentación.
