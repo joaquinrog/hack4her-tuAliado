@@ -47,18 +47,42 @@ Antes de implementar las pantallas de FASE 1 hay que resolver estas correcciones
      - `lib/recommendation-engine.ts` → `calcularRecomendaciones` debe asignar ese nivel
    - El diseño (`assets/recomendaciones/tualiado_recomendaciones_v2/code.html`) ya muestra los 3 badges 🟢/🟡/🟠 — una vez agregado el campo, no requiere cambio en el HTML.
 
-3. **Textos de "oportunidades" del diagnóstico no coinciden con el motor**
-   - Archivo a corregir (elegir una opción):
-     - Opción A — alinear el diseño al motor: `assets/diagnostico/code.html`, cambiar
-       *"Pides por promotor, no por app"* → **"No usas el pedido sugerido todavía"**
-     - Opción B — alinear el motor al diseño: `lib/recommendation-engine.ts` → `calcularDiagnostico`, cambiar el texto de la 2ª oportunidad a **"Pides por promotor, no por app"** (requiere lógica nueva basada en `porcentajePedidosTuali`)
-   - Pendiente decidir cuál opción con el Tech Lead — ver `docs/decisions.md`.
+3. **⚠️ ABIERTO DE NUEVO (2026-06-06 22:32) — Textos de "oportunidades" del diagnóstico, vueltos a desalinear en sentido contrario**
 
-4. **Recomendación B para "Vender más" no coincide**
-   - Mismo origen que el punto 3 (autonomía de canal vs. pedido sugerido). Archivos:
-     - `assets/recomendaciones/tualiado_recomendaciones_v2/code.html` (texto "Pide por la app esta semana")
-     - `lib/recommendation-engine.ts` (genera "Activa el pedido sugerido")
-   - Resolver junto con el punto 3 — son la misma decisión de producto.
+   El Tech Lead ya había resuelto esto el 2026-06-06 21:40 implementando lo que en
+   `docs/handoff-context.md` se etiquetó como **"opción A confirmada"**: cambiar el motor
+   (`calcularRecomendaciones` → `calcularDiagnostico`) para que genere
+   **"Pides por promotor, no por app"** usando `porcentajePedidosTuali` — alineándolo con el
+   texto que el diseño mostraba *en ese momento* y con la métrica de autonomía de canal.
+
+   ⚠️ **Ojo:** lo implementado corresponde, según la definición *literal* de este mismo README,
+   a la **"Opción B"** (alinear el motor al diseño) — no a la "Opción A" como quedó etiquetado en
+   el handoff. Esa confusión de nombres probablemente llevó al fix de diseño de Isabel
+   (commit `69dfd82`, "fix: design/assets/diagnostico error de prompt") a aplicar justo lo que
+   este README describía como "Opción A": cambió `assets/diagnostico/code.html` de
+   *"Pides por promotor, no por app"* → **"No usas el pedido sugerido todavía"**.
+
+   Resultado: **diseño y motor vuelven a estar desalineados, ahora en sentido inverso**:
+   - Motor genera (`lib/recommendation-engine.ts:50`): "Pides por promotor, no por app"
+   - Diseño muestra (post-fix de Isabel): "No usas el pedido sugerido todavía"
+
+   - **Pendiente real:** confirmar con el Tech Lead/Isabel cuál de los dos textos se queda —
+     y corregir solo ese lado. Importante: el motor ya tiene una "Recomendación B" para
+     "Vender más" (`rec-pide-por-app`, "Pide por la app esta semana") construida sobre el mismo
+     criterio de `porcentajePedidosTuali` / autonomía de canal (ver punto 4) — revertir el motor
+     a "No usas el pedido sugerido todavía" dejaría esa recomendación sin el diagnóstico que la
+     respalda. Lo más coherente sería que el fix de diseño se revierta a "Pides por promotor,
+     no por app", pero **es una decisión de producto, no técnica — no resolver por cuenta propia**.
+   - Detalle completo y diffs exactos en `docs/handoff-context.md`
+     (sección "⚠️ Pull de fix de diseño — reabre la contradicción #3 en sentido contrario").
+
+4. **✅ Resuelto en T1.4 (2026-06-06 23:10) — Recomendación B para "Vender más"**
+   - Se implementó "Pide por la app esta semana" (`rec-pide-por-app`, tipo `pedido_sugerido`)
+     para `meta === "vender_mas"` cuando `porcentajePedidosTuali < 50` — alineado con autonomía
+     de canal y con el copy del diseño `tualiado_recomendaciones_v2/code.html`.
+   - **Nota:** esta recomendación depende del mismo criterio (`porcentajePedidosTuali`) que el
+     punto 3 de arriba — si se decide revertir el motor del diagnóstico, esta recomendación
+     seguiría siendo válida y coherente (no hay que tocarla).
 
 5. **Capitalización de marca — "TuAliado" vs "tuAliado"**
    - Archivo a corregir: `assets/brand identity/wordmark.svg`

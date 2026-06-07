@@ -26,7 +26,8 @@
 | `lib/gemini.ts` — capa de explicación | ✅ Hecho |
 | `lib/state.ts` — URL params + localStorage | ✅ Hecho |
 | Splash, Onboarding, Diagnóstico (T1.1–T1.3) | ✅ Hecho |
-| Pantallas core restantes (recomendaciones, registro, seguimiento) | 🔄 Placeholders listos |
+| Recomendaciones (T1.4) | ✅ Hecho — 3 tarjetas + texto Gemini vía `/api/explicar` |
+| Pantallas core restantes (registro, seguimiento) | 🔄 Placeholders listos |
 | Chatbot flotante (modo texto) + `/api/chat` | ✅ Montado en `layout.tsx`, probado en navegador (FAB + bottom sheet + `/api/chat`) |
 | **Chat de voz** (diferenciador clave — F13) | 🔄 `lib/voice.ts` listo. Modo voz se integrará dentro del bottom sheet de `ChatbotButton` |
 
@@ -421,20 +422,42 @@ layout.tsx" más arriba — montado, probado en navegador y con un ajuste de pos
      (Diagnóstico → Meta → Recomendación → Acción → Seguimiento) ni con las rutas ya creadas.
    → Probablemente sea scaffolding genérico de Stitch sin personalizar. Confirmar con la diseñadora antes de implementar — no copiar tal cual.
 
-## T1.4 — Recomendaciones: en progreso (2026-06-06 23:10)
+## ✅ T1.4 — Recomendaciones: completa (2026-06-07 04:40)
 
-**T1.4a y T1.4b completas.** Resueltas las contradicciones #2 y #4 (ver sección de
+**T1.4a–d completas.** Resueltas las contradicciones #2 y #4 (ver sección de
 contradicciones arriba) como parte de este trabajo — eran bloqueantes para esta pantalla.
 
 | Sub-tarea | Estado | Detalle |
 |---|---|---|
 | T1.4a — estructura base | ✅ Hecho | `app/recomendaciones/page.tsx`: mismo patrón que `/diagnostico` (Suspense, guard sin `?meta=`, header). Lee meta con `getMeta`, llama `calcularRecomendaciones(meta, MOCK_STATE)`, chip "Meta: {label}" desde `PREGUNTA_META.opciones` (sin duplicar labels/emojis del onboarding). |
-| T1.4b — `RecomendacionCard` | ✅ Hecho | `components/RecomendacionCard.tsx` (nuevo, ~75 líneas). Tabla `ESTILO_POR_RIESGO` mapea `nivelRiesgo` → emoji/etiqueta del badge, color de barra de acento, estilo del recuadro de beneficio y estilo del CTA (🟢 bajo = botón primario relleno, 🟡 medio = outline, 🟠 alto = link) — calca los 3 ejemplos de `tualiado_recomendaciones_v2/code.html`. CTA usa `recomendacion.accion` (texto que ya define el motor, sin inventar copy). Recibe `descripcion: string | null` para el texto Gemini (aún no conectado). |
-| T1.4c — render 3 tarjetas + CTA primario | 🔄 Prácticamente cubierto | El `.map` en `page.tsx` ya renderiza hasta 3 `RecomendacionCard`; el CTA "dominante" sale solo del estilo por `nivelRiesgo` (no hace falta lógica extra de "primera tarjeta"). Falta solo verificación visual. |
-| T1.4d — texto Gemini en cada tarjeta | ⏳ Pendiente | Conectar `explicarRecomendacion(rec, perfil)` de `lib/gemini.ts` y pasar el resultado como prop `descripcion` a cada `RecomendacionCard` (hoy se pasa `null`). |
+| T1.4b — `RecomendacionCard` | ✅ Hecho | `components/RecomendacionCard.tsx` (nuevo, ~75 líneas). Tabla `ESTILO_POR_RIESGO` mapea `nivelRiesgo` → emoji/etiqueta del badge, color de barra de acento, estilo del recuadro de beneficio y estilo del CTA (🟢 bajo = botón primario relleno, 🟡 medio = outline, 🟠 alto = link) — calca los 3 ejemplos de `tualiado_recomendaciones_v2/code.html`. CTA usa `recomendacion.accion` (texto que ya define el motor, sin inventar copy). Recibe `descripcion: string | null` para el texto Gemini. |
+| T1.4c — render 3 tarjetas + CTA primario | ✅ Hecho | El `.map` en `page.tsx` renderiza hasta 3 `RecomendacionCard`; el CTA "dominante" sale solo del estilo por `nivelRiesgo`. Verificado visualmente a 390x844 (ver abajo): sin overflow, jerarquía de colores correcta (verde/amarillo/naranja). |
+| T1.4d — texto Gemini en cada tarjeta | ✅ Hecho | Conectado `explicarRecomendacion(rec, perfil)` de `lib/gemini.ts` (existía sin usar). Como esa función necesita `GEMINI_API_KEY` server-side y la página es `"use client"`, se agregó: `app/api/explicar/route.ts` (POST, llama a `explicarRecomendacion` server-side, devuelve `{ descripcion: string \| null }`, mismo shape que `app/api/chat/route.ts`) + `lib/explicaciones.ts` (`obtenerExplicacion`, helper `fetch` cliente, mismo patrón que `enviarMensaje` en `lib/chat.ts`). En `app/recomendaciones/page.tsx`: estado `descripciones: Record<string, string \| null>` llenado vía `useEffect` (dependencia `[meta]`, con flag `cancelado` para evitar `setState` post-unmount) que dispara `obtenerExplicacion` por cada recomendación en paralelo y pasa `descripciones[rec.id] ?? null` como prop (ya no `null` fijo). |
 
-**Verificación hasta ahora:** `npx tsc --noEmit` → 0 errores en cada paso. Falta probar visualmente
-en navegador (Chrome DevTools MCP, viewport móvil) antes de dar T1.4 por cerrado.
+**Verificación:** `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio (nueva ruta
+`ƒ /api/explicar` aparece en el build junto a `/api/chat`).
+
+**Segunda opinión de Codex (agente secundario, solo lectura, `codex exec`)** sobre el diff de
+los 3 archivos nuevos/modificados — halló que `lib/explicaciones.ts` no capturaba rechazos de
+`fetch` (errores de red), a diferencia de `res.ok === false` que sí manejaba. Se corrigió
+envolviendo el `fetch` en `try/catch` → devuelve `null` en cualquier fallo, igual que el resto
+de casos (la UI ya degrada con gracia: `{descripcion && <p>...}` en `RecomendacionCard.tsx`).
+El resto de hallazgos de Codex (la ruta API podría 500 si Gemini lanza excepción, posibles
+duplicados en React Strict Mode al montar) son consistentes con el patrón ya existente en
+`app/api/chat/route.ts` / `lib/chat.ts` y se degradan sin romper la UI — no se tocaron para no
+introducir asimetría con el resto del proyecto.
+
+**Prueba visual en navegador (Chrome DevTools MCP, 390x844) en `/recomendaciones?meta=vender_mas`:**
+- Las 3 tarjetas se renderizan con los 3 niveles de riesgo (🟢 promo / 🟡 pedido por app / 🟠
+  reto de loyalty), colores y CTAs correctos, sin overflow horizontal.
+- `list_network_requests` confirma 3 `POST /api/explicar` (uno por recomendación) con `200` y
+  el payload correcto (`recomendacion.titulo`, `perfil.nombre: "Raúl"`).
+- La respuesta fue `{"descripcion": null}` en los 3 casos — **mismo límite de sandbox ya
+  documentado para `/api/chat`** (la API de Gemini no responde en este entorno, probablemente
+  acceso de red restringido; `GEMINI_API_KEY` sí está configurada). Las tarjetas se ven
+  perfectamente bien sin el párrafo de descripción — `{descripcion && <p>...}` degrada con
+  gracia, sin huecos ni layout roto. Falta probar con la API respondiendo de verdad (fuera de
+  este sandbox) para confirmar que el texto generado es corto y coherente.
 
 **Sigue pendiente, no bloquea T1.4:**
 - **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) — afecta el "Calculador de ganancia"

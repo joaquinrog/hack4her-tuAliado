@@ -1,12 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { calcularRecomendaciones } from "@/lib/recommendation-engine"
 import { MOCK_STATE } from "@/lib/mock-data"
 import { PREGUNTA_META } from "@/lib/onboarding-questions"
 import { getMeta } from "@/lib/state"
+import { obtenerExplicacion } from "@/lib/explicaciones"
 import { RecomendacionCard } from "@/components/RecomendacionCard"
 
 export default function Recomendaciones() {
@@ -21,6 +22,24 @@ function RecomendacionesContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const meta = getMeta(searchParams)
+  const [descripciones, setDescripciones] = useState<Record<string, string | null>>({})
+  const recomendaciones = meta ? calcularRecomendaciones(meta, MOCK_STATE).recomendaciones : []
+
+  useEffect(() => {
+    if (!meta) return
+    let cancelado = false
+
+    recomendaciones.forEach((rec) => {
+      obtenerExplicacion(rec, MOCK_STATE.perfil).then((descripcion) => {
+        if (!cancelado) setDescripciones((prev) => ({ ...prev, [rec.id]: descripcion }))
+      })
+    })
+
+    return () => {
+      cancelado = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meta])
 
   if (!meta) {
     return (
@@ -39,7 +58,6 @@ function RecomendacionesContent() {
   }
 
   const opcionMeta = PREGUNTA_META.opciones.find((o) => o.valor === meta)
-  const { recomendaciones } = calcularRecomendaciones(meta, MOCK_STATE)
 
   return (
     <div className="relative flex flex-1 flex-col bg-background">
@@ -64,7 +82,11 @@ function RecomendacionesContent() {
         )}
 
         {recomendaciones.map((rec) => (
-          <RecomendacionCard key={rec.id} recomendacion={rec} descripcion={null} />
+          <RecomendacionCard
+            key={rec.id}
+            recomendacion={rec}
+            descripcion={descripciones[rec.id] ?? null}
+          />
         ))}
       </main>
     </div>
