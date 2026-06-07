@@ -154,13 +154,18 @@ Ejemplos posibles:
 ## README practico
 
 47. ¿El README debe estar en español solamente o bilingue?
+    Español
 
 48. ¿Hay video, GIF o capturas que quieran enlazar?
+    Podemos enlazar capturas, video de youtube de la demo y más. Tú agrega los placeholder y sí
 
 49. ¿Que nombres y roles definitivos del equipo van en README?
+    Sí, pero hasta abajo abajo, cómo firma
 
 50. ¿Se debe escribir como entrega de hackathon, como repo tecnico o hibrido?
+    Híbrido, busca en internet ejemplos de Devpost/MLH
 
 51. ¿Hay creditos de diseño, assets o logos que deban mencionarse?
+    Usamos stich para assets
 
 52. ¿Hay alguna frase o claim que NO debamos usar?

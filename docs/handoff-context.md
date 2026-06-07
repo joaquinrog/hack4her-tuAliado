@@ -5,6 +5,97 @@
 
 ---
 
+## ⚠️ Polish visual pendiente a evaluar para demo (Codex, solo lectura) (2026-06-07 06:20)
+
+Joaquín pidió a Codex revisar FASE 1 / FASE 2 hasta ahora buscando bugs, contradicciones,
+polish visual, UI/UX, frontend y branding. Codex hizo una revisión de solo lectura, levantó una
+copia temporal de la app en `/tmp/tualiado-review` y tomó capturas mobile 390x844 en
+`/tmp/tualiado-review-screens/`.
+
+Verificado:
+- El flujo core funciona de punta a punta sin errores de consola:
+  Splash → Onboarding → Diagnóstico → Recomendaciones → Registro → Seguimiento.
+- Branding consistente en app/código como **tuAliado**; no se encontró la capitalización vieja
+  "TuAliado" en `app/`, `components/`, `lib/` o `public/`.
+- No se encontró bottom nav en inglés ni contradicciones fuertes de datos en el flujo principal:
+  ticket `$440`, meta `$506`, canal `20% app / 80% promotor`, oportunidades y recomendaciones
+  siguen coherentes con el mock de Raúl.
+
+Polish pendiente — **evaluar si conviene hacerlo según tiempo/valor para el demo**:
+- Splash y Onboarding no ocupan todo el alto del viewport mobile por la cadena `min-h-full` /
+  `flex-1`; en 390x844 el contenido queda visualmente arriba y los CTAs no se sienten anclados al
+  fondo real. Posible fix: usar `min-h-dvh` / `h-dvh` en el shell mobile y pantallas base.
+- El FAB del chat en `bottom-[136px]` evita CTAs fijos, pero tapa contenido en Diagnóstico,
+  Recomendaciones y parcialmente Seguimiento. Posibles opciones: posición por ruta, ocultarlo en
+  pantallas críticas del demo, o bajarlo cuando no haya CTA fijo.
+- El footer absoluto de Onboarding (`absolute bottom-0` con gradiente) es frágil: puede quedar a
+  media pantalla por el problema de altura y puede capturar taps en zona visualmente transparente.
+- `/recomendaciones` se siente largo/textual para Raúl: 3 tarjetas + "Tu plan" generan scroll
+  considerable; si Gemini responde, agrega más texto. Para demo podría compactarse la jerarquía
+  visual o destacar una recomendación principal y secundarias más ligeras.
+- Riesgo técnico menor en voz: `SpeechRecognition.start()` en `lib/voice.ts` no está envuelto en
+  `try/catch`; si lanza excepción síncrona por permisos/contexto, podría dejar la UI en estado
+  `escuchando`.
+
+No se aplicaron cambios de código durante esta revisión. Estos puntos quedan como polish
+recomendado, no como bloqueantes de FASE 1.
+
+---
+
+## ✅ Estrategia adaptable en recomendaciones implementada (2026-06-07 06:28)
+
+Se afinó `/recomendaciones` para la demo final con foco en personalización, adaptabilidad y practicidad para Raúl:
+- Selector simple de estrategia: **Más fácil** / **Más ganancia**; default **Más fácil**.
+- `lib/recommendation-engine.ts`: `calcularRecomendaciones(meta, estado, estrategia = "facil")`; cada meta devuelve máximo 3 tarjetas y ya no produce sets idénticos.
+- `lib/types.ts`: agregado `EstrategiaRiesgo`; `Recomendacion` ahora incluye `retornoEstimado` y `fundamento`.
+- Retorno/ROI: promos calculan ahorro real desde `precioCosto * descuentoPct`; loyalty muestra puntos reales del reto; pedido por app/pedido sugerido/registro usan retorno cualitativo sin inventar margen ni precio de venta.
+- Metas cubiertas:
+  - `vender_mas`: promo Coca-Cola, pedir por app, loyalty.
+  - `aprovechar_promos`: Coca-Cola, Ciel, Victoria.
+  - `surtir_tienda`: producto frecuente, pedido sugerido/resurtido, promo compatible.
+  - `como_voy`: registrar día, pedir por app, loyalty.
+- Bloque visual agregado: **Empieza por aquí** con el copy simple “Si no sabes cuál elegir, empieza con la primera.”
+
+Polish incluido:
+- `components/RecomendacionCard.tsx`: `onAction` requerido para evitar CTAs muertos; muestra fundamento y retorno estimado.
+- `app/registro/page.tsx`: corregido plural `1 día seguido`.
+- `app/page.tsx`: `<Image>` del logo usa dimensiones intrínsecas reales `862x216` y `sizes="240px"`.
+
+Verificación:
+- `npx tsc --noEmit` sin errores.
+- `npm run build` sin errores.
+- QA mobile 390x844 con Playwright en `http://localhost:3000`: `/recomendaciones?meta=vender_mas`, selector Más fácil/Más ganancia, CTA → `/registro?meta=vender_mas`, registro completo → `/seguimiento?meta=vender_mas`.
+- Revisadas las 4 metas en `/recomendaciones`; cada una muestra 3 títulos distintos y `documentElement.scrollWidth <= window.innerWidth`.
+- Consola sin errores ni warnings nuevos; solo logs normales de dev (`HMR`/React DevTools).
+
+---
+
+## ✅ Handoff táctico para Claude preparado (2026-06-07 06:06)
+
+Nuevo archivo `docs/claude-next-dev.md`: backlog priorizado para que Claude Code pueda retomar rápido sin reabrir contexto. Incluye specs concretos, archivos a tocar, criterios de done y cosas a evitar.
+
+Prioridad recomendada para Claude:
+1. Hacer `/recomendaciones` menos genérico por meta, sin inventar datos.
+2. Polish rápido del flujo demo (`1 día` vs. `1 días`, warning de logo, CTA muerto si se reutiliza).
+3. Narrativa final del pitch.
+4. QA final mobile del demo path.
+
+`.ai/task-board.md` actualizado: se marcó como hecho el handoff táctico para Claude.
+
+---
+
+## ✅ Tracking interno actualizado tras commits de navegación (2026-06-07 05:19)
+
+Se actualizó `.ai/task-board.md` para reflejar las tareas ya avanzadas después de los commits recientes:
+- demo path principal definido con meta **Vender más**;
+- salida de `/recomendaciones` hacia `/registro` corregida;
+- end correcto del demo confirmado/documentado: Recomendaciones → Registro → Seguimiento;
+- explicación de `/diagnostico` común para las 4 metas documentada.
+
+Pendiente real agregado al tracking: evaluar si vale la pena hacer más distintas las recomendaciones por meta.
+
+---
+
 ## ✅ Navegación real de demo corregida (2026-06-07 04:49)
 
 Se navegó/revisó el flujo real de la app y se confirmó el corte principal: en `/recomendaciones`, los botones de las tarjetas eran visuales pero no navegaban a ningún lado.
