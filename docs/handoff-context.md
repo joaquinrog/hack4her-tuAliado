@@ -25,9 +25,25 @@
 | `lib/recommendation-engine.ts` — motor determinístico | ✅ Hecho |
 | `lib/gemini.ts` — capa de explicación | ✅ Hecho |
 | `lib/state.ts` — URL params + localStorage | ✅ Hecho |
-| Pantallas core (onboarding, diagnóstico, recomendaciones, seguimiento) | 🔄 Placeholders listos |
-| Chatbot flotante + `/api/chat` | 🔄 `/api/chat` listo — falta UI |
-| **Chat de voz** (diferenciador clave — F13) | ⬜ Pendiente |
+| Splash, Onboarding, Diagnóstico (T1.1–T1.3) | ✅ Hecho |
+| Pantallas core restantes (recomendaciones, registro, seguimiento) | 🔄 Placeholders listos |
+| Chatbot flotante (modo texto) + `/api/chat` | 🔄 `components/ChatbotButton.tsx` listo — falta montarlo en `layout.tsx` |
+| **Chat de voz** (diferenciador clave — F13) | 🔄 `lib/voice.ts` listo. Modo voz se integrará dentro del bottom sheet de `ChatbotButton` |
+
+## 🔜 Próxima tarea síncrona (requiere coordinar con el otro agente)
+
+**Montar `<ChatbotButton />` en `app/layout.tsx`.**
+
+Es un cambio de una línea (import + `<ChatbotButton />` dentro del `<body>`, junto al resto de
+children), pero `layout.tsx` está siendo editado activamente por el agente de T1 — por eso se
+dejó fuera del trabajo en paralelo (ver sección `components/ChatbotButton.tsx` más abajo).
+
+Hacerlo en síncrono, una vez que T1 converja, porque:
+- Es el único punto de integración real entre ambos focos de trabajo.
+- Es también el primer momento en que se puede probar el chatbot visualmente en navegador
+  (hasta ahora solo se verificó con `tsc --noEmit` y `npm run build`, nunca renderizado).
+- Conviene revisar juntos que el FAB no choque visualmente con elementos de T1 (headers,
+  bottom nav, CTAs) en las pantallas ya implementadas (Splash, Onboarding, Diagnóstico).
 
 ## Contexto del equipo
 
@@ -182,6 +198,121 @@ Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approa
 - Números del diagnóstico ($450 ticket, 20%/80% canal, 180 puntos loyalty) coinciden con `mock-data.ts`.
 - Viewport consistente en 375px, sin breakpoints `lg:`/`xl:`/`2xl:`. Tap targets de 56–160px (superan el mínimo de 44px).
 
+## Nuevo prompt de Stitch pendiente de generar (2026-06-06 20:18)
+
+Se creó `design/stitch-prompts/07-chat-de-voz.md` — prompt para el **modo voz** dentro del chatbot
+(diferenciador clave F13, ver fila "Chat de voz" arriba). Diseñado a propósito para no verse como
+micrófono/walkie-talkie/Alexa: usa la marca de tuAliado animada, anillos suaves tipo ecualizador,
+caption en vivo del transcript y un botón pill de ancho completo. Falta correrlo en Google Stitch
+y exportar el resultado a `design/assets/`.
+
+## FASE 1 — Splash, Onboarding y Diagnóstico implementados (2026-06-06 21:40)
+
+Se construyeron las 3 primeras "pantallas core" con el sistema visual "Warm & Approachable
+Advisor" de los assets Stitch:
+
+| Archivo | Qué hace |
+|---|---|
+| `app/globals.css` | Bloque `@theme inline` (Tailwind v4) con paleta de color, spacing y tipografía Outfit tomados de `design/assets/*/code.html` |
+| `app/layout.tsx` | Fuente cambiada de Geist a **Outfit**, `<link>` a Material Symbols Outlined, contenedor `max-w-[430px]` |
+| `app/page.tsx` | Splash (T1.1): logo, tagline "Tu asesor de crecimiento", CTA "Empezar" → `/onboarding` |
+| `app/onboarding/page.tsx` + `MetaOptionButton.tsx` | Onboarding (T1.2): grid 2x2 de metas con íconos Material Symbols, navega a `/diagnostico?meta=...` |
+| `app/diagnostico/page.tsx` + `TicketCard.tsx`, `CanalGrid.tsx`, `OportunidadesList.tsx` | Diagnóstico (T1.3a–e): ticket promedio, canal app/promotor, badge loyalty, lista de oportunidades, CTA → `/recomendaciones` |
+| `public/logo-full.svg`, `logo-mark.svg`, `wordmark.svg` | Copiados de `design/assets/brand identity/` |
+
+**Contradicción #3 resuelta — opción A confirmada por el Tech Lead:**
+Se cambió la detección de oportunidad en `calcularDiagnostico` (`lib/recommendation-engine.ts`)
+de "pedido sugerido" a **autonomía de canal**, usando el dato real `porcentajePedidosTuali`:
+
+```ts
+// Antes:
+if (!estado.comportamiento.usaPedidoSugerido)
+  oportunidades.push("No usas el pedido sugerido todavía")
+// Ahora:
+if (estado.comportamiento.porcentajePedidosTuali < 50)
+  oportunidades.push("Pides por promotor, no por app")
+```
+
+Esto alinea el motor con el copy del diseño Stitch y con la métrica secundaria confirmada
+(autonomía del cliente dentro de Tuali) — sin inventar datos: el 20%/80% ya existía en el mock.
+
+**Verificación:**
+- `npx tsc --noEmit` → 0 errores. `npm run build` → compila limpio, todas las rutas estáticas.
+- Contenido verificado vía `curl` contra el dev server para las 3 pantallas: textos, las 4
+  metas, y los números del diagnóstico — **ticket $440** (cálculo real de `calcularTicketPromedio`
+  sobre `historialPedidos`; el "~$450" de este doc era una aproximación, el valor exacto del mock
+  es 440), canal 20% app / 80% promotor, loyalty 180 puntos, y las 3 oportunidades correctas
+  incluyendo "Pides por promotor, no por app".
+- ✅ **Prueba visual en navegador a 375px — RESUELTA (2026-06-06 21:22):**
+  El bloqueo era que el Chrome DevTools MCP buscaba el binario en `/opt/google/chrome/chrome`
+  (no existe en este entorno) y crear el symlink a `/usr/bin/chromium-browser` requería sudo.
+  Se arregló sin sudo creando `.mcp.json` a nivel de proyecto que sobreescribe el servidor
+  `chrome-devtools` del plugin, pasándole `--executablePath /usr/bin/chromium-browser` y un
+  `--userDataDir` propio (para no chocar con el perfil del servidor del plugin). Requiere
+  reiniciar la sesión de Claude Code para que tome el `.mcp.json` del proyecto.
+
+  **Revisión visual a 375px (Splash, Onboarding, Diagnóstico) — sin problemas:**
+  - Splash, grid 2x2 de metas y diagnóstico se ven correctos, sin overflow horizontal.
+  - Flujo de navegación probado de extremo a extremo: seleccionar meta → "Continuar" se
+    habilita y resalta la card elegida → navega a `/diagnostico?meta=vender_mas` con los
+    datos correctos ($440, 20%/80%, 180 puntos, 3 oportunidades).
+  - El CTA fijo "Ver mis recomendaciones" en Diagnóstico tapa visualmente el final de la
+    lista de oportunidades cuando la pantalla está sin hacer scroll — es el comportamiento
+    esperado de un botón fijo sobre contenido scrolleable (`pb-[120px]` en `<main>` ya
+    reserva el espacio); al hacer scroll las 3 oportunidades quedan completamente visibles
+    y el botón no las tapa. No es un bug.
+
+## `lib/voice.ts` — capa de voz adelantada en paralelo (2026-06-06 21:03)
+
+Mientras se trabajaba T1 (Splash/Onboarding/Diagnóstico), se adelantó en paralelo la pieza de
+lógica del **chat de voz** (F13, diferenciador clave): un archivo nuevo y aislado, sin tocar
+nada de `app/`, así que no tuvo solapamiento con T1.
+
+`lib/voice.ts` envuelve Web Speech API (sin dependencias externas, mismo estilo que `lib/state.ts`):
+
+| Función | Qué hace |
+|---|---|
+| `soportaVoz()` | Feature detection de `SpeechRecognition`/`webkitSpeechRecognition` + `speechSynthesis` — para el fallback a modo texto si el navegador no soporta voz |
+| `iniciarEscucha(opciones)` / `detenerEscucha()` | STT: transcripción en vivo (resultados parciales y finales vía `onResultado`), una sola instancia activa a la vez |
+| `hablar(texto, opciones)` / `detenerHabla()` | TTS vía `speechSynthesis`, con callbacks `onInicio`/`onFin` para mapear a los estados "Pensando…" / "tuAliado te responde" del diseño |
+
+Incluye también las interfaces ambientales mínimas para `SpeechRecognition` (no están en
+`lib.dom.d.ts` de TypeScript, sólo `SpeechSynthesisUtterance` sí lo está).
+
+**Verificación:** `npx tsc --noEmit` → 0 errores en modo `strict`.
+
+**Actualización:** `components/ChatbotButton.tsx` ya existe (ver sección siguiente). El modo voz
+se conectará ahí — `iniciarEscucha`/`hablar` todavía no están cableados a la UI, queda como
+siguiente paso hacia F13.
+
+## `components/ChatbotButton.tsx` — chat de texto, FAB + bottom sheet (2026-06-06)
+
+Construido en paralelo a T1, siguiendo `design/stitch-prompts/05-chatbot.md` y
+`design/assets/chatbot/tualiado_chat_con_asistente/code.html`. Es además el contenedor donde
+después vivirá el **modo voz** (F13 — el prompt `07-chat-de-voz.md` dice explícitamente que esa
+vista reutiliza el mismo bottom sheet).
+
+| Archivo | Responsabilidad |
+|---|---|
+| `components/ChatbotButton.tsx` | FAB (56x56, esquina inferior derecha) + estado abierto/cerrado + historial de mensajes + orquesta el envío a `/api/chat` |
+| `components/ChatSheet.tsx` | Shell del bottom sheet: drag handle, header, lista scrollable de mensajes, input |
+| `components/ChatMessageBubble.tsx` | Burbuja de mensaje (asistente/usuario) + `ChatTypingBubble` (dots animados de "escribiendo…") |
+| `components/ChatInputBar.tsx` | Input + botón enviar + chips de respuesta rápida del diseño |
+| `lib/chat.ts` (nuevo) | `enviarMensaje(mensaje, contexto)` → llama `/api/chat` y devuelve `reply`; `MENSAJE_INICIAL`, `CHIPS_RESPUESTA_RAPIDA` |
+| `lib/types.ts` (+tipos) | `Mensaje { rol, texto, hora }`, `ChatContexto { nombre, meta, ticketPromedio }` — espeja el contrato de `app/api/chat/route.ts` |
+
+El contexto que se manda a Gemini se arma con `MOCK_STATE.perfil.nombre`,
+`calcularTicketPromedio(MOCK_STATE.historialPedidos)` y `getMeta(useSearchParams())` (con
+fallback `"crecer su negocio"` si no hay `?meta=` en la URL, igual que ya hace la propia ruta).
+
+**Verificación:** `npx tsc --noEmit` y `npm run build` → 0 errores, compila limpio.
+
+**⚠️ Pendiente — paso de integración (1 línea, intencionalmente no hecho aquí):**
+Falta montar `<ChatbotButton />` en `app/layout.tsx` para que aparezca en todas las pantallas.
+No se tocó porque `layout.tsx` está modificado activamente por el otro agente ahora mismo —
+para evitar conflicto, el componente quedó listo pero sin montar. Tampoco se pudo probar
+visualmente en navegador por la misma razón (no está renderizado en ninguna ruta todavía).
+
 ## ⚠️ Contradicciones encontradas — requieren decisión antes de implementar pantallas (2026-06-06 20:11)
 
 1. **Incoherencia de precio (CRÍTICO — esto es justo lo que Tuali no quiere ver):**
@@ -195,7 +326,7 @@ Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approa
    `lib/types.ts → Recomendacion` no tiene ningún campo de riesgo, y el motor tampoco lo asigna.
    → Pendiente: agregar `nivelRiesgo: "bajo" | "medio" | "alto"` (o equivalente) a `Recomendacion` y que `calcularRecomendaciones` lo determine.
 
-3. **Las "oportunidades" del diagnóstico no calzan con lo que genera el motor:**
+3. **✅ RESUELTO (2026-06-06 21:40, opción A) — Las "oportunidades" del diagnóstico no calzaban con lo que genera el motor:**
    Diseño muestra: "No usas las promociones activas" / **"Pides por promotor, no por app"** / "Retos de loyalty sin activar".
    Motor genera (`calcularDiagnostico`): "Tienes N promociones sin usar" / **"No usas el pedido sugerido todavía"** / "Tienes N reto(s) de puntos sin activar".
    → La oportunidad #2 no coincide: el diseño apunta a **autonomía de canal** (métrica secundaria confirmada), el motor apunta a pedido sugerido.
@@ -217,11 +348,21 @@ Cada una incluye `code.html`, `screen.png` y `DESIGN.md` (sistema "Warm & Approa
      (Diagnóstico → Meta → Recomendación → Acción → Seguimiento) ni con las rutas ya creadas.
    → Probablemente sea scaffolding genérico de Stitch sin personalizar. Confirmar con la diseñadora antes de implementar — no copiar tal cual.
 
-## Próximo paso
+## Próximo paso (actualizado 2026-06-06 21:40)
 
-**Antes de FASE 1:** resolver los puntos 1–6 de arriba con la diseñadora/Tech Lead (decisiones de producto, no técnicas).
+**T1.1, T1.2 y T1.3 (Splash, Onboarding, Diagnóstico) ya están implementadas** — ver sección
+"FASE 1 — Splash, Onboarding y Diagnóstico implementados" arriba.
 
-**FASE 1 — Pantallas core.** Empezar por:
-1. `app/page.tsx` — Splash (T1.1)
-2. `app/onboarding/page.tsx` — 4 botones grandes (T1.2)
-3. `app/diagnostico/page.tsx` — Diagnóstico visual (T1.3a–e)
+**Siguiente: T1.4 — Recomendaciones (`app/recomendaciones/page.tsx`).**
+Ahí se deben resolver las contradicciones pendientes que tocan esta pantalla:
+- **#2** — agregar `nivelRiesgo` a `Recomendacion` y que el motor lo determine (3 badges:
+  🟢 Bajo riesgo / 🟡 Riesgo medio / 🟠 Mayor ganancia).
+- **#4** — alinear la Recomendación B de "vender_mas" con el copy del diseño ("Pide por la
+  app esta semana") en vez de "Activa el pedido sugerido", siguiendo la misma lógica de
+  autonomía de canal usada para resolver la #3.
+- **#1** (precio Coca-Cola $15.50 vs `precioCosto: 11.5`) afecta el "Calculador de ganancia"
+  dentro de esta misma pantalla — confirmar con la diseñadora cuál es la fuente correcta antes
+  de construir esa sección.
+
+Puntos #5 (naming TuAliado/tuAliado) y #6 (bottom nav en inglés, afecta `/registro`) siguen
+pendientes de confirmar con la diseñadora — no bloquean T1.4.
