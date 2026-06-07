@@ -169,11 +169,11 @@ function ChatbotButtonContent() {
         aria-label="Abrir chat con tuAliado"
         onClick={() => setAbierto(true)}
         // bottom-[136px]: deja libre la barra de CTA fija (~124px) de Diagnóstico/Recomendaciones/Registro
-        className="fixed right-6 bottom-[136px] z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary-container text-on-primary shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-transform active:scale-90"
+        className="fixed right-6 bottom-[136px] z-40 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-primary-container to-primary shadow-[0_6px_22px_rgba(249,115,22,0.4)] transition-transform active:scale-90"
       >
-        <span className="material-symbols-outlined text-[28px]">chat_bubble</span>
+        <span className="absolute inset-0 rounded-full bg-primary-container/40 [animation-duration:2.5s] animate-ping" />
         <span
-          className="material-symbols-outlined absolute top-1 right-1 text-[14px] text-on-primary"
+          className="material-symbols-outlined relative text-[30px] text-on-primary"
           style={{ fontVariationSettings: "'FILL' 1" }}
         >
           auto_awesome

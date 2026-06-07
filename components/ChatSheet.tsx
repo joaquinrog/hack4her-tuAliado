@@ -37,11 +37,13 @@ export function ChatSheet(props: ChatSheetProps) {
 
       <div className="flex items-center justify-between px-margin-mobile py-2">
         <div className="flex items-center gap-2">
-          <span
-            className="material-symbols-outlined text-[20px] text-primary"
-            style={{ fontVariationSettings: "'FILL' 1" }}
-          >
-            auto_awesome
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary-container to-primary">
+            <span
+              className="material-symbols-outlined text-[18px] text-on-primary"
+              style={{ fontVariationSettings: "'FILL' 1" }}
+            >
+              auto_awesome
+            </span>
           </span>
           <span className="font-sans text-label-md text-on-surface">tuAliado</span>
         </div>
@@ -50,8 +52,9 @@ export function ChatSheet(props: ChatSheetProps) {
             <button
               type="button"
               onClick={onToggleModoVoz}
-              className="font-sans text-[13px] text-primary underline"
+              className="flex h-11 items-center gap-1.5 rounded-full bg-tertiary-container/15 px-4 font-sans text-[14px] font-medium text-on-tertiary-container transition-transform active:scale-95"
             >
+              <span className="material-symbols-outlined text-[20px]">{modoVoz ? "keyboard" : "mic"}</span>
               {modoVoz ? "Escribir en su lugar" : "Hablar en su lugar"}
             </button>
           )}

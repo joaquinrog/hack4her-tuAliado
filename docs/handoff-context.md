@@ -5,6 +5,28 @@
 
 ---
 
+## 🎨 Rediseño del ícono y panel del chatbot (Claude) (2026-06-07 16:10)
+
+Joaquín pidió mejorar el ícono flotante del chat, el diseño general del panel y agrandar
+el botón "Hablar en su lugar" (texto subrayado de 13px, por debajo del tap target mínimo
+de 44px de las reglas de frontend).
+
+Cambios en `components/ChatbotButton.tsx` y `components/ChatSheet.tsx`:
+- **Ícono flotante:** de burbuja genérica (`chat_bubble`) + insignia superpuesta a un solo
+  ícono `auto_awesome` (la chispa que ya es la identidad visual de tuAliado), con fondo en
+  degradado `from-primary-container to-primary` y un anillo `animate-ping` lento (2.5s) que
+  llama la atención sin ser molesto.
+- **Header del panel:** el ícono suelto de "tuAliado" pasó a un mini-avatar circular con el
+  mismo degradado, reforzando identidad de marca.
+- **"Hablar en su lugar" / "Escribir en su lugar":** de texto subrayado a botón píldora de
+  44px con ícono (`mic`/`keyboard`), fondo de color y texto 14px — más visible y cumple el
+  tap target mínimo.
+
+Verificación visual con Chrome DevTools (390x844): ícono flotante, apertura del panel,
+toggle voz↔texto y cierre — todo funciona sin regresiones.
+
+---
+
 ## 📄 Guion de pitch agregado (Joaquín) (2026-06-07 15:00)
 
 Nuevo doc `docs/pitch-guion.md` con el guion de presentación para jueces/MLH: intro
