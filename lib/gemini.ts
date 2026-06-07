@@ -3,24 +3,42 @@ import type { Recomendacion, PerfilCliente } from "./types"
 const GEMINI_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
 
-async function llamarGemini(prompt: string): Promise<string> {
-  const apiKey = process.env.GEMINI_API_KEY
-  if (!apiKey) return ""
+const GEMINI_API_KEYS = [process.env.GEMINI_API_KEY, process.env.GEMINI_API_KEY_2].filter(
+  (key): key is string => Boolean(key)
+)
 
-  const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { maxOutputTokens: 80, temperature: 0.3 },
-    }),
-  })
+interface GenerationConfig {
+  maxOutputTokens: number
+  temperature: number
+}
 
-  if (!res.ok) return ""
-  const data = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[]
+export async function generarContenidoGemini(
+  prompt: string,
+  generationConfig: GenerationConfig
+): Promise<string> {
+  for (const apiKey of GEMINI_API_KEYS) {
+    const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig,
+      }),
+    })
+
+    if (!res.ok) continue
+
+    const data = (await res.json()) as {
+      candidates?: { content?: { parts?: { text?: string }[] } }[]
+    }
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? ""
   }
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() ?? ""
+
+  return ""
+}
+
+async function llamarGemini(prompt: string): Promise<string> {
+  return generarContenidoGemini(prompt, { maxOutputTokens: 80, temperature: 0.3 })
 }
 
 export async function explicarRecomendacion(

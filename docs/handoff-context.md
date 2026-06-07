@@ -5,6 +5,57 @@
 
 ---
 
+## ✅ Segunda API key de Gemini como respaldo (Claude) (2026-06-07 08:59)
+
+Joaquín pidió agregar una segunda API key de Gemini para usarla como respaldo si la primera se
+queda sin tokens (cuota agotada). Cambios:
+
+- **`.env.local`**: agregada `GEMINI_API_KEY_2` junto a `GEMINI_API_KEY` (no se commitea, está en
+  `.gitignore`).
+- **`lib/gemini.ts`**: nueva función exportada `generarContenidoGemini(prompt, generationConfig)`
+  que arma `GEMINI_API_KEYS` filtrando las keys presentes y prueba cada una en orden — si una
+  responde con `res.ok === false` (p. ej. cuota agotada / 429), pasa a la siguiente. `llamarGemini`
+  ahora delega en ella; `explicarRecomendacion` y `responderChat` no cambiaron.
+- **`app/api/chat/route.ts`**: se eliminó el `fetch` duplicado a Gemini (mismo endpoint y
+  estructura que `lib/gemini.ts`) y ahora reutiliza `generarContenidoGemini`, conservando los
+  mismos mensajes de fallback (`"No pude generar una respuesta. Intenta de nuevo."`).
+
+Esto también elimina la duplicación de la llamada HTTP a Gemini que existía entre `lib/gemini.ts`
+y `app/api/chat/route.ts`.
+
+Verificación:
+- `npx tsc --noEmit` sin errores.
+
+---
+
+## ✅ Coherencia CTA y compactación de /recomendaciones (Claude) (2026-06-07 08:32)
+
+Joaquín pidió revisar el commit `2a262a4` (selector de estrategia más fácil/más ganancia) en
+busca de bugs e incoherencias. Se encontraron y corrigieron dos cosas:
+
+- **Incoherencia CTA → destino:** las 3 tarjetas de `/recomendaciones` siempre navegan a
+  `/registro?meta=...` (check-in diario), pero el commit de hoy les puso textos de botón muy
+  específicos (`"Activar reto"`, `"Ver pedido sugerido"`, `"Agregar Coca-Cola"`, `"Agregar
+  Victoria"`...) que prometían pantallas/funciones que no existen. Se unificó el texto de
+  `accion` a **"Voy a intentarlo"** en `lib/recommendation-engine.ts` — corto, honesto sobre lo
+  que pasa al tocarlo (ir a registrar el día) y consistente con cualquier tipo de recomendación.
+- **Pantalla con demasiados bloques visuales:** se quitó la tarjeta "Empieza por aquí" de
+  `app/recomendaciones/page.tsx` (redundante — el orden de las tarjetas ya indica cuál probar
+  primero), recuperando un bloque visual completo. Esto va en línea con la nota de Codex de que
+  la pantalla "se siente larga/textual".
+
+No se tocó el motor de selección por meta/estrategia (datos y lógica siguen siendo los de
+`2a262a4`, que están bien fundamentados en datos reales del mock).
+
+Verificación:
+- `npx tsc --noEmit` sin errores.
+- `npm run build` sin errores.
+
+`docs/claude-next-dev.md` actualizado: Prioridad 1 marcada como cerrada y los dos hallazgos
+agregados a "pendientes cerrados".
+
+---
+
 ## ⚠️ Polish visual pendiente a evaluar para demo (Codex, solo lectura) (2026-06-07 06:20)
 
 Joaquín pidió a Codex revisar FASE 1 / FASE 2 hasta ahora buscando bugs, contradicciones,
