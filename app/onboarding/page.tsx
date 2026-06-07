@@ -20,7 +20,7 @@ export default function Onboarding() {
   const [meta, setMeta] = useState<MetaCliente | null>(null)
 
   return (
-    <div className="relative flex flex-1 flex-col bg-surface text-on-surface">
+    <div className="flex flex-1 flex-col bg-surface text-on-surface">
       <header className="flex flex-col items-center px-margin-mobile pt-8 pb-4">
         <span className="mb-stack-md rounded-full bg-surface-container-high px-3 py-1 font-sans text-caption text-on-surface-variant">
           1 de 1
@@ -46,7 +46,7 @@ export default function Onboarding() {
         </div>
       </main>
 
-      <footer className="absolute bottom-0 w-full bg-gradient-to-t from-surface via-surface to-transparent px-margin-mobile py-6">
+      <footer className="fixed bottom-0 w-full max-w-[430px] bg-gradient-to-t from-surface via-surface to-transparent px-margin-mobile py-6">
         <button
           type="button"
           disabled={!meta}

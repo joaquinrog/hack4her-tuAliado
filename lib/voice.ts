@@ -109,7 +109,13 @@ export function iniciarEscucha(opciones: OpcionesEscucha): () => void {
     opciones.onFin?.()
   }
 
-  reconocimiento.start()
+  try {
+    reconocimiento.start()
+  } catch {
+    opciones.onError?.("start-failed")
+    return () => {}
+  }
+
   reconocimientoActivo = reconocimiento
   return detenerEscucha
 }

@@ -5,6 +5,38 @@
 
 ---
 
+## ✅ Polish de UI pre-code-freeze (Claude) (2026-06-07 16:40)
+
+Joaquín pidió cerrar el polish visual pendiente que Codex había dejado documentado en
+"Polish visual pendiente a evaluar para demo" (06:20), priorizando los puntos con impacto
+directo en cómo se ve el demo en mobile para Raúl. Tres cambios acotados:
+
+- **`app/layout.tsx`:** `h-full`/`min-h-full` → `h-dvh`/`min-h-dvh` (en `<html>`, `<body>` y el
+  contenedor `max-w-[430px]`). Causa raíz del problema reportado: en mobile, `100%` de altura
+  no contempla la barra de navegación dinámica del navegador, así que Splash y Onboarding
+  quedaban con el contenido pegado arriba y el CTA sin sentirse anclado al fondo real del
+  viewport. `dvh` sí usa la altura visual real.
+- **`app/onboarding/page.tsx`:** footer de `absolute bottom-0` → `fixed bottom-0 max-w-[430px]`
+  (mismo patrón que `/diagnostico`, `/recomendaciones`, `/registro`) + se quitó el `relative`
+  ya innecesario del wrapper. Antes, al no llenar el viewport el contenedor `relative`, el
+  footer absoluto podía quedar a media pantalla con su zona transparente capturando taps fuera
+  de lugar — justo el riesgo que Codex había señalado.
+- **`lib/voice.ts:112`:** `reconocimiento.start()` envuelto en `try/catch` — si lanza una
+  excepción síncrona (permisos/contexto), ahora dispara `onError("start-failed")` (cae al
+  mensaje genérico en español de `mensajeErrorEscucha`, "No pude escucharte. Intenta de nuevo
+  o escribe.") en vez de dejar la UI colgada en estado `escuchando`.
+
+Verificación: `npx tsc --noEmit` sin errores. No se hizo QA visual con Chrome DevTools por
+límite de tiempo antes del freeze — Joaquín verificará en navegador que Splash/Onboarding
+anclan el CTA al fondo en 390x844.
+
+Esto cierra los 3 puntos de polish de UI de la lista de Codex (06:20) que tenían impacto
+visual/funcional directo. Quedan fuera del freeze (no se tocaron): el FAB del chat (offset
+`bottom-[136px]` ya resuelto en entrada anterior) y el largo de `/recomendaciones` (ya
+compactado en entrada de las 08:32).
+
+---
+
 ## 🎨 Rediseño del ícono y panel del chatbot (Claude) (2026-06-07 16:10)
 
 Joaquín pidió mejorar el ícono flotante del chat, el diseño general del panel y agrandar
