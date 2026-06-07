@@ -21,7 +21,7 @@ export async function generarContenidoGemini(
   prompt: string,
   generationConfig: GenerationConfig
 ): Promise<string> {
-  for (const apiKey of GEMINI_API_KEYS) {
+  for (const [i, apiKey] of GEMINI_API_KEYS.entries()) {
     const res = await fetch(`${GEMINI_URL}?key=${apiKey}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -31,7 +31,17 @@ export async function generarContenidoGemini(
       }),
     })
 
-    if (!res.ok) continue
+    if (!res.ok) {
+      const quedan = GEMINI_API_KEYS.length - (i + 1)
+      if (quedan > 0) {
+        console.warn(
+          `⚠️ Gemini key ${i + 1}/${GEMINI_API_KEYS.length} falló (${res.status}) — probando la siguiente. Quedan ${quedan}.`
+        )
+      } else {
+        console.warn(`🚨 Las ${GEMINI_API_KEYS.length} keys de Gemini fallaron (última: ${res.status}) — necesitas una nueva YA.`)
+      }
+      continue
+    }
 
     const data = (await res.json()) as {
       candidates?: { content?: { parts?: { text?: string }[] } }[]
