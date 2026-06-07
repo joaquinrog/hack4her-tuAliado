@@ -115,10 +115,24 @@
   line-height: 1;
   letter-spacing: normal;
   text-transform: none;
-  display: inline-block;
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
   -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * La hoja de Google Fonts (ver <link> en app/layout.tsx) trae su propia regla
+ * `.material-symbols-outlined { display: inline-block }`. Con la misma especificidad
+ * que las utilidades `flex`/`inline-flex` de Tailwind, gana por orden de carga y
+ * descentra el glifo dentro de su círculo. Esta regla, más específica, asegura que
+ * el `flex` de Tailwind controle el centrado en los íconos dentro de círculos.
+ */
+.material-symbols-outlined.flex {
+  display: flex;
+}
+
+.material-symbols-outlined.inline-flex {
+  display: inline-flex;
 }

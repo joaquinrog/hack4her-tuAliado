@@ -5,6 +5,50 @@
 
 ---
 
+## 📄 Guion de pitch agregado (Joaquín) (2026-06-07 15:00)
+
+Nuevo doc `docs/pitch-guion.md` con el guion de presentación para jueces/MLH: intro
+(contexto del tendero que se queda atrás), qué creamos (tuAliado como acompañamiento),
+y recorrido por las pantallas (Meta, Diagnóstico, Recomendación, Acción/Chatbot,
+Seguimiento) cerrando con el framing "Tuali te ayuda a comprar, tuAliado te ayuda a
+crecer". Sirve como referencia de la narrativa oficial del producto para demo/pitch.
+
+---
+
+## ✅ Fix global — íconos descentrados dentro de sus círculos (Claude) (2026-06-07 14:20)
+
+Joaquín reportó que al correr el server se veían "vectores/íconos fuera de su círculo" —
+se confirmó con Chrome DevTools (390x844) en Diagnóstico, Seguimiento y Registro: los íconos
+de canal (`storefront`/`groups`), la insignia de loyalty, "Promos aplicadas" y los emojis de
+estado de ánimo (`OpcionPaso.tsx`) aparecían pegados arriba-izquierda de su círculo en vez de
+centrados — **un solo bug de CSS, no errores aislados por pantalla**.
+
+**Causa raíz:** la hoja de Google Fonts cargada en `app/layout.tsx`
+(`fonts.googleapis.com/css2?family=Material+Symbols+Outlined...`) trae su propia regla
+`.material-symbols-outlined { display: inline-block; ... }`. Con la misma especificidad que
+las utilidades `flex items-center justify-center` de Tailwind (el patrón estándar de "ícono
+en círculo" del proyecto), gana por orden de carga y bloquea el centrado — el glifo queda
+posicionado por flujo normal de texto en vez de centrado por flexbox. `globals.css` tenía
+una copia casi idéntica de esa misma regla (con el mismo `display: inline-block`), así que
+quitarla de ahí no alcanzaba: la de Google seguía ganando.
+
+**Fix aplicado en `app/globals.css`:**
+- Se quitó `display: inline-block` de la copia local de `.material-symbols-outlined` (quedaba
+  redundante con la hoja de Google).
+- Se agregaron dos reglas con mayor especificidad que sí ganan sin importar el orden de carga:
+  `.material-symbols-outlined.flex { display: flex }` y
+  `.material-symbols-outlined.inline-flex { display: inline-flex }` — dejan que las utilidades
+  de Tailwind controlen el centrado donde se combinan con `flex`/`inline-flex` (9 archivos:
+  `CanalGrid`, `ComparacionCanal`, `PromosCard`, `OpcionPaso`, diagnóstico/registro/seguimiento/
+  recomendaciones (botón "Regresar") y `ChatbotButton`).
+
+Verificación: `npx tsc --noEmit` y `npm run build` sin errores (9 rutas). QA visual en 390x844
+con Chrome DevTools en Diagnóstico, Registro, Seguimiento, Recomendaciones y el chat — todos
+los íconos quedan centrados en su círculo, sin overflow ni regresiones en los íconos sueltos
+(sin círculo) que ya se veían bien.
+
+---
+
 ## ✅ Chatbot Gemini restaurado con modelo Free Tier (Codex) (2026-06-07 09:31)
 
 Joaquín reportó que el chatbot respondía siempre `"No pude generar una respuesta. Intenta de
