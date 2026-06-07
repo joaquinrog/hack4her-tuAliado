@@ -109,6 +109,16 @@ un error sin contexto del cambio anterior, o (b) volver a cambiar el motor — p
 también la lógica de "Rec B" en `calcularRecomendaciones` que ya usa `porcentajePedidosTuali` para
 generar "Pide por la app esta semana" (T1.4, ver arriba), que sí está alineada con autonomía de canal.
 
+## ✅ Contradicción #3 resuelta definitivamente — diseño y motor alineados (2026-06-07 00:00)
+
+Isabel subió el commit `2497947` ("fix: revert design text to match tech lead motor logic"),
+revirtiendo su cambio anterior en `design/assets/diagnostico/code.html`: el copy vuelve de
+"No usas el pedido sugerido todavía" a **"Pides por promotor, no por app."**, igual que genera
+el motor (`calcularDiagnostico`, `lib/recommendation-engine.ts:50`).
+
+Se mergeó `design` → `main` sin conflictos (commit de merge incluido). Verificado con `grep`
+que ambos lados usan el mismo texto. No se requiere ningún cambio adicional en código.
+
 ## ✅ Modo Voz integrado al chatbot — F13 (2026-06-06 23:01)
 
 Se conectó `lib/voice.ts` (ya completo desde antes) a la UI del chatbot. Diferenciador clave del
