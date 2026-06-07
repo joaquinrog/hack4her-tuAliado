@@ -96,12 +96,18 @@ Antes, Raúl dependía solo del promotor y otras personas para tomar decisiones;
 
 15. ¿Como explicamos que si funciona para Raul, funciona para usuarios mas digitales?
 
+Diseñamos tuAliado pensando primero en el usuario con más barreras tecnológicas. Si la experiencia logra ser clara, práctica y útil para Raúl, también puede simplificar y acelerar la toma de decisiones para usuarios más digitales. La simplicidad no limita; mejora la experiencia para todos.
+
 16. ¿Que tan fuerte queremos mencionar al promotor: problema, aliado, canal actual o transicion?
+
+El promotor debe presentarse como un aliado y un canal de confianza ya existente. tuAliado no busca reemplazarlo, sino extender y escalar su acompañamiento mediante recomendaciones personalizadas, automatización y seguimiento continuo.
 
 17. ¿Que ejemplos reales del journey de Raul conviene incluir?
 
-18. ¿Que frase simple usaria Raul para describir lo que tuAliado le ayuda a hacer?
+Conviene incluir momentos cotidianos y accionables: Raúl escoge una meta simple como vender más, recibe recomendaciones basadas en promociones activas y productos populares, usa el chat de voz para resolver dudas rápidamente, recibe recordatorios para surtir su tienda y da seguimiento diario a sus avances mientras acumula puntos y mantiene su racha.
 
+18. ¿Que frase simple usaria Raul para describir lo que tuAliado le ayuda a hacer?
+Me ayuda a saber qué hacer para vender más y llevar mejor mi tiendo
 ---
 
 ## Demo
@@ -166,13 +172,26 @@ Ejemplos actuales de la demo:
 
 37. ¿Que hace tuAliado que la app actual de Tuali no hace?
 
+tuAliado conecta las herramientas que ya existen en Tuali y las combina y recomienda de manera concreta con una meta específica de acuerdo a lo que prefiere el negocio. En vez de mostrar promociones, pedidos sugeridos o programas de lealtad aislados, los convierte en acciones personalizadas y medibles para ayudar al cliente a crecer.
+
 38. ¿Que hace tuAliado que un chatbot generico no puede hacer?
 
-39. ¿Como explicamos "agente de crecimiento" sin prometer automatizacion que no existe?
+El chatbot solo contesta preguntas, mientras que tuAliado genera una conversación con base en el análisis del comportamiento del cliente y sus datos de los últimos meses, creando una experiencia personalizada y adaptada a lo que el cliente necesita.
+
+39. ¿Como explicamos "agente de crecimiento" sin prometer automatizacion que no 
+existe?
+
+tuAliado es un agente de crecimiento debido a que acompaña al usuario durante todo el proceso: entiende su contexto del negocio, le ayuda a definir metas específicas, define metas, recomienda acciones y da seguimiento al avance. Al final del día, es el cliente quien toma las decisiones, no el agente, pues él solo guía.
+
 
 40. ¿Que rol tiene la voz para Raul: accesibilidad, confianza, rapidez o diferenciador tecnico?
 
+Para Raúl, la accesibilidad es limitada debido a que él no está acostumbrado a utilizar herramientas digitales y no puede leer la letra pequeña. Sin embargo, al poder describir perfectamente su negocio a través de la experiencia, el chat de voz le permite utilizar sus habilidades para obtener los mismos beneficios de recomendaciones y acompañamiento guiado que otros usuarios tenían, destruyendo así las barreras de la brecha de conocimiento digital.
+
 41. ¿Que parte del diseño mobile-first vale la pena mencionar?
+
+La interfaz fue diseñada pensando en el usuario con menor habilidad digital, priorizando una sola acción principal por pantalla, botones grandes, lenguaje simple, visuales sobre texto y métricas fáciles de interpretar.
+
 
 ---
 
