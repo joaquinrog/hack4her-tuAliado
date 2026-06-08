@@ -48,9 +48,14 @@ function ChatbotButtonContent() {
   // async en curso para que no "revivan" el modo voz tras cambiar de contexto.
   const generacionVozRef = useRef(0)
 
+  // soportaVoz() depende de window/SpeechRecognition: debe leerse en efecto, no
+  // en render, para que el primer render coincida con el del servidor.
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setTieneSoporteVoz(soportaVoz()), [])
 
   // Corta cualquier escucha/habla en curso al cerrar el chat o desmontar — evita procesos de audio colgados.
+  // El reseteo de estado va junto a las llamadas imperativas (detenerEscucha/detenerHabla)
+  // porque ambos deben ocurrir atómicamente al mismo cambio de "abierto".
   useEffect(() => {
     if (!abierto) {
       generacionVozRef.current += 1
@@ -58,6 +63,7 @@ function ChatbotButtonContent() {
       escuchaActivaRef.current = false
       detenerEscucha()
       detenerHabla()
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setModoVoz(false)
       setEstadoVoz("idle")
       setErrorVoz(null)

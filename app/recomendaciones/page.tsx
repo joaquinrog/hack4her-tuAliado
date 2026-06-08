@@ -87,7 +87,6 @@ function RecomendacionesContent() {
   useEffect(() => {
     if (!meta) return
     let cancelado = false
-    setDescripciones({})
 
     recomendaciones.forEach((rec) => {
       obtenerExplicacion(rec, MOCK_STATE.perfil).then((descripcion) => {

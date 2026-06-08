@@ -1,87 +1,83 @@
 # tuAliado
 
-> tuAliado es un sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para cada tendero.
+> Sistema de acompañamiento que convierte metas de negocio en acciones concretas y medibles para dueños de tienda — construido para el reto **Tuali Growth Agent** de Hack4Her.
 
 | | |
 |---|---|
-| 🏆 **Hackathon** | Hack4Her — Reto **Tuali Growth Agent** |
-| 👥 **Equipo** | Picafresitas |
 | 🚀 **Demo en vivo** | [hack4her-tu-aliado.vercel.app](https://hack4her-tu-aliado.vercel.app/) |
 | 🎬 **Video demo** | [Ver en YouTube](https://youtube.com/shorts/Dmv-8YtmCt8?feature=share) |
 | 📋 **Devpost** | [devpost.com/software/tualiado](https://devpost.com/software/tualiado) |
 
 [![Video demo de tuAliado](https://img.youtube.com/vi/Dmv-8YtmCt8/hqdefault.jpg)](https://youtube.com/shorts/Dmv-8YtmCt8?feature=share)
-<p align="center"><sub>↑ clic para ver el video (grabado como YouTube Short, formato vertical 9:16 — por eso no se incrusta en 16:9)</sub></p>
 
 ---
 
 ## El problema
 
-Los clientes de Tuali (dueños de tiendas de abarrotes) tienen acceso a una app con pedidos, promociones, puntos de loyalty y pedido sugerido — pero nada dentro de Tuali los acompaña a usar esa información para crecer su negocio. El resultado: no saben qué les conviene pedir, no aprovechan sus promociones, y dependen del promotor para decisiones que podrían tomar solos.
+Los dueños de tienda en el ecosistema de Tuali tienen acceso a una app con pedidos, promociones y un programa de loyalty — pero nada dentro de esa app los acompaña a usar esa información para crecer su negocio. Diseñamos para el arquetipo de menor habilidad digital del reto: si el flujo funciona para ese caso, funciona para cualquier perfil más digital.
 
-Diseñamos para **Raúl**, el arquetipo de **dueño apoyado**: el perfil con menor habilidad digital de las protopersonas del reto. Si el producto funciona para él — que evita procesos complejos y depende de otros para usar herramientas tecnológicas —, funciona para cualquier perfil más digital. Diseñar para el caso más difícil es diseñar para todos.
+## La solución
 
-## La solución: tuAliado
-
-tuAliado **no es un chatbot que responde preguntas**. Es un sistema de acompañamiento que convierte una meta de negocio en un plan de acciones concretas, con seguimiento continuo — más parecido a la guía de un promotor que a un asistente conversacional genérico.
-
-El flujo es lineal y simple:
+tuAliado convierte una meta de negocio en un plan de acciones concretas con seguimiento continuo, en un flujo lineal de cinco pasos:
 
 ```
 Diagnóstico → Meta → Recomendaciones → Acción → Seguimiento
 ```
 
-1. **Diagnóstico** — tuAliado muestra el estado actual del negocio (ticket promedio, canal de pedido, puntos de loyalty, oportunidades) usando comportamiento real dentro de la app.
-2. **Meta** — Raúl elige qué quiere lograr, con botones grandes y visuales (sin formularios largos).
-3. **Recomendaciones** — el motor determinístico prioriza hasta 3 acciones concretas conectadas a esa meta: una promoción activa, pedir por la app, activar un reto de loyalty.
-4. **Acción → Registro** — Raúl reporta señales simples de su día (check-in de 2-3 preguntas, no captura de ventas complejas).
-5. **Seguimiento** — tuAliado muestra el avance hacia la meta, comparación de canal y racha de uso.
+Un chat flotante (texto y voz) acompaña el flujo para resolver dudas puntuales, pero **no decide nada** — solo explica en lenguaje simple lo que el motor ya calculó.
 
-Un chat flotante (texto y **voz**) acompaña todo el flujo para resolver dudas puntuales — pero **explica, no decide**: las recomendaciones siempre salen del motor determinístico.
+<p align="center">
+  <img src="docs/screenshots/diagnostico.png" alt="Pantalla de diagnóstico: ticket promedio, mezcla de canal y oportunidades detectadas" width="280" />
+  <img src="docs/screenshots/recomendaciones.png" alt="Pantalla de recomendaciones: plan priorizado con explicación generada por el LLM" width="280" />
+</p>
 
-## Por qué no es "otro chatbot con IA"
+## Decisión de arquitectura: motor determinístico + LLM como capa de explicación
 
-La IA (Gemini) no es el producto. Es el motor que traduce lo que ya calculó la lógica determinística a lenguaje simple y cercano. **El motor decide qué recomendar; Gemini solo lo explica** — y si Gemini no responde, el flujo completo sigue funcionando porque las recomendaciones no dependen de él.
+La parte técnicamente más relevante del proyecto es esta separación:
 
-Esto importa porque Tuali fue explícito: lo que no quieren ver es **incoherencia en los datos**. Un chatbot genérico improvisa texto; tuAliado siempre parte de números reales del mock (ticket, canal, promociones, loyalty) y solo usa el LLM para ponerlos en palabras que Raúl entienda.
+- **`lib/recommendation-engine.ts`** — funciones puras de TypeScript que calculan diagnóstico y recomendaciones a partir de datos estructurados (`lib/mock-data.ts`). El motor decide *qué* recomendar.
+- **`lib/gemini.ts`** — capa delgada sobre la API de Gemini que traduce esas recomendaciones ya calculadas a lenguaje natural. El LLM solo decide *cómo decirlo*.
 
-## Diferenciador principal
+Esta separación no es un detalle de implementación: es la respuesta directa a un requisito explícito del reto — **cero incoherencia entre los datos mostrados**. Un LLM que improvisa números o recomendaciones puede contradecirse entre pantallas; un motor determinístico no. Y como consecuencia, **si la API de Gemini falla, el producto sigue funcionando** — el flujo completo no depende del LLM, solo pierde la traducción a lenguaje natural (hay plantillas de respaldo en `lib/explicaciones.ts`).
 
-**Acompañamiento accesible para usuarios con baja habilidad digital**, antes que cualquier feature aislada. Eso se traduce en:
+Cada dato del mock está anotado por origen en `lib/types.ts` (`TUALI` / `CLIENTE` / `ESTIMACION`), para que sea trazable de dónde sale cada número que se muestra.
 
-- flujo estructurado y lineal (no navegación libre por menús),
-- lenguaje claro y visual (íconos, números grandes, barras de progreso sobre párrafos),
-- recomendaciones siempre justificadas con datos reales,
-- **interacción por voz** — para Raúl, que prefiere hablar a escribir o navegar interfaces complejas,
-- seguimiento continuo, no una recomendación de una sola vez.
+## Cómo correrlo localmente
 
-## Para Tuali / Arca Continental
+```bash
+npm install
+cp .env.example .env.local   # agregar tu GEMINI_API_KEY (ver .env.example)
+npm run dev
+```
 
-La promesa es **convertir interacción cotidiana en inteligencia comercial**: cada vez que Raúl registra su día o sigue una recomendación, tuAliado capta señales que permiten personalizar mejor, impulsar promociones y loyalty, y — como resultado — mover las dos métricas que Tuali definió como objetivo:
+Abre [http://localhost:3000](http://localhost:3000). El proyecto es **mobile-first** (viewport objetivo 375–430px) — usa las dev tools del navegador en modo responsive para verlo como está pensado.
 
-| Métrica | Qué mide |
-|---|---|
-| **Ticket promedio** | Valor promedio de los pedidos del cliente (métrica principal) |
-| **Autonomía dentro de Tuali** | Que el cliente pida más por app y dependa menos del promotor (métrica secundaria) |
+> El producto funciona sin `GEMINI_API_KEY`: el motor de recomendaciones es 100% determinístico y local; sin la key solo se pierde la capa de explicación en lenguaje natural (cae a plantillas de respaldo).
 
-## Datos usados en la demo
+## Estructura del proyecto
 
-> **No usamos datos reales de clientes.** Trabajamos con un mock TypeScript construido a partir de las protopersonas, journeys y contexto oficial del reto que compartió Tuali. El objetivo es demostrar cómo funcionaría el flujo completo — diagnóstico, recomendación, seguimiento — sobre un escenario realista, no entregar analítica sobre datos de producción.
+```
+app/                  Rutas de Next.js App Router — una carpeta por pantalla del flujo
+├─ page.tsx           Splash / entrada
+├─ onboarding/        Selección de meta (4 botones grandes)
+├─ diagnostico/       Estado actual del negocio (ticket, canal, oportunidades)
+├─ recomendaciones/   Hasta 3 acciones priorizadas por el motor
+├─ registro/          Check-in diario de 2-3 preguntas
+├─ seguimiento/       Avance hacia la meta + comparación de canal
+└─ api/               Endpoints que llaman a Gemini (chat, explicaciones)
 
-Cada dato del mock está anotado por origen en `lib/types.ts`:
+components/           Componentes de UI compartidos (chat flotante, tarjetas, progreso)
 
-| Origen | Significa |
-|---|---|
-| `TUALI` | Viene del contexto/datos que Tuali compartió (historial, comportamiento, loyalty, catálogo, promociones) |
-| `CLIENTE` | Lo aporta el cliente dentro del flujo (meta elegida, precio de venta) |
-| `ESTIMACION` | Cálculo derivado (p. ej. margen/ganancia) — siempre `null` si falta el dato base, nunca se inventa |
-
-Números destacados del perfil de Raúl en la demo (todos calculados por el motor sobre el mock, no inventados):
-
-- Ticket promedio: **$440 MXN** → meta sugerida **$506 MXN**
-- Canal de pedido: **20% app / 80% promotor**
-- Loyalty: **180 puntos** acumulados, retos sin activar
-- 3 oportunidades reales detectadas: promociones sin usar, bajo uso de la app para pedir, reto de loyalty sin activar
+lib/                  Toda la lógica de negocio — nada de lógica en componentes
+├─ types.ts                   Contratos de datos, con anotación de origen
+├─ mock-data.ts               Datos simulados (perfil, pedidos, catálogo, promos)
+├─ recommendation-engine.ts   Motor determinístico de diagnóstico y recomendaciones
+├─ gemini.ts                  Capa de explicación vía Gemini API (con fallback)
+├─ explicaciones.ts           Plantillas de respaldo si el LLM no responde
+├─ chat.ts                    Construcción de contexto para el chat
+├─ voice.ts                   Wrapper de Web Speech API (STT + TTS)
+└─ state.ts                   Manejo de estado vía URL params + localStorage
+```
 
 ## Camino de demo recomendado
 
@@ -89,65 +85,32 @@ Números destacados del perfil de Raúl en la demo (todos calculados por el moto
 / → /onboarding → /diagnostico?meta=vender_mas → /recomendaciones?meta=vender_mas → /registro?meta=vender_mas → /seguimiento?meta=vender_mas
 ```
 
-Se recorre una sola meta (**Vender más**) de punta a punta — es la más fácil de entender y la que conecta más directo con el ticket promedio. El `/diagnostico` se ve igual sin importar la meta elegida a propósito: es la "foto base" del negocio antes de decidir qué hacer; la personalización ocurre después, en recomendaciones, registro y seguimiento. (Más detalle en `docs/demo-flow.md`.)
-
-## Qué está implementado hoy
-
-- Flujo completo: Splash, Onboarding, Diagnóstico, Recomendaciones, Registro diario y Seguimiento
-- Motor determinístico de diagnóstico y recomendaciones (`lib/recommendation-engine.ts`)
-- Capa de explicación con Gemini (`lib/gemini.ts`) — con respaldo de segunda API key
-- Chat flotante de texto, integrado en todo el flujo
-- **Modo voz** (Web Speech API: STT + TTS) — diferenciador clave para usuarios que prefieren hablar a escribir
-- Sistema de racha / streak de uso diario
-- UX mobile-first (375–430px) con visuales sobre texto
-
-## Próximos pasos
-
-En orden de impacto para el siguiente sprint (ver detalle y estimaciones en `docs/mvp-plan.md`):
-
-1. **Calculador de ganancia** (F6) — modal en `/recomendaciones` para pedir el precio de venta de Raúl y mostrar el beneficio estimado; diseño ya recibido (`design/assets/recomendaciones/tualiado_calculador_de_ganancia_v3`), falta conectarlo al motor.
-2. **Pop-ups guiados** (F16) — tour de primera visita que señala "esto es para ti, Raúl".
-3. **Sustitución de recomendaciones** (F5) — botón "no me convence, ver otra" para que el producto se sienta vivo, no estático.
-4. **Asesoramiento financiero** (F8) y **perfil del cliente editable** (F2) — más profundidad y credibilidad en la demo.
-5. **Piloto con datos reales** — conectar el motor a datos productivos de Tuali/Arca Continental con un grupo pequeño de clientes, y validar que las recomendaciones siguen siendo coherentes fuera del mock.
-
-## Visión a futuro
-
-Aprendizaje adaptativo en tiempo real, modelos predictivos de comportamiento, predicciones estacionales, evaluación dinámica de riesgo, y conexión completa con datos productivos reales de Tuali y Arca Continental. Lo de hoy es un prototipo funcional sobre datos mock — el siguiente paso natural es pilotear con datos reales de un grupo pequeño de clientes.
+Se recorre una sola meta ("Vender más") de punta a punta — es la que conecta más directo con la métrica principal (ticket promedio). Más detalle del guion en `docs/demo-flow.md`.
 
 ## Stack técnico
 
 - **Framework:** Next.js (App Router) + TypeScript
 - **Estilos:** Tailwind CSS — mobile-first, sin breakpoints de escritorio
-- **Datos:** módulos TypeScript mock en `lib/mock-data.ts`
+- **Datos:** módulos TypeScript mock en `lib/mock-data.ts` (no hay datos reales de clientes — ver `docs/data-assumptions.md`)
 - **Motor:** funciones puras determinísticas en `lib/recommendation-engine.ts`
-- **LLM:** Gemini API — solo como capa de explicación en lenguaje natural (`lib/gemini.ts`)
-- **Diseño:** assets generados con Stitch (`design/stitch-prompts/`, `design/assets/`)
+- **LLM:** Gemini API, solo como capa de explicación (`lib/gemini.ts`)
+- **Voz:** Web Speech API nativa del navegador (`lib/voice.ts`)
 - **Deploy:** Vercel
 
-## Documentación del proyecto
-
-Este proyecto es **docs-first**: la continuidad de contexto entre sesiones de desarrollo importa tanto como el código. Toda la documentación vive en `docs/`:
+## Documentación adicional
 
 | Archivo | Contenido |
 |---|---|
-| `docs/handoff-context.md` | Resumen de contexto y estado actual, sesión a sesión |
-| `docs/mvp-current-direction.md` | Dirección del MVP |
-| `docs/decisions.md` | Decisiones de producto confirmadas |
+| `docs/mvp-current-direction.md` | Dirección de producto: usuario, métricas, flujo, restricciones de diseño |
+| `docs/decisions.md` | Registro de decisiones de producto y arquitectura, con su razón |
 | `docs/demo-flow.md` | Guion y camino exacto de la demo |
-| `docs/data-assumptions.md` | Qué datos hay, cuáles son reales y cuáles supuestos |
-| `docs/risk-register.md` | Riesgos identificados y mitigaciones |
-| `01-contexto-reto-tuali.md` | Contexto oficial del reto, protopersonas y journeys |
+| `docs/data-assumptions.md` | Qué datos hay, cuáles son reales y cuáles son supuestos del mock |
 
 ## Equipo — Picafresitas
 
 | Nombre | Rol |
 |---|---|
-| Joaquín Rosales González | Tech Lead / Ingeniería |
+| Joaquín Rosales González | Ingeniería |
 | Fernanda Sánchez Estudillo | Diseño UX/UI |
 | Isabel Mejía Franco | Producto / Estrategia |
 | Katia Iveth Uribe Briones | Presentación / Pitch |
-
----
-
-> Capturas adicionales de la demo: ver el [Devpost del proyecto](https://devpost.com/software/tualiado). Preguntas abiertas de producto en `docs/producto-preguntas.md`.

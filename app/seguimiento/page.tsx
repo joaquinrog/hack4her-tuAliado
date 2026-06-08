@@ -40,6 +40,9 @@ function SeguimientoContent() {
   const presionTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
+    // Lectura única de localStorage al montar: debe ir en efecto (no en lazy initializer)
+    // para que el primer render coincida con el del servidor y evite mismatch de hidratación.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBaseline(cargarBaseline())
   }, [])
 

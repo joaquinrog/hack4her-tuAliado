@@ -2,108 +2,52 @@
 
 Este documento define cómo se usa AI en este proyecto — aplica tanto para Claude Code como para Codex.
 
-**Claude Code es el agente principal.** Codex puede actuar como **agente secundario de apoyo**, en tareas acotadas de solo lectura (ver su sección abajo). Decisión registrada en `docs/decisions.md` ("Uso de Codex como agente secundario").
+**Claude Code es el agente principal.** Codex actúa como **agente secundario de apoyo**, limitado a tareas acotadas de solo lectura. Decisión registrada en `docs/decisions.md` ("Uso de Codex como agente secundario").
 
 ---
+
+## Por qué delegar a un segundo agente
+
+El recurso escaso real al trabajar con asistentes de AI no son los "tokens" en abstracto, sino la ventana de uso de cada herramienta (se renueva cada pocas horas). Las herramientas MCP de Claude Code (p. ej. chrome-devtools) y el contexto profundo de este proyecto no son transferibles a Codex — así que conviene reservar la ventana de Claude para ese trabajo exclusivo, y descargar en Codex el trabajo genérico que no depende de ese contexto. Esto libera presupuesto de Claude para las tareas que solo Claude puede hacer.
 
 ## Claude Code — Agente principal
 
-**Responsabilidad:** Todo lo que toca el proyecto. Contexto, planificación, implementación, validación, docs, decisiones de producto y código.
+**Responsabilidad:** todo lo que toca el proyecto — planificación, implementación, validación, docs, decisiones de producto y código.
 
-**Puede tocar:**
-- Cualquier archivo del proyecto
-- Docs en `docs/`
-- Tracking en `.ai/`
-- Código de producto
-
-**Reglas que siempre aplican:**
-- Leer `docs/handoff-context.md` antes de cualquier tarea mayor
-- No implementar sin aprobación de Joaquín
-- No inventar datos ni funcionalidades no documentadas
-- Registrar decisiones en `docs/decisions.md`
-- Actualizar `docs/handoff-context.md` cuando el estado del proyecto cambie
-- Actualizar `.ai/task-board.md` al completar tareas
-
----
+**Reglas:**
+- No implementar sin aprobación previa cuando el cambio es mayor.
+- No inventar datos ni funcionalidades no documentadas.
+- Registrar decisiones relevantes en `docs/decisions.md`.
 
 ## Codex — Agente secundario (apoyo, solo lectura)
 
-**Por qué existe este rol:** Joaquín tiene Claude Pro y GPT Plus, ambos con ventana de uso que se renueva cada ~5 horas — el recurso escaso real es esa ventana, no "tokens" en abstracto. Las MCP tools de Claude Code (p. ej. chrome-devtools) y el contexto profundo de este proyecto son exclusivos/no-transferibles a Codex; conviene proteger la ventana de Claude para ese trabajo. Codex puede absorber trabajo genérico que no depende de ese contexto, liberando la ventana de Claude para lo que solo Claude puede hacer.
+**Puede ayudar con (sin tocar el repo):**
+- Investigación externa: librerías, APIs, configuración de herramientas, debugging de errores ajenos al código del proyecto.
+- Segunda opinión / revisión de un diff — reporta hallazgos en texto, sin aplicar cambios.
+- Lectura y resumen de documentación externa o de archivos puntuales indicados.
 
-**Si te invocaron como Codex en este repo, puedes ayudar con (solo lectura, sin tocar el repo):**
-- Investigación externa: librerías, APIs, configuración de herramientas, debugging de errores que no son del código del proyecto (p. ej. por qué un binario o un MCP server no arranca)
-- Segunda opinión / revisión de un diff — reportar hallazgos en texto claro, sin aplicar cambios
-- Lectura y resumen de documentación externa o de archivos puntuales que te indiquen
+**Fuera de su alcance:**
+- Editar código del proyecto (`app/`, `components/`, `lib/`).
+- Tomar o registrar decisiones de producto, arquitectura o datos.
+- Modificar `docs/` o cualquier archivo de tracking — eso lo hace Claude Code.
 
-**No hagas (fuera de tu alcance como agente secundario):**
-- Editar código del proyecto (`app/`, `components/`, `lib/`)
-- Tomar o registrar decisiones de producto, arquitectura o datos
-- Modificar `docs/`, `.ai/`, o cualquier archivo de tracking — eso lo hace Claude Code
-
-**Cómo reportar:** texto claro y conciso, en español si la tarea lo amerita. Quien decide qué hacer con tus hallazgos es Claude Code / Joaquín — no asumas el siguiente paso.
-
-**Cómo decide Claude Code cuándo y cómo delegar (al planear una tarea):**
-- Al armar un plan, identificar qué subtareas son delegables (solo lectura, genéricas — ver lista de arriba) y marcarlas como "Codex" vs. "Claude" en el plan.
-- Asumir por defecto que Codex tiene presupuesto disponible — su ventana de ~5h se renueva seguido y tareas típicas gastan poco (la última investigación delegada usó ~2% de su ventana). No preguntar a Joaquín antes de delegar.
-- `codex exec` no expone `/status` (es un comando del modo interactivo, no de `exec`), así que no hay forma de consultar la cuota de antemano — decidir el nivel de esfuerzo según la tarea y simplemente intentar.
-- Si Codex regresa un error de cuota agotada (p. ej. "usage limit reached", "tokens restart at..."), Claude Code asume la tarea directamente sin reintentar ni esperar.
-
-Para entender el producto (qué es tuAliado, reglas de mobile/visuales, métricas), lee `CLAUDE.md` y `docs/handoff-context.md` antes de investigar — así tu reporte llega ya alineado con el contexto real.
-
----
-
-## Flujo de trabajo
-
-```
-1. Leer docs/handoff-context.md (contexto del estado actual)
-2. Identificar la tarea (referencia al task board o instrucción directa)
-3. Implementar con tareas acotadas — un módulo o archivo a la vez
-4. Verificar que no hay incoherencia en los datos
-5. Actualizar task-board.md y handoff-context.md
-6. Preguntar a Joaquín si se hace commit de los cambios antes de seguir
-7. Confirmar con Joaquín antes de la siguiente tarea mayor
-```
-
-**Sobre el commit:** al terminar una tarea (o un cambio de estado claro), preguntar explícitamente si se commitea — no dejarlo sin preguntar. Ya ha pasado varias veces que los cambios quedan sin commitear y se acumulan.
-
-**Atajo para implementación:** usa `/dev` con el número de tarea.
-
-Ejemplo: "Revisa la task #3 y haz /dev"
-
----
+**Cómo decide Claude Code cuándo delegar:**
+- Al planear una tarea, identificar qué subtareas son delegables (solo lectura, genéricas) y marcarlas como "Codex" vs. "Claude".
+- Asumir por defecto que Codex tiene presupuesto disponible — no preguntar antes de delegar; intentar y reaccionar si regresa un error de cuota agotada, asumiendo la tarea directamente sin reintentar.
 
 ## Uso de subagents (ahorro de tokens)
 
-- Si el path del archivo ya se conoce, leerlo directo con `Read`/`grep` — no delegar a un subagent `Explore`. Spawnear un subagent duplica el costo: primero procesa el archivo completo, luego lo vuelve a transcribir de regreso.
-- Reservar `Explore` para cuando el path NO se conoce (búsquedas, "¿dónde está X?", exploración de estructura desconocida) o cuando la tarea requiere síntesis/juicio sobre varios archivos a la vez.
-- Si la pregunta es "¿en qué estado está la tarea X / qué falta?", esa respuesta ya
-  vive en `docs/handoff-context.md`, `docs/mvp-current-direction.md` o
-  `docs/decisions.md` — leerlos directo primero. No delegar a `Explore` la
-  re-derivación de un estado que ya está documentado (medido: un agente gastó 42k
-  tokens redescubriendo una tabla que ya estaba en `handoff-context.md`).
+- Si el path del archivo ya se conoce, leerlo directo con `Read`/`grep` — no delegar a un subagent de exploración (duplica el costo: primero procesa el archivo completo, luego lo retranscribe de regreso).
+- Reservar agentes de exploración para cuando el path NO se conoce, o la tarea requiere síntesis/juicio sobre varios archivos a la vez.
+- Antes de delegar una pregunta de "¿en qué estado está X / qué falta?", revisar si la respuesta ya vive en la documentación del proyecto (`docs/decisions.md`, `docs/mvp-current-direction.md`) — no vale la pena re-derivar un estado ya documentado.
 
 ### Verificación de frontend (chrome-devtools)
 
-- Para confirmar que algo *funciona* (clic dispara acción, dato se actualiza, no hay error), usar herramientas de texto: `evaluate_script`, `list_console_messages`, `list_network_requests` — son baratas. Evitar `take_snapshot` para esto.
-- Reservar `take_screenshot` para cuando de verdad hace falta ver el layout (validar que algo "se ve bien", acorde a la regla de "visuales sobre texto" del proyecto).
-- Antes de capturar, hacer `resize_page` al viewport móvil (390x844) — este proyecto es mobile-only, una captura grande no aporta nada extra.
-- Parámetros de captura — esto no es opcional, es la diferencia entre ~90K y ~10K
-  caracteres por captura (medido en sesiones reales de este proyecto):
-  - `format: "jpeg", quality: 60` — nunca dejar el `png` por defecto (sin comprimir).
-  - Nunca `fullPage: true` salvo que se esté validando explícitamente un layout largo
-    con scroll; por defecto solo el viewport visible.
-  - Si la captura es "para que la vea Joaquín" y no para que Claude la analice, usar
-    `filePath` para guardarla en disco — así no se adjunta al contexto de la conversación.
-- Por defecto, manejar la sesión de chrome-devtools desde un subagent (no desde el
-  hilo principal): así las capturas/snapshots pesados quedan aislados ahí y solo
-  regresa un veredicto corto en texto al hilo principal.
-
----
+- Para confirmar que algo *funciona* (clic dispara acción, dato se actualiza, no hay error), usar herramientas de texto (`evaluate_script`, `list_console_messages`, `list_network_requests`) — son baratas. Evitar snapshots visuales para esto.
+- Reservar capturas de pantalla para cuando de verdad hace falta validar layout — y siempre en viewport móvil (este proyecto es mobile-only).
+- Comprimir capturas (`format: jpeg, quality: 60`, sin `fullPage`) — la diferencia es de ~90K a ~10K caracteres por captura.
+- Manejar la sesión de chrome-devtools desde un subagente aislado: las capturas pesadas quedan ahí y solo regresa un veredicto corto al hilo principal.
 
 ## Sobre el LLM en el producto
 
-Gemini API actúa solo como **capa de explicación**:
-- Traduce recomendaciones ya calculadas a lenguaje natural
-- No toma decisiones de negocio
-- No inventa datos
-- Si la API falla, el motor determinístico sigue funcionando
+Gemini API actúa solo como **capa de explicación**: traduce recomendaciones ya calculadas a lenguaje natural, no toma decisiones de negocio, no inventa datos. Si la API falla, el motor determinístico sigue funcionando.

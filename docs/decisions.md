@@ -1,7 +1,7 @@
 # Decisiones del proyecto
 
 > Registro de decisiones confirmadas. Agregar fecha y razón cuando sea posible.
-> Si una decisión cambia, actualizar aquí y en `docs/handoff-context.md`.
+> Si una decisión cambia, actualizar este registro.
 
 ---
 
@@ -134,7 +134,7 @@
 
 - **Decisión:** Next.js (App Router) + TypeScript + Tailwind CSS, full-stack sin backend separado
 - **Estado:** Confirmado
-- **Razón:** No habrá dataset real de Tuali. Los únicos datos disponibles son los de `01-contexto-reto-tuali.md`. Un backend separado no aporta nada.
+- **Razón:** No habrá dataset real de Tuali. Los únicos datos disponibles son los del contexto oficial del reto compartido por Tuali. Un backend separado no aporta nada.
 - **Deploy:** Vercel
 
 ---
@@ -243,14 +243,14 @@
 ## Decisiones pendientes / resueltas recientes
 
 - ~~Definir modelo de Gemini a usar (Flash vs Pro — por costo y latencia)~~ → Resuelto: Gemini Flash/Flash-Lite (ver "Modelo de Gemini a usar" arriba, 2026-06-06)
-- ~~Pantallas mínimas para el demo (flujo core a confirmar con el Tech Lead)~~ → Resuelto: flujo core implementado y verificado como FASE 1 / T1: Splash → Onboarding → Diagnóstico → Recomendaciones → Registro → Seguimiento (ver `docs/handoff-context.md`, 2026-06-07 12:30)
-- ~~Diseño visual: paleta de colores, tipografía, componentes base~~ → Resuelto: assets de Stitch recibidos (sistema "Warm & Approachable Advisor", ver `docs/handoff-context.md` 2026-06-06 20:11)
+- ~~Pantallas mínimas para el demo (flujo core a confirmar)~~ → Resuelto: flujo core implementado y verificado — Splash → Onboarding → Diagnóstico → Recomendaciones → Registro → Seguimiento (2026-06-07)
+- ~~Diseño visual: paleta de colores, tipografía, componentes base~~ → Resuelto: assets de Stitch recibidos (sistema "Warm & Approachable Advisor", 2026-06-06)
 
 No quedan decisiones abiertas en esta sección; se conserva como historial de cierres recientes.
 
 ### Contradicciones surgidas al revisar assets de diseño Stitch (2026-06-06 20:11)
 
-Detalle completo en `docs/handoff-context.md` sección "Contradicciones encontradas". Resumen para decidir:
+Resumen de las contradicciones encontradas y su resolución:
 
 - ~~**Precio Coca-Cola 600ml**~~ → Resuelto: el diseño actual muestra `$11.50 en Tuali`, igual que `precioCosto: 11.5` en `lib/mock-data.ts`; el `$15.50` quedó como referencia histórica en docs, no en assets actuales.
 - ~~**¿Agregamos `nivelRiesgo` a `Recomendacion`?**~~ → Resuelto: `nivelRiesgo: "bajo" | "medio" | "alto"` agregado a `Recomendacion` y calculado por el motor.
